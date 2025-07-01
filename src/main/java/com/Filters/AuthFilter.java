@@ -22,7 +22,7 @@ public class AuthFilter implements Filter {
         HttpServletRequest request = ((HttpServletRequest) req); 
         HttpSession session = request.getSession();
         String contextPath = request.getContextPath();
-        String loginPage = contextPath + "/user/form-login";
+        String loginPage = contextPath + "/emp/form-login";
         if(session.getAttribute("auth") != null) {
             fc.doFilter(req, res);
         } else {
