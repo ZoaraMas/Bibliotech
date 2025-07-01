@@ -99,14 +99,7 @@ CREATE OR REPLACE TABLE exemplaire (
     reference VARCHAR(50) NOT NULL UNIQUE,
     date_arrivee DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_livre) REFERENCES livre(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    INDEX idx_exemplaire_reference (reference)
-);
-
--- Table Inscription
-CREATE OR REPLACE TABLE inscription (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    date_inscription DATE NOT NULL,
+    FOREIGN KEY ("id"OT NULL,
     id_user INT NOT NULL,
     id_type_adherent INT NOT NULL,
     duree_mois INT NOT NULL,
