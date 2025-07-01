@@ -9,11 +9,8 @@ import com.Utility.MyDate;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "employe", indexes = {
-        @Index(name = "idx_employe_nom", columnList = "nom"),
-        @Index(name = "idx_employe_email", columnList = "email")
-})
-public class Employe {
+@Table(name = "user")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +20,9 @@ public class Employe {
 
     @Column(nullable = false, length = 100)
     private String prenom;
+
+    @Column(name = "date_naissance", nullable = false)
+    private java.time.LocalDate dateNaissance;
 
     @Column(unique = true, length = 100)
     private String email;
@@ -34,14 +34,8 @@ public class Employe {
     private String telephone;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_type_employe", nullable = false, foreignKey = @ForeignKey(name = "FK_employe_type_employe"))
-    private TypeEmploye typeEmploye;
-
-    @Column(name = "date_embauche", nullable = false)
-    private java.time.LocalDate dateEmbauche;
-
-    @Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private Boolean actif = true;
+    @JoinColumn(name = "id_type_user", nullable = false, foreignKey = @ForeignKey(name = "FK_employe_type_employe"))
+    private TypeUser typeUser;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -53,115 +47,103 @@ public class Employe {
     // private List<Pret> prets = new ArrayList<>();
 
     // Constructeurs
-    public Employe() {
+    public User() {
     }
 
-    public Employe(String nom, String prenom, String email, TypeEmploye typeEmploye, java.time.LocalDate dateEmbauche) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.email = email;
-        this.typeEmploye = typeEmploye;
-        this.dateEmbauche = dateEmbauche;
-    }
-
+    
     public boolean loginMatch(String mail, String password) {
         return this.email.equals(mail) && this.password.equals(password);
     }
-    // Getters et Setters
+
+
     public Long getId() {
         return id;
     }
+
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    
+
     public String getNom() {
         return nom;
     }
+
 
     public void setNom(String nom) {
         this.nom = nom;
     }
 
+
     public String getPrenom() {
         return prenom;
     }
+
 
     public void setPrenom(String prenom) {
         this.prenom = prenom;
     }
 
+
+    public java.time.LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+
+
+    public void setDateNaissance(java.time.LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+
+
     public String getEmail() {
         return email;
     }
+
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public TypeEmploye getTypeEmploye() {
-        return typeEmploye;
-    }
-
-    public void setTypeEmploye(TypeEmploye typeEmploye) {
-        this.typeEmploye = typeEmploye;
-    }
-
-    public java.time.LocalDate getDateEmbauche() {
-        return dateEmbauche;
-    }
-
-    public void setDateEmbauche(java.time.LocalDate dateEmbauche) {
-        this.dateEmbauche = dateEmbauche;
-    }
-
-    public Boolean getActif() {
-        return actif;
-    }
-
-    public void setActif(Boolean actif) {
-        this.actif = actif;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 
     public String getPassword() {
         return password;
     }
 
+
     public void setPassword(String password) {
         this.password = password;
     }
 
-    // public List<Inscription> getInscriptions() {
-    //     return inscriptions;
-    // }
 
-    // public void setInscriptions(List<Inscription> inscriptions) {
-    //     this.inscriptions = inscriptions;
-    // }
+    public String getTelephone() {
+        return telephone;
+    }
 
-    // public List<Pret> getPrets() {
-    //     return prets;
-    // }
 
-    // public void setPrets(List<Pret> prets) {
-    //     this.prets = prets;
-    // }
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+
+    public TypeUser getTypeUser() {
+        return typeUser;
+    }
+
+
+    public void setTypeUser(TypeUser typeUser) {
+        this.typeUser = typeUser;
+    }
+
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+
 }

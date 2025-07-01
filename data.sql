@@ -1,15 +1,14 @@
 
 -- Insertion des types d'employés
-INSERT INTO type_employe (libelle, description) VALUES
+INSERT INTO type_user (libelle, description) VALUES
 ('Bibliothecaire', 'Bibliothécaire principal avec tous les droits'),
-('Assistant', 'Assistant bibliothécaire avec droits limités'),
-('Directeur', 'Directeur de la bibliothèque'),
-('Stagiaire', 'Stagiaire en formation');
+('Membre', 'Membre simple ayant acces a des fonctionalites limites');
 
 -- Insertion des employés
-INSERT INTO employe (nom, prenom, email, password, telephone, id_type_employe, date_embauche, actif) VALUES
-('Dubois', 'Claire', 'claire.dubois@bibliotech.fr', '', '0123456789', 1, '2020-09-01', TRUE),
-('Leroy', 'Antoine', 'antoine.leroy@bibliotech.fr', '','0234567890', 1, '2021-03-15', TRUE);
+INSERT INTO user (nom, prenom, date_naissance, email, password, telephone, id_type_user) VALUES
+('Admin', 'Claire', '2000-01-01', 'admin', '', '0123456789', 1),
+('membre', 'Sombre', '2000-01-01', 'membre', '', '0123456789', 2);
+-- ('Leroy', 'Antoine', 'antoine.leroy', '','0234567890', 1, '2021-03-15', TRUE);
 -- ('Garnier', 'Marie-Claire', 'mc.garnier@bibliotech.fr', '0345678901', 3, '2018-01-10', TRUE),
 -- ('Roux', 'Thomas', 'thomas.roux@bibliotech.fr', '0456789012', 2, '2022-06-01', TRUE),
 -- ('Simon', 'Julie', 'julie.simon@bibliotech.fr', '0567890123', 4, '2024-02-01', TRUE);
@@ -150,7 +149,7 @@ INSERT INTO parametre_pret (id_type_adherent, id_type_pret, id_genre, nb_jour_pr
 (4, 2, 10, 1, 3, 0, 0, 0);  -- Jeunesse sur place
 
 -- Insertion des inscriptions
-INSERT INTO inscription (date_inscription, nom, prenom, date_naissance, telephone, email, id_type_adherent, duree_mois, id_employe) VALUES
+INSERT INTO inscription (date_inscription, nom, prenom, date_naissance, telephone, email, id_type_adherent, duree_mois, id_user) VALUES
 ('2024-01-15', 'Dupont', 'Marie', '1995-03-20', '0123456789', 'marie.dupont@email.com', 1, 12, 1),
 ('2024-01-20', 'Martin', 'Pierre', '1975-07-10', '0234567890', 'pierre.martin@email.com', 2, 12, 1),
 ('2024-02-01', 'Durand', 'Sophie', '1988-12-05', '0345678901', 'sophie.durand@email.com', 3, 6, 2),
@@ -168,7 +167,7 @@ INSERT INTO inscription (date_inscription, nom, prenom, date_naissance, telephon
 ('2024-06-20', 'Morel', 'Clara', '1994-07-18', '0956789012', 'clara.morel@email.com', 3, 6, 1);
 
 -- Insertion des prêts
-INSERT INTO pret (id_inscription, id_exemplaire, id_type_pret, date_pret, id_employe) VALUES
+INSERT INTO pret (id_inscription, id_exemplaire, id_type_pret, date_pret, id_user) VALUES
 -- Prêts en cours
 (1, 2, 1, '2024-06-15', 1),    -- Marie - Le Petit Prince
 (2, 5, 1, '2024-06-10', 1),    -- Pierre - 1984
@@ -188,7 +187,7 @@ INSERT INTO pret (id_inscription, id_exemplaire, id_type_pret, date_pret, id_emp
 (14, 20, 1, '2024-06-10', 2);  -- Maxime - Introduction à l'algorithmique (rendu)
 
 -- Insertion des remises de livre
-INSERT INTO remise_livre (id_pret, date_remise, commentaire, id_employe) VALUES
+INSERT INTO remise_livre (id_pret, date_remise, commentaire, id_user) VALUES
 (8, '2024-05-14', 'Livre rendu en bon état', 1),
 (9, '2024-06-05', 'Livre rendu à temps', 2),
 (10, '2024-05-01', 'Livre rendu en avance', 1),
@@ -199,7 +198,7 @@ INSERT INTO remise_livre (id_pret, date_remise, commentaire, id_employe) VALUES
 (15, '2024-06-28', 'Livre rendu en bon état', 2);
 
 -- Insertion des réservations
-INSERT INTO reservation (id_inscription, id_livre, id_type_pret, date_reservation, date_pret_souhaitee, commentaire, id_employe) VALUES
+INSERT INTO reservation (id_inscription, id_livre, id_type_pret, date_reservation, date_pret_souhaitee, commentaire, id_user) VALUES
 (1, 4, 1, '2024-06-25', '2024-07-05', 'Réservation pour les vacances', 1),
 (4, 2, 1, '2024-06-28', '2024-07-10', 'Besoin pour un projet étudiant', 2),
 (9, 11, 1, '2024-06-20', '2024-07-01', 'Réservation confirmée', 1),

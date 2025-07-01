@@ -123,3 +123,11 @@ plus que la fonction update, initialiser les categories avant de mettre les chec
 - executer run.bat
 - Dans le batch file CAMTuf, Changer le nom du projet [war_name] si besoin, et preciser le vrai chemin vers webapps de tomcat-10.1.28
 - Executer le batch
+
+
+
+
+
+# Prevoir 
+- demande de pret
+- config age
