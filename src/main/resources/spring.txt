@@ -1,0 +1,21 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+    <bean scope="prototype" id="dept" class="com.ModeleDept"/>
+    <bean id="conn" class="com.MyOwnConnection.Conn">
+        <property name="url" value="jdbc:mysql://localhost:3306/servlet" />
+        <property name="username" value="root" />
+        <property name="password" value="" />
+    </bean>
+    <bean id="Prevision" class="com.Entite.Prevision">
+        <property name="conn" ref="conn"/>
+    </bean>
+    <bean id="Depense" class="com.Entite.Depense">
+        <property name="conn" ref="conn"/>
+    </bean>
+</beans>
+
+

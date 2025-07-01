@@ -1,0 +1,1095 @@
+// ============================================
+// ENUMS
+// ============================================
+
+package com.bibliotech.enums;
+
+public enum EtatReservation {
+    EN_ATTENTE, VALIDEE, REFUSEE, TRANSFORMEE_EN_PRET
+}
+
+package com.bibliotech.enums;
+
+public enum EtatProlongement {
+    EN_ATTENTE, VALIDEE, REFUSEE
+}
+
+// ============================================
+// ENTITÉS PRINCIPALES
+// ============================================
+
+package com.bibliotech.entities;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "type_employe")
+public class TypeEmploye {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true, length = 50)
+    private String libelle;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "typeEmploye", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Employe> employes = new ArrayList<>();
+
+    // Constructeurs
+    public TypeEmploye() {
+    }
+
+    public TypeEmploye(String libelle, String description) {
+        this.libelle = libelle;
+        this.description = description;
+    }
+
+    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLibelle() {
+        return libelle;
+    }
+
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<Employe> getEmployes() {
+        return employes;
+    }
+
+    public void setEmployes(List<Employe> employes) {
+        this.employes = employes;
+    }
+}
+
+@Entity
+@Table(name = "employe", indexes = {
+        @Index(name = "idx_employe_nom", columnList = "nom"),
+        @Index(name = "idx_employe_email", columnList = "email")
+})
+public class Employe {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 100)
+    private String nom;
+
+    @Column(nullable = false, length = 100)
+    private String prenom;
+
+    @Column(unique = true, length = 100)
+    private String email;
+
+    @Column(length = 20)
+    private String telephone;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_type_employe", nullable = false, foreignKey = @ForeignKey(name = "FK_employe_type_employe"))
+    private TypeEmploye typeEmploye;
+
+    @Column(name = "date_embauche", nullable = false)
+    private java.time.LocalDate dateEmbauche;
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean actif = true;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "employe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Inscription> inscriptions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "employe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Pret> prets = new ArrayList<>();
+
+    // Constructeurs
+    public Employe() {
+    }
+
+    public Employe(String nom, String prenom, String email, TypeEmploye typeEmploye, java.time.LocalDate dateEmbauche) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.typeEmploye = typeEmploye;
+        this.dateEmbauche = dateEmbauche;
+    }
+
+    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public TypeEmploye getTypeEmploye() {
+        return typeEmploye;
+    }
+
+    public void setTypeEmploye(TypeEmploye typeEmploye) {
+        this.typeEmploye = typeEmploye;
+    }
+
+    public java.time.LocalDate getDateEmbauche() {
+        return dateEmbauche;
+    }
+
+    public void setDateEmbauche(java.time.LocalDate dateEmbauche) {
+        this.dateEmbauche = dateEmbauche;
+    }
+
+    public Boolean getActif() {
+        return actif;
+    }
+
+    public void setActif(Boolean actif) {
+        this.actif = actif;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<Inscription> getInscriptions() {
+        return inscriptions;
+    }
+
+    public void setInscriptions(List<Inscription> inscriptions) {
+        this.inscriptions = inscriptions;
+    }
+
+    public List<Pret> getPrets() {
+        return prets;
+    }
+
+    public void setPrets(List<Pret> prets) {
+        this.prets = prets;
+    }
+}
+
+@Entity
+@Table(name = "genre")
+public class Genre {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true, length = 100)
+    private String nom;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Livre> livres = new ArrayList<>();
+
+    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ParametrePret> parametresPret = new ArrayList<>();
+
+    // Constructeurs
+    public Genre() {
+    }
+
+    public Genre(String nom) {
+        this.nom = nom;
+    }
+
+    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<Livre> getLivres() {
+        return livres;
+    }
+
+    public void setLivres(List<Livre> livres) {
+        this.livres = livres;
+    }
+
+    public List<ParametrePret> getParametresPret() {
+        return parametresPret;
+    }
+
+    public void setParametresPret(List<ParametrePret> parametresPret) {
+        this.parametresPret = parametresPret;
+    }
+}
+
+@Entity
+@Table(name = "type_adherent")
+public class TypeAdherent {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true, length = 50)
+    private String libelle;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "typeAdherent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Inscription> inscriptions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "typeAdherent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ParametrePret> parametresPret = new ArrayList<>();
+
+    // Constructeurs
+    public TypeAdherent() {
+    }
+
+    public TypeAdherent(String libelle) {
+        this.libelle = libelle;
+    }
+
+    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLibelle() {
+        return libelle;
+    }
+
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<Inscription> getInscriptions() {
+        return inscriptions;
+    }
+
+    public void setInscriptions(List<Inscription> inscriptions) {
+        this.inscriptions = inscriptions;
+    }
+
+    public List<ParametrePret> getParametresPret() {
+        return parametresPret;
+    }
+
+    public void setParametresPret(List<ParametrePret> parametresPret) {
+        this.parametresPret = parametresPret;
+    }
+}
+
+@Entity
+@Table(name = "type_pret")
+public class TypePret {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true, length = 50)
+    private String libelle;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "typePret", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Pret> prets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "typePret", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Reservation> reservations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "typePret", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ParametrePret> parametresPret = new ArrayList<>();
+
+    // Constructeurs
+    public TypePret() {
+    }
+
+    public TypePret(String libelle) {
+        this.libelle = libelle;
+    }
+
+    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLibelle() {
+        return libelle;
+    }
+
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<Pret> getPrets() {
+        return prets;
+    }
+
+    public void setPrets(List<Pret> prets) {
+        this.prets = prets;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+
+    public List<ParametrePret> getParametresPret() {
+        return parametresPret;
+    }
+
+    public void setParametresPret(List<ParametrePret> parametresPret) {
+        this.parametresPret = parametresPret;
+    }
+}
+
+@Entity
+@Table(name = "livre", indexes = {
+        @Index(name = "idx_livre_titre", columnList = "titre"),
+        @Index(name = "idx_livre_auteur", columnList = "auteur"),
+        @Index(name = "idx_livre_isbn", columnList = "isbn")
+})
+public class Livre {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 255)
+    private String titre;
+
+    @Column(nullable = false, length = 255)
+    private String auteur;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_genre", nullable = false, foreignKey = @ForeignKey(name = "FK_livre_genre"))
+    private Genre genre;
+
+    @Column(unique = true, length = 20)
+    private String isbn;
+
+    @Column(length = 100)
+    private String edition;
+
+    @Column(name = "nb_page")
+    private Integer nbPage;
+
+    @Column(columnDefinition = "TEXT")
+    private String resume;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "livre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Exemplaire> exemplaires = new ArrayList<>();
+
+    @OneToMany(mappedBy = "livre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Reservation> reservations = new ArrayList<>();
+
+    // Relation Many-to-Many avec Auteur (nouvelle table associative)
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "livre_auteur", joinColumns = @JoinColumn(name = "livre_id"), inverseJoinColumns = @JoinColumn(name = "auteur_id"))
+    private List<Auteur> auteurs = new ArrayList<>();
+
+    // Constructeurs
+    public Livre() {
+    }
+
+    public Livre(String titre, String auteur, Genre genre) {
+        this.titre = titre;
+        this.auteur = auteur;
+        this.genre = genre;
+    }
+
+    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitre() {
+        return titre;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
+
+    public String getAuteur() {
+        return auteur;
+    }
+
+    public void setAuteur(String auteur) {
+        this.auteur = auteur;
+    }
+
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public String getEdition() {
+        return edition;
+    }
+
+    public void setEdition(String edition) {
+        this.edition = edition;
+    }
+
+    public Integer getNbPage() {
+        return nbPage;
+    }
+
+    public void setNbPage(Integer nbPage) {
+        this.nbPage = nbPage;
+    }
+
+    public String getResume() {
+        return resume;
+    }
+
+    public void setResume(String resume) {
+        this.resume = resume;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<Exemplaire> getExemplaires() {
+        return exemplaires;
+    }
+
+    public void setExemplaires(List<Exemplaire> exemplaires) {
+        this.exemplaires = exemplaires;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+
+    public List<Auteur> getAuteurs() {
+        return auteurs;
+    }
+
+    public void setAuteurs(List<Auteur> auteurs) {
+        this.auteurs = auteurs;
+    }
+}
+
+// ============================================
+// NOUVELLE ENTITÉ AUTEUR (pour relation Many-to-Many)
+// ============================================
+
+@Entity
+@Table(name = "auteur")
+public class Auteur {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 255)
+    private String nom;
+
+    @Column(nullable = false, length = 255)
+    private String prenom;
+
+    @Column(name = "date_naissance")
+    private java.time.LocalDate dateNaissance;
+
+    @Column(name = "date_deces")
+    private java.time.LocalDate dateDeces;
+
+    @Column(columnDefinition = "TEXT")
+    private String biographie;
+
+    @Column(length = 100)
+    private String nationalite;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @ManyToMany(mappedBy = "auteurs")
+    private List<Livre> livres = new ArrayList<>();
+
+    // Constructeurs
+    public Auteur() {
+    }
+
+    public Auteur(String nom, String prenom) {
+        this.nom = nom;
+        this.prenom = prenom;
+    }
+
+    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public java.time.LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(java.time.LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+
+    public java.time.LocalDate getDateDeces() {
+        return dateDeces;
+    }
+
+    public void setDateDeces(java.time.LocalDate dateDeces) {
+        this.dateDeces = dateDeces;
+    }
+
+    public String getBiographie() {
+        return biographie;
+    }
+
+    public void setBiographie(String biographie) {
+        this.biographie = biographie;
+    }
+
+    public String getNationalite() {
+        return nationalite;
+    }
+
+    public void setNationalite(String nationalite) {
+        this.nationalite = nationalite;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<Livre> getLivres() {
+        return livres;
+    }
+
+    public void setLivres(List<Livre> livres) {
+        this.livres = livres;
+    }
+}
+
+@Entity
+@Table(name = "exemplaire", indexes = {
+        @Index(name = "idx_exemplaire_reference", columnList = "reference")
+})
+public class Exemplaire {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_livre", nullable = false, foreignKey = @ForeignKey(name = "FK_exemplaire_livre"))
+    private Livre livre;
+
+    @Column(nullable = false, unique = true, length = 50)
+    private String reference;
+
+    @Column(name = "date_arrivee", nullable = false)
+    private java.time.LocalDate dateArrivee;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "exemplaire", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Pret> prets = new ArrayList<>();
+
+    // Constructeurs
+    public Exemplaire() {
+    }
+
+    public Exemplaire(Livre livre, String reference, java.time.LocalDate dateArrivee) {
+        this.livre = livre;
+        this.reference = reference;
+        this.dateArrivee = dateArrivee;
+    }
+
+    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Livre getLivre() {
+        return livre;
+    }
+
+    public void setLivre(Livre livre) {
+        this.livre = livre;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    public java.time.LocalDate getDateArrivee() {
+        return dateArrivee;
+    }
+
+    public void setDateArrivee(java.time.LocalDate dateArrivee) {
+        this.dateArrivee = dateArrivee;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<Pret> getPrets() {
+        return prets;
+    }
+
+    public void setPrets(List<Pret> prets) {
+        this.prets = prets;
+    }
+}
+
+@Entity
+@Table(name = "inscription", uniqueConstraints = @UniqueConstraint(name = "unique_nom_prenom", columnNames = { "nom",
+        "prenom" }), indexes = @Index(name = "idx_inscription_nom", columnList = "nom"))
+public class Inscription {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "date_inscription", nullable = false)
+    private java.time.LocalDate dateInscription;
+
+    @Column(nullable = false, length = 100)
+    private String nom;
+
+    @Column(nullable = false, length = 100)
+    private String prenom;
+
+    @Column(name = "date_naissance", nullable = false)
+    private java.time.LocalDate dateNaissance;
+
+    @Column(length = 20)
+    private String telephone;
+
+    @Column(length = 100)
+    private String email;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_type_adherent", nullable = false, foreignKey = @ForeignKey(name = "FK_inscription_type_adherent"))
+    private TypeAdherent typeAdherent;
+
+    @Column(name = "duree_mois", nullable = false)
+    private Integer dureeMois;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_employe", nullable = false, foreignKey = @ForeignKey(name = "FK_inscription_employe"))
+    private Employe employe;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "inscription", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Pret> prets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "inscription", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Reservation> reservations = new ArrayList<>();
+
+    // Constructeurs
+    public Inscription() {
+    }
+
+    public Inscription(String nom, String prenom, java.time.LocalDate dateNaissance,
+            TypeAdherent typeAdherent, Integer dureeMois, Employe employe) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.dateNaissance = dateNaissance;
+        this.typeAdherent = typeAdherent;
+        this.dureeMois = dureeMois;
+        this.employe = employe;
+        this.dateInscription = java.time.LocalDate.now();
+    }
+
+    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public java.time.LocalDate getDateInscription() {
+        return dateInscription;
+    }
+
+    public void setDateInscription(java.time.LocalDate dateInscription) {
+        this.dateInscription = dateInscription;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public java.time.LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(java.time.LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public TypeAdherent getTypeAdherent() {
+        return typeAdherent;
+    }
+
+    public void setTypeAdherent(TypeAdherent typeAdherent) {
+        this.typeAdherent = typeAdherent;
+    }
+
+    public Integer getDureeMois() {
+        return dureeMois;
+    }
+
+    public void setDureeMois(Integer dureeMois) {
+        this.dureeMois = dureeMois;
+    }
+
+    public Employe getEmploye() {
+        return employe;
+    }
+
+    public void setEmploye(Employe employe) {
+        this.employe = employe;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<Pret> getPrets() {
+        return prets;
+    }
+
+    public void setPrets(List<Pret> prets) {
+        this.prets = prets;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+}
+
+@Entity
+@Table(name = "parametre_pret", uniqueConstraints = @UniqueConstraint(name = "unique_parametre", columnNames = {
+        "id_type_adherent", "id_type_pret", "id_genre" }))
+public class ParametrePret {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_type_adherent", nullable = false, foreignKey = @ForeignKey(name = "FK_parametre_type_adherent"))
+    private TypeAdherent typeAdherent;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_type_pret", nullable = false, foreignKey = @ForeignKey(name = "FK_parametre_type_pret"))
+    private TypePret typePret;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_genre", nullable = false, foreignKey = @ForeignKey(name = "FK_parametre_genre"))
+    private Genre genre;
+
+    @Column(name = "nb_jour_pret", nullable = false)
+    private Integer nbJourPret;
+
+    @Column(name = "nb_livre_pretable_en_meme_temps", nullable = false)
+    private Integer nbLivrePretableEnMemeTemps;
+
+    @Column(name = "penalite_jours")
+    private Integer penaliteJours = 0;
+
+    @Column(name = "nb_jours_avant_prolongation")
+    private Integer nbJoursAvantProlongation = 3;
+
+    @Column(name = "nb_jours_prolongation")
+    private Integer nbJoursProlongation = 7;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    // Constructeurs
+    public ParametrePret() {
+    }
+
+    public ParametrePret(TypeAdherent typeAdherent, TypePret typePret, Genre genre,
+            Integer nbJourPret, Integer nbLivrePretableEnMemeTemps) {
+        this.typeAdherent = typeAdherent;
+        this.typePret = typePret;
+        this.genre = genre;
+        this.nbJourPret = nbJourPret;
+        this.nbLivrePretableEnMemeTemps = nbLivrePretableEnMemeTemps;
+    }
+
+    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public TypeAdherent getTypeAdherent() {
+        return typeAdherent;
+    }
+
+    public void setTypeAdherent(TypeAdherent typeAdherent) {
+        this.typeAdherent = typeAdherent;
+    }
+
+    public TypePret getTypePret() {
+        return typePret;
+    }
+
+    public void setTypePret(TypePret typePret) {
+        this.typePret = typePret;
+    }
+
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
+
+    public Integer getNbJourPret() {
+        return nbJourPret;
+    }
+
+    public void setNbJourPret(Integer nbJourPret) {
+        this.nbJourPret = nbJourPret;
+    }
+
+    public Integer getNbLivrePretableEnMemeTemps() {
+        return nbLivrePretableEnMemeTemps;
+    }
+
+    public void setNbLivrePretableEnMemeTemps(Integer nbLivrePretableEnMemeTemps) {
+        this.nbLivrePretableEnMemeTemps = nbLivrePretableEnMemeTemps;
+    }
+
+    public Integer getPenaliteJours() {
+        return penaliteJours;
+    }
+
+    public void setPenaliteJours(Integer penaliteJours) {
+        this.penaliteJours = penaliteJours;
+    }
+
+    public Integer getNbJoursAvantProlongation() { return nbJoursAvantProlongation; }
+
+public void setNbJoursAvantProlongation(Integer nbJoursAvantProlongation) { 
+        this.nbJoursAvantProlongation = nbJ

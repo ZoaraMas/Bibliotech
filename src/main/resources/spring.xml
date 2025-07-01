@@ -1,0 +1,80 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context 
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx.xsd
+           http://www.springframework.org/schema/data/jpa
+           http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+    <!-- Activation de l'annotation processing -->
+    <context:annotation-config/>
+    
+    <!-- Scan des composants (services, repositories, etc.) -->
+    <context:component-scan base-package="com.Entite, com.Repository, com.Service"/>
+
+    <!-- Source de données JDBC avec pool de connexions (HikariCP recommandé) -->
+   <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/bibliotech?useSSL=false&amp;serverTimezone=UTC"/>
+        <property name="username" value="root"/>
+        <property name="password" value=""/>
+    </bean>
+
+    <!-- EntityManagerFactory avec Hibernate comme provider -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.Entite"/>
+
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQL8Dialect"/>
+                <property name="showSql" value="true"/>
+                <property name="generateDdl" value="true"/>
+            </bean>
+        </property>
+
+        <property name="jpaProperties">
+            <props>
+                 <prop key="hibernate.hbm2ddl.auto">update</prop>
+                 <prop key="hibernate.show_sql">true</prop>
+                 <prop key="hibernate.format_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- Transaction manager -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <!-- Activation des transactions annotées -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    
+    <!-- Activation des repositories JPA -->
+    <jpa:repositories base-package="com.Repository"
+                      entity-manager-factory-ref="entityManagerFactory"
+                      transaction-manager-ref="transactionManager"/>
+
+    <!-- Suppression des déclarations manuelles des beans - à remplacer par @Component/@Service -->
+    <!--
+    <bean id="Prevision" class="com.Entite.Prevision"/>
+    <bean id="previsionRepository" class="com.Repository.PrevisionRepository"/>
+    <bean id="previsionService" class="com.Service.PrevisionService"/>
+    -->
+    
+    <!-- Suppression de la connexion manuelle si vous utilisez JPA -->
+    <!--
+    <bean id="conn" class="com.MyOwnConnection.Conn">
+        <property name="url" value="jdbc:mysql://localhost:3306/servlet"/>
+        <property name="username" value="root"/>
+        <property name="password" value=""/>
+    </bean>
+    -->
+</beans>
