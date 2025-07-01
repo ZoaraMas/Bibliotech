@@ -44,6 +44,7 @@
     </filter>
     <filter-mapping>
         <filter-name>AuthFilter</filter-name>
+        <url-pattern>/*</url-pattern>
         <url-pattern>/film/form-film</url-pattern>
         <url-pattern>/categorie/form-categorie</url-pattern>
     </filter-mapping> 
