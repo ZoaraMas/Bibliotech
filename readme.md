@@ -109,7 +109,7 @@ plus que la fonction update, initialiser les categories avant de mettre les chec
 
 - Fonctionalite Pret Livre
     - verifier si l'exemplaire du livre est encore disponible => il va falloir prendre en compte les prets deja existant pour verifier si un exemplaire(en tant qu'individu propre) est encore disponible ou non
-
+    - Je vais creer les vues necessaires pour creer la fonction sql qui va verifier si un exemplaire est disponible maintenant ou non
 
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
