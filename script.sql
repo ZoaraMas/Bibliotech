@@ -99,7 +99,14 @@ CREATE OR REPLACE TABLE exemplaire (
     reference VARCHAR(50) NOT NULL UNIQUE,
     date_arrivee DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY ("id"OT NULL,
+    FOREIGN KEY (id_livre) REFERENCES livre(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    INDEX idx_exemplaire_reference (reference)
+);
+
+-- Table Inscription
+CREATE OR REPLACE TABLE inscription (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    date_inscription DATE NOT NULL,
     id_user INT NOT NULL,
     id_type_adherent INT NOT NULL,
     duree_mois INT NOT NULL,
@@ -128,7 +135,6 @@ CREATE OR REPLACE TABLE parametre_pret (
     UNIQUE KEY unique_parametre (id_type_adherent, id_type_pret, id_genre)
 );
 
--- Checkpoint
 
 -- Table Prêt
 CREATE OR REPLACE TABLE pret (
@@ -142,9 +148,10 @@ CREATE OR REPLACE TABLE pret (
     FOREIGN KEY (id_inscription) REFERENCES inscription(id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (id_exemplaire) REFERENCES exemplaire(id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (id_type_pret) REFERENCES type_pret(id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (id_employe) REFERENCES employe(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE,
     INDEX idx_pret_dates (date_pret)
 );
+-- Checkpoint
 
 -- Table Remise de livre
 CREATE OR REPLACE TABLE remise_livre (
