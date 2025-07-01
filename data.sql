@@ -149,22 +149,23 @@ INSERT INTO parametre_pret (id_type_adherent, id_type_pret, id_genre, nb_jour_pr
 (4, 2, 10, 1, 3, 0, 0, 0);  -- Jeunesse sur place
 
 -- Insertion des inscriptions
-INSERT INTO inscription (date_inscription, nom, prenom, date_naissance, telephone, email, id_type_adherent, duree_mois, id_user) VALUES
-('2024-01-15', 'Dupont', 'Marie', '1995-03-20', '0123456789', 'marie.dupont@email.com', 1, 12, 1),
-('2024-01-20', 'Martin', 'Pierre', '1975-07-10', '0234567890', 'pierre.martin@email.com', 2, 12, 1),
-('2024-02-01', 'Durand', 'Sophie', '1988-12-05', '0345678901', 'sophie.durand@email.com', 3, 6, 2),
-('2024-02-10', 'Moreau', 'Jean', '2000-01-15', '0456789012', 'jean.moreau@email.com', 1, 12, 1),
-('2024-02-15', 'Lefebvre', 'Anne', '1965-09-30', '0567890123', 'anne.lefebvre@email.com', 2, 12, 2),
-('2024-03-01', 'Rousseau', 'Paul', '1992-04-25', '0678901234', 'paul.rousseau@email.com', 3, 3, 1),
-('2024-03-10', 'Visitor', 'Anonymous', '1990-01-01', NULL, NULL, 4, 1, 4),
-('2024-03-15', 'Petit', 'Lucas', '1998-11-12', '0789012345', 'lucas.petit@email.com', 1, 12, 2),
-('2024-04-01', 'Bernard', 'Emma', '1980-06-18', '0890123456', 'emma.bernard@email.com', 2, 12, 1),
-('2024-04-15', 'Thomas', 'Hugo', '1993-08-22', '0901234567', 'hugo.thomas@email.com', 3, 6, 2),
-('2024-05-01', 'Blanc', 'Camille', '1997-02-14', '0912345678', 'camille.blanc@email.com', 1, 12, 1),
-('2024-05-15', 'Girard', 'Nicolas', '1985-09-08', '0923456789', 'nicolas.girard@email.com', 3, 12, 2),
-('2024-06-01', 'Faure', 'Léa', '1999-05-22', '0934567890', 'lea.faure@email.com', 1, 6, 1),
-('2024-06-15', 'Laurent', 'Maxime', '1972-11-30', '0945678901', 'maxime.laurent@email.com', 2, 12, 2),
-('2024-06-20', 'Morel', 'Clara', '1994-07-18', '0956789012', 'clara.morel@email.com', 3, 6, 1);
+INSERT INTO inscription (date_inscription, id_user, id_type_adherent, duree_mois, id_employe) VALUES
+('2024-01-15', 2, 1, 2, 1);
+-- ('2024-01-20', 'Martin', 'Pierre', '1975-07-10', '0234567890', 'pierre.martin@email.com', 2, 12, 1),
+-- ('2024-02-01', 'Durand', 'Sophie', '1988-12-05', '0345678901', 'sophie.durand@email.com', 3, 6, 2),
+-- ('2024-02-10', 'Moreau', 'Jean', '2000-01-15', '0456789012', 'jean.moreau@email.com', 1, 12, 1),
+-- ('2024-02-15', 'Lefebvre', 'Anne', '1965-09-30', '0567890123', 'anne.lefebvre@email.com', 2, 12, 2),
+-- ('2024-03-01', 'Rousseau', 'Paul', '1992-04-25', '0678901234', 'paul.rousseau@email.com', 3, 3, 1),
+-- ('2024-03-10', 'Visitor', 'Anonymous', '1990-01-01', NULL, NULL, 4, 1, 4),
+-- ('2024-03-15', 'Petit', 'Lucas', '1998-11-12', '0789012345', 'lucas.petit@email.com', 1, 12, 2),
+-- ('2024-04-01', 'Bernard', 'Emma', '1980-06-18', '0890123456', 'emma.bernard@email.com', 2, 12, 1),
+-- ('2024-04-15', 'Thomas', 'Hugo', '1993-08-22', '0901234567', 'hugo.thomas@email.com', 3, 6, 2),
+-- ('2024-05-01', 'Blanc', 'Camille', '1997-02-14', '0912345678', 'camille.blanc@email.com', 1, 12, 1),
+-- ('2024-05-15', 'Girard', 'Nicolas', '1985-09-08', '0923456789', 'nicolas.girard@email.com', 3, 12, 2),
+-- ('2024-06-01', 'Faure', 'Léa', '1999-05-22', '0934567890', 'lea.faure@email.com', 1, 6, 1),
+-- ('2024-06-15', 'Laurent', 'Maxime', '1972-11-30', '0945678901', 'maxime.laurent@email.com', 2, 12, 2),
+-- ('2024-06-20', 'Morel', 'Clara', '1994-07-18', '0956789012', 'clara.morel@email.com', 3, 6, 1);
+-- Checkpoint
 
 -- Insertion des prêts
 INSERT INTO pret (id_inscription, id_exemplaire, id_type_pret, date_pret, id_user) VALUES

@@ -135,6 +135,8 @@ CREATE OR REPLACE TABLE parametre_pret (
     UNIQUE KEY unique_parametre (id_type_adherent, id_type_pret, id_genre)
 );
 
+-- Checkpoint
+
 -- Table Prêt
 CREATE OR REPLACE TABLE pret (
     id INT AUTO_INCREMENT PRIMARY KEY,
