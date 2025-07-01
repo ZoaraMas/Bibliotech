@@ -12,8 +12,8 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.Entite.Film;
+import com.Entite.User;
 
 @Repository
-public interface FilmRepository extends JpaRepository<Film, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 }

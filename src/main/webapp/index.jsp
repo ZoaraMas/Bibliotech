@@ -3,15 +3,15 @@
 <html>
 <body>
 
-    <h1>Login:</h1>
-    <a href="user/form-login">LOGIN</a>
-<h2> CATEGORIE</h2>
-<a href="categorie/read-categorie">liste des categories</a>
-<a href="categorie/form-categorie">creer une categorie</a>
-
-<h2> CRUD FILM</h2>
-<a href="film/read-film">liste des films</a>
-<a href="film/form-film">creer un films</a>
-
+<h1>Login:</h1>
+<a href="user/form-login">LOGIN</a>
+<% 
+    if(session.getAttribute("auth") != null)  { %>
+        <h1>unlog:</h1>
+        <a href="user/unlog">UNLOG</a>
+    <% }
+%>
+<h2> LIVRES</h2>
+<a href="pret/demander-pret">Demander un pret</a>
 </body>
 </html>

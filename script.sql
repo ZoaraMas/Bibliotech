@@ -2,25 +2,6 @@ DROP DATABASE IF EXISTS bibliotech;
 CREATE DATABASE bibliotech;
 USE bibliotech;
 
-CREATE OR REPLACE TABLE categorie (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    libelle VARCHAR(50)
-);
-
-CREATE OR REPLACE TABLE film (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nom VARCHAR(50),
-    duree DECIMAL(5,2)
-);
-
-CREATE OR REPLACE TABLE film_categorie (
-    id_film BIGINT,
-    id_categorie BIGINT,
-    PRIMARY KEY (id_film, id_categorie),
-    FOREIGN KEY (id_categorie) REFERENCES categorie(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_film) REFERENCES film(id) ON DELETE CASCADE
-);  
-
 -- ============================================
 -- SCRIPT SQL BIBLIOTECH - GESTION BIBLIOTHEQUE
 -- ============================================
@@ -44,7 +25,7 @@ DROP TABLE IF EXISTS genre;
 DROP TABLE IF EXISTS type_adherent;
 DROP TABLE IF EXISTS type_pret;
 DROP TABLE IF EXISTS employe;
-DROP TABLE IF EXISTS type_employe;
+DROP TABLE IF EXISTS type_user;
 DROP TABLE IF EXISTS jour_ferrie;
 
 -- ============================================
@@ -52,7 +33,7 @@ DROP TABLE IF EXISTS jour_ferrie;
 -- ============================================
 
 -- Table Type d'employé
-CREATE TABLE type_employe (
+CREATE OR REPLACE TABLE type_user (
     id INT AUTO_INCREMENT PRIMARY KEY,
     libelle VARCHAR(50) NOT NULL UNIQUE,
     description TEXT,
@@ -60,45 +41,42 @@ CREATE TABLE type_employe (
 );
 
 -- Table Employé
-CREATE OR REPLACE TABLE employe (
+CREATE OR REPLACE TABLE user (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     prenom VARCHAR(100) NOT NULL,
+    date_naissance DATE NOT NULL,
     email VARCHAR(100) UNIQUE,
     password VARCHAR(100) NOT NULL,
     telephone VARCHAR(20),
-    id_type_employe INT NOT NULL,
-    date_embauche DATE NOT NULL,
-    actif BOOLEAN DEFAULT TRUE,
+    id_type_user INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_type_employe) REFERENCES type_employe(id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    INDEX idx_employe_nom (nom),
-    INDEX idx_employe_email (email)
+    FOREIGN KEY (id_type_user) REFERENCES type_user(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- Table Genre
-CREATE TABLE genre (
+CREATE OR REPLACE TABLE genre (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Table Type d'adhérent
-CREATE TABLE type_adherent (
+CREATE OR REPLACE TABLE type_adherent (
     id INT AUTO_INCREMENT PRIMARY KEY,
     libelle VARCHAR(50) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Table Type de prêt
-CREATE TABLE type_pret (
+CREATE OR REPLACE TABLE type_pret (
     id INT AUTO_INCREMENT PRIMARY KEY,
     libelle VARCHAR(50) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Table Livre
-CREATE TABLE livre (
+CREATE OR REPLACE TABLE livre (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titre VARCHAR(255) NOT NULL,
     auteur VARCHAR(255) NOT NULL,
@@ -115,7 +93,7 @@ CREATE TABLE livre (
 );
 
 -- Table Exemplaire
-CREATE TABLE exemplaire (
+CREATE OR REPLACE TABLE exemplaire (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_livre INT NOT NULL,
     reference VARCHAR(50) NOT NULL UNIQUE,
@@ -126,26 +104,21 @@ CREATE TABLE exemplaire (
 );
 
 -- Table Inscription
-CREATE TABLE inscription (
+CREATE OR REPLACE TABLE inscription (
     id INT AUTO_INCREMENT PRIMARY KEY,
     date_inscription DATE NOT NULL,
-    nom VARCHAR(100) NOT NULL,
-    prenom VARCHAR(100) NOT NULL,
-    date_naissance DATE NOT NULL,
-    telephone VARCHAR(20),
-    email VARCHAR(100),
+    id_user INT NOT NULL,
     id_type_adherent INT NOT NULL,
     duree_mois INT NOT NULL,
     id_employe INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_type_adherent) REFERENCES type_adherent(id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (id_employe) REFERENCES employe(id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    UNIQUE KEY unique_nom_prenom (nom, prenom),
-    INDEX idx_inscription_nom (nom)
+    FOREIGN KEY (id_type_adherent) REFERENCES type_adherent(id),
+    FOREIGN KEY (id_user) REFERENCES user(id),
+    FOREIGN KEY (id_employe) REFERENCES user(id)
 );
 
 -- Table Paramètres de prêt (règles de gestion)
-CREATE TABLE parametre_pret (
+CREATE OR REPLACE TABLE parametre_pret (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_type_adherent INT NOT NULL,
     id_type_pret INT NOT NULL,
@@ -163,7 +136,7 @@ CREATE TABLE parametre_pret (
 );
 
 -- Table Prêt
-CREATE TABLE pret (
+CREATE OR REPLACE TABLE pret (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_inscription INT NOT NULL,
     id_exemplaire INT NOT NULL,
@@ -179,7 +152,7 @@ CREATE TABLE pret (
 );
 
 -- Table Remise de livre
-CREATE TABLE remise_livre (
+CREATE OR REPLACE TABLE remise_livre (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_pret INT NOT NULL,
     date_remise DATE NOT NULL,
@@ -191,7 +164,7 @@ CREATE TABLE remise_livre (
 );
 
 -- Table Réservation
-CREATE TABLE reservation (
+CREATE OR REPLACE TABLE reservation (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_inscription INT NOT NULL,
     id_livre INT NOT NULL,
@@ -209,7 +182,7 @@ CREATE TABLE reservation (
 );
 
 -- Table État réservation (historique)
-CREATE TABLE etat_reservation (
+CREATE OR REPLACE TABLE etat_reservation (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_reservation INT NOT NULL,
     date_changement DATE NOT NULL,
@@ -222,7 +195,7 @@ CREATE TABLE etat_reservation (
 );
 
 -- Table Prolongement de prêt
-CREATE TABLE prolongement_pret (
+CREATE OR REPLACE TABLE prolongement_pret (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_pret INT NOT NULL,
     date_demande DATE NOT NULL,
@@ -234,7 +207,7 @@ CREATE TABLE prolongement_pret (
 );
 
 -- Table État prolongement de prêt (historique)
-CREATE TABLE validation_prolongement_pret (
+CREATE OR REPLACE TABLE validation_prolongement_pret (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_prolongement_pret INT NOT NULL,
     date_validation DATE NOT NULL,
@@ -247,7 +220,7 @@ CREATE TABLE validation_prolongement_pret (
 );
 
 -- Table Jours fériés
-CREATE TABLE jour_ferrie (
+CREATE OR REPLACE TABLE jour_ferrie (
     id INT AUTO_INCREMENT PRIMARY KEY,
     libelle VARCHAR(100) NOT NULL,
     date_ferrie DATE NOT NULL,

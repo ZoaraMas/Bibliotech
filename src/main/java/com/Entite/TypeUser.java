@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "type_employe")
-public class TypeEmploye {
+@Table(name = "type_user")
+public class TypeUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,14 +21,14 @@ public class TypeEmploye {
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "typeEmploye", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Employe> employes = new ArrayList<>();
+    @OneToMany(mappedBy = "typeUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<User> Users = new ArrayList<>();
 
     // Constructeurs
-    public TypeEmploye() {
+    public TypeUser() {
     }
 
-    public TypeEmploye(String libelle, String description) {
+    public TypeUser(String libelle, String description) {
         this.libelle = libelle;
         this.description = description;
     }
@@ -66,11 +66,11 @@ public class TypeEmploye {
         this.createdAt = createdAt;
     }
 
-    public List<Employe> getEmployes() {
-        return employes;
+    public List<User> getUsers() {
+        return Users;
     }
 
-    public void setEmployes(List<Employe> employes) {
-        this.employes = employes;
+    public void setUsers(List<User> Users) {
+        this.Users = Users;
     }
 }
