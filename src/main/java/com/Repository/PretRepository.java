@@ -22,9 +22,9 @@ import com.dto.PretParametreDTO;
 @Repository
 public interface PretRepository extends JpaRepository<Pret, Long> {
     // obtenir tout les prets avec leurs parametres
-    @Query(value = "SELECT * FROM pret_parametre WHERE id_inscription
-     BETWEEN date_pret AND date_fin_pret AND id_inscription = :idInscription", nativeQuery = true)
-    public List<PretParametreDTO> getAllPret(@Param("idInsctiption") Integer idInscription);
+    @Query(value = "SELECT * FROM pret_parametre WHERE id_inscription = :idInscription ORDER BY date_fin_pret ASC", nativeQuery = true)
+    public List<PretParametreDTO> getAllPretOrderByDateFinAsc(@Param("idInsctiption") Integer idInscription);
+
     @Query(value = "SELECT * FROM pret_parametre WHERE :dateCible BETWEEN date_pret AND date_fin_pret AND id_exemplaire = :idExemplaire", nativeQuery = true)
     public PretParametreDTO findPretWhereExemplaireIn(@Param("dateCible") LocalDateTime dateCible,
             @Param("idExemplaire") Long idExemplaire);
@@ -33,5 +33,4 @@ public interface PretRepository extends JpaRepository<Pret, Long> {
     public Integer getQuotaDepenseActuel(@Param("dateCible") LocalDateTime dateCible,
             @Param("idInscription") Integer idInscription);
 
-    
 }

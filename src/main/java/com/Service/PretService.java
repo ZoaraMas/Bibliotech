@@ -38,7 +38,7 @@ public class PretService {
     // Verifier si le membre subit une penalite ou non
     public boolean subitPenalite(int idInscription) {
         int nombreJourPenalite = 0;
-        
+        List<PretParametreDTO> liste = this.pretRepository.getAllPretOrderByDateFinAsc(idInscription);
         return true;
     }
 
