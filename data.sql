@@ -13,6 +13,23 @@ INSERT INTO user (nom, prenom, date_naissance, email, password, telephone, id_ty
 -- ('Roux', 'Thomas', 'thomas.roux@bibliotech.fr', '0456789012', 2, '2022-06-01', TRUE),
 -- ('Simon', 'Julie', 'julie.simon@bibliotech.fr', '0567890123', 4, '2024-02-01', TRUE);
 
+INSERT INTO user (nom, prenom, date_naissance, email, password, telephone, id_type_user) VALUES
+('Martin', 'Pierre', '1975-07-10', 'pierre.martin@email.com', '', '0234567890', 2),
+('Durand', 'Sophie', '1988-12-05', 'sophie.durand@email.com', '', '0345678901', 2),
+('Moreau', 'Jean', '2000-01-15', 'jean.moreau@email.com', '', '0456789012', 2),
+('Lefebvre', 'Anne', '1965-09-30', 'anne.lefebvre@email.com', '', '0567890123', 2),
+('Rousseau', 'Paul', '1992-04-25', 'paul.rousseau@email.com', '', '0678901234', 2),
+('Visitor', 'Anonymous', '1990-01-01', 'visitor@temp.com', '', '', 2),
+('Petit', 'Lucas', '1998-11-12', 'lucas.petit@email.com', '', '0789012345', 2),
+('Bernard', 'Emma', '1980-06-18', 'emma.bernard@email.com', '', '0890123456', 2),
+('Thomas', 'Hugo', '1993-08-22', 'hugo.thomas@email.com', '', '0901234567', 2),
+('Blanc', 'Camille', '1997-02-14', 'camille.blanc@email.com', '', '0912345678', 2),
+('Girard', 'Nicolas', '1985-09-08', 'nicolas.girard@email.com', '', '0923456789', 2),
+('Faure', 'Léa', '1999-05-22', 'lea.faure@email.com', '', '0934567890', 2),
+('Laurent', 'Maxime', '1972-11-30', 'maxime.laurent@email.com', '', '0945678901', 2),
+('Morel', 'Clara', '1994-07-18', 'clara.morel@email.com', '', '0956789012', 2);
+
+
 -- Insertion des genres
 INSERT INTO genre (nom) VALUES
 ('Roman'),
@@ -148,27 +165,25 @@ INSERT INTO parametre_pret (id_type_adherent, id_type_pret, id_genre, nb_jour_pr
 (4, 2, 2, 1, 2, 0, 0, 0),   -- SF sur place
 (4, 2, 10, 1, 3, 0, 0, 0);  -- Jeunesse sur place
 
--- Insertion des inscriptions
 INSERT INTO inscription (date_inscription, id_user, id_type_adherent, duree_mois, id_employe) VALUES
-('2024-01-15', 2, 1, 2, 1);
--- ('2024-01-20', 'Martin', 'Pierre', '1975-07-10', '0234567890', 'pierre.martin@email.com', 2, 12, 1),
--- ('2024-02-01', 'Durand', 'Sophie', '1988-12-05', '0345678901', 'sophie.durand@email.com', 3, 6, 2),
--- ('2024-02-10', 'Moreau', 'Jean', '2000-01-15', '0456789012', 'jean.moreau@email.com', 1, 12, 1),
--- ('2024-02-15', 'Lefebvre', 'Anne', '1965-09-30', '0567890123', 'anne.lefebvre@email.com', 2, 12, 2),
--- ('2024-03-01', 'Rousseau', 'Paul', '1992-04-25', '0678901234', 'paul.rousseau@email.com', 3, 3, 1),
--- ('2024-03-10', 'Visitor', 'Anonymous', '1990-01-01', NULL, NULL, 4, 1, 4),
--- ('2024-03-15', 'Petit', 'Lucas', '1998-11-12', '0789012345', 'lucas.petit@email.com', 1, 12, 2),
--- ('2024-04-01', 'Bernard', 'Emma', '1980-06-18', '0890123456', 'emma.bernard@email.com', 2, 12, 1),
--- ('2024-04-15', 'Thomas', 'Hugo', '1993-08-22', '0901234567', 'hugo.thomas@email.com', 3, 6, 2),
--- ('2024-05-01', 'Blanc', 'Camille', '1997-02-14', '0912345678', 'camille.blanc@email.com', 1, 12, 1),
--- ('2024-05-15', 'Girard', 'Nicolas', '1985-09-08', '0923456789', 'nicolas.girard@email.com', 3, 12, 2),
--- ('2024-06-01', 'Faure', 'Léa', '1999-05-22', '0934567890', 'lea.faure@email.com', 1, 6, 1),
--- ('2024-06-15', 'Laurent', 'Maxime', '1972-11-30', '0945678901', 'maxime.laurent@email.com', 2, 12, 2),
--- ('2024-06-20', 'Morel', 'Clara', '1994-07-18', '0956789012', 'clara.morel@email.com', 3, 6, 1);
--- Checkpoint
+('2024-01-15', 2, 1, 12, 1),  -- membre (id=2)
+('2024-01-20', 3, 2, 12, 1),  -- Pierre Martin
+('2024-02-01', 4, 3, 6, 1),   -- Sophie Durand
+('2024-02-10', 5, 1, 12, 1),  -- Jean Moreau
+('2024-02-15', 6, 2, 12, 1),  -- Anne Lefebvre
+('2024-03-01', 7, 3, 3, 1),   -- Paul Rousseau
+('2024-03-10', 8, 4, 1, 1),   -- Visitor Anonymous
+('2024-03-15', 9, 1, 12, 1),  -- Lucas Petit
+('2024-04-01', 10, 2, 12, 1), -- Emma Bernard
+('2024-04-15', 11, 3, 6, 1),  -- Hugo Thomas
+('2024-05-01', 12, 1, 12, 1), -- Camille Blanc
+('2024-05-15', 13, 3, 12, 1), -- Nicolas Girard
+('2024-06-01', 14, 1, 6, 1),  -- Léa Faure
+('2024-06-15', 15, 2, 12, 1), -- Maxime Laurent
+('2024-06-20', 16, 3, 6, 1);  -- Clara Morel
 
 -- Insertion des prêts
-INSERT INTO pret (id_inscription, id_exemplaire, id_type_pret, date_pret, id_user) VALUES
+INSERT INTO pret (id_inscription, id_exemplaire, id_type_pret, date_pret, id_employe) VALUES
 -- Prêts en cours
 (1, 2, 1, '2024-06-15', 1),    -- Marie - Le Petit Prince
 (2, 5, 1, '2024-06-10', 1),    -- Pierre - 1984
@@ -185,7 +200,8 @@ INSERT INTO pret (id_inscription, id_exemplaire, id_type_pret, date_pret, id_use
 (9, 4, 1, '2024-05-20', 1),    -- Emma - 1984 (rendu)
 (10, 18, 1, '2024-05-25', 2),  -- Hugo - Dune (rendu)
 (12, 8, 1, '2024-06-05', 1),   -- Nicolas - Steve Jobs (rendu)
-(14, 20, 1, '2024-06-10', 2);  -- Maxime - Introduction à l'algorithmique (rendu)
+(14, 20, 1, '2025-07-01', 2);  -- Maxime - Introduction à l'algorithmique (rendu)
+-- Checkpoint
 
 -- Insertion des remises de livre
 INSERT INTO remise_livre (id_pret, date_remise, commentaire, id_user) VALUES

@@ -16,6 +16,7 @@
         <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
         <jakarta.persistence-api.version>3.1.0</jakarta.persistence-api.version>
         <jakarta.transaction-api.version>2.0.0</jakarta.transaction-api.version>
+        <jackson.version>2.16.1</jackson.version>
     </properties>
 
     <dependencies>
@@ -91,6 +92,13 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>2.0.7</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
 
     </dependencies>
 

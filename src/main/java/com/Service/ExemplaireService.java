@@ -14,6 +14,7 @@ import com.Repository.LivreRepository;
 
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,13 @@ import java.util.Optional;
 public class ExemplaireService {
     @Autowired
     private ExemplaireRepository exemplaireRepository;
+
+    @Autowired
+    private PretService pretService;
+
+    public boolean exemplaireDisponible(Long idExemplaire) throws Exception {
+        return this.pretService.exemplaireEstDisponible(idExemplaire);
+    }
 
     public boolean exemplaireExists(Long id) {
         return this.exemplaireRepository.existsById(id);
