@@ -187,6 +187,14 @@ CREATE OR REPLACE VIEW pret_parametre AS (
             l.id_genre = pp.id_genre
 );
 
+-- Table Paramètres de prêt (règles de gestion)
+CREATE OR REPLACE TABLE adherent_quota (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_type_adherent INT NOT NULL,
+    quota INT NOT NULL,
+    FOREIGN KEY (id_type_adherent) REFERENCES type_adherent(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 -- Checkpoint
 
 -- Table Remise de livre

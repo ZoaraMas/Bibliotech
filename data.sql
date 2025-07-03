@@ -50,6 +50,12 @@ INSERT INTO type_adherent (libelle) VALUES
 ('Professionnel'),
 ('Anonyme');
 
+INSERT INTO adherent_quota (id_type_adherent, quota) VALUES
+(1, 5),  -- Etudiant (assuming ID 1) can borrow 5 books
+(2, 10), -- Professeur (assuming ID 2) can borrow 10 books
+(3, 7),  -- Professionnel (assuming ID 3) can borrow 7 books
+(4, 2);   -- Anonyme (assuming ID 4) can borrow 2 books
+
 -- Insertion des types de prêt
 INSERT INTO type_pret (libelle) VALUES
 ('Domicile'),

@@ -25,12 +25,37 @@ public class PretService {
     private PretRepository pretRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private AdherentQuotaService adherentQuotaService;
 
     // Fonctionalite 1
     // Preter un livre a un membre selon le type d’adherant, le type de livre et la
     // disponibilite du livre en elle meme.
     public void preterUnExemplaireLivre(long idUser, long idEmploye, long idExemplaire) {
 
+    }
+
+    // Verifier si le membre subit une penalite ou non
+    public boolean subitPenalite(int idInscription) {
+        int nombreJourPenalite = 0;
+        
+        return true;
+    }
+
+    public boolean quotaNonNull(int idInscription) {
+        if (this.getQuotaRestant(idInscription) == 0)
+            return false;
+        return true;
+    }
+
+    public int getQuotaRestant(int idInscription) {
+        return this.adherentQuotaService.getQuotaInscription(idInscription) - this.getNombrePretActuel(idInscription);
+    }
+
+    public int getNombrePretActuel(int idInscription) {
+        LocalDateTime dateCible = LocalDateTime.now();
+        Integer result = this.pretRepository.getQuotaDepenseActuel(dateCible, idInscription);
+        return result;
     }
 
     public boolean exemplaireEstDisponible(Long idExemplaire) throws Exception {
