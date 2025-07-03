@@ -107,6 +107,9 @@ plus que la fonction update, initialiser les categories avant de mettre les chec
 # 01-07-25
 - Initialisation projet + base de donnee
 
+- Fonctionalite Pret Livre
+    - verifier si l'exemplaire du livre est encore disponible => il va falloir prendre en compte les prets deja existant pour verifier si un exemplaire(en tant qu'individu propre) est encore disponible ou non
+    - Je vais creer les vues necessaires pour creer la fonction sql qui va verifier si un exemplaire est disponible maintenant ou non
 
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
@@ -123,10 +126,6 @@ plus que la fonction update, initialiser les categories avant de mettre les chec
 - executer run.bat
 - Dans le batch file CAMTuf, Changer le nom du projet [war_name] si besoin, et preciser le vrai chemin vers webapps de tomcat-10.1.28
 - Executer le batch
-
-
-
-
 
 # Prevoir 
 - demande de pret

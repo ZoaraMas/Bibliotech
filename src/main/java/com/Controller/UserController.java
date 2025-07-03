@@ -24,9 +24,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserController {
     @Autowired
     private UserService userService;
+
     @GetMapping("/unlog")
-    public String unlog(Model model,  HttpSession session) {
-        if(session.getAttribute("auth") != null) session.removeAttribute("auth");
+    public String unlog(Model model, HttpSession session) {
+        if (session.getAttribute("auth") != null)
+            session.removeAttribute("auth");
         return "user/form-login";
     }
 
@@ -35,12 +37,13 @@ public class UserController {
     public String form(Model model) {
         return "user/form-login";
     }
-    
+
     // Liste
     @PostMapping("/login")
-    public String login(Model model, HttpSession session, @RequestParam(name = "user", required = true) String user, @RequestParam(name = "password", required = true) String password) {
+    public String login(Model model, HttpSession session, @RequestParam(name = "user", required = true) String user,
+            @RequestParam(name = "password", required = true) String password) {
         User target = this.userService.login(user, password);
-        if(target != null) {
+        if (target != null) {
             session.setAttribute("auth", "true");
             System.out.println("cheese null");
             return "redirect:../";
@@ -48,5 +51,10 @@ public class UserController {
         System.out.println("cheese not null");
         model.addAttribute("error", "Mail or Password wrong or don't match");
         return "redirect:form-login";
+    }
+
+    @GetMapping("/hello")
+    public String hello(Model model) {
+        return "user/hello";
     }
 }
