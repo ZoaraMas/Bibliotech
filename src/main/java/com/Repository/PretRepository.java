@@ -12,10 +12,10 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.Entite.Exemplaire;
+import com.Entite.Livre;
+import com.Entite.Pret;
 import com.Entite.User;
 
 @Repository
-public interface ExemplaireRepository extends JpaRepository<Exemplaire, Long> {
-
+public interface PretRepository extends JpaRepository<Pret, Long> {
 }
