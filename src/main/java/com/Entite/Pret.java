@@ -34,10 +34,9 @@ public class Pret {
     // Constructeurs
     public Pret() {
     }
-    
-    public Pret(Long id, Inscription inscription, Exemplaire exemplaire, TypePret typePret, LocalDateTime datePret,
+
+    public Pret(Inscription inscription, Exemplaire exemplaire, TypePret typePret, LocalDateTime datePret,
             User employe) {
-        this.id = id;
         this.inscription = inscription;
         this.exemplaire = exemplaire;
         this.typePret = typePret;
@@ -93,5 +92,4 @@ public class Pret {
         this.employe = employe;
     }
 
-    
 }

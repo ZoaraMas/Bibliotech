@@ -31,7 +31,9 @@ public class UserService {
     }
 
     public User findById(long id) {
-        return this.UserRepository.findById(id).orElse(null);
+        return this.UserRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "User with ID: " + id + " not found."));
     }
 
     public User login(String mail, String password) {

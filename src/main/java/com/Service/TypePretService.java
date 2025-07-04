@@ -5,10 +5,12 @@ import org.springframework.stereotype.Service;
 
 import com.Entite.Exemplaire;
 import com.Entite.Livre;
+import com.Entite.TypePret;
 import com.Entite.User;
 import com.Entite.Livre;
 import com.Repository.ExemplaireRepository;
 import com.Repository.LivreRepository;
+import com.Repository.TypePretRepository;
 import com.Repository.UserRepository;
 import com.Repository.LivreRepository;
 
@@ -19,25 +21,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ExemplaireService {
+public class TypePretService {
     @Autowired
-    private ExemplaireRepository exemplaireRepository;
+    private TypePretRepository typePretRepository;
 
-    @Autowired
-    private PretService pretService;
-
-    public Exemplaire findById(Long idExemplaire) {
-        Exemplaire result = this.exemplaireRepository.findById(idExemplaire)
+    public TypePret findById(Integer typePretId) {
+        TypePret result = this.typePretRepository.findById(typePretId)
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "L'exemplaire avec l'id ID: " + idExemplaire + " non trouve"));
+                        "Le type de pret avec ID: " + typePretId + " non trouve"));
         return result;
-    }
-
-    public boolean exemplaireDisponible(Long idExemplaire) throws Exception {
-        return this.pretService.exemplaireEstDisponible(idExemplaire);
-    }
-
-    public boolean exemplaireExists(Long id) {
-        return this.exemplaireRepository.existsById(id);
     }
 }

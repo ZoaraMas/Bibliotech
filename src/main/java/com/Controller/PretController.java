@@ -29,6 +29,27 @@ public class PretController {
     @Autowired
     private PretService pretService;
 
+    @GetMapping("/form-pret")
+    public String form(Model model) {
+        return "pret/form-pret";
+    }
+
+    @PostMapping("/creer")
+    @ResponseBody
+    public ResponseEntity<String> creerPret(@RequestParam("idUser") Long idUser,
+            @RequestParam("idExemplaire") Long idExemplaire,
+            @RequestParam("idTypePret") Integer idTypePret, Model model, HttpSession session) {
+        try {
+            Long idEmp = (Long) session.getAttribute("auth");
+            pretService.preterUnExemplaireLivre(idUser, idEmp, idExemplaire, idTypePret);
+            model.addAttribute("message", "Prêt créé avec succès !");
+            return ResponseEntity.ok("Prêt créé avec succès !");
+        } catch (Exception e) {
+            model.addAttribute("error", "Erreur lors de la création du prêt : " + e.getMessage());
+            return ResponseEntity.ok("Erreur lors de la création du prêt : " + e.getMessage());
+        }
+    }
+
     @GetMapping(value = "penalite", produces = "application/json")
     @ResponseBody
     public ResponseEntity<PenaliteResponse> estPenalise(@RequestParam(name = "idInscription") Long idInscription)
@@ -37,6 +58,19 @@ public class PretController {
             PenaliteResponse result = this.pretService.subitPenalite(idInscription);
             String temp = "Penalisation en cours";
             return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.ok(null);
+            // TODO: handle exception
+        }
+    }
+
+    @GetMapping(value = "quota", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<String> quota(@RequestParam(name = "idUser") Long idUser)
+            throws Exception {
+        try {
+            int result = this.pretService.quotaNonNullFromUserId(idUser);
+            return ResponseEntity.ok("restant = " + result);
         } catch (Exception e) {
             return ResponseEntity.ok(null);
             // TODO: handle exception

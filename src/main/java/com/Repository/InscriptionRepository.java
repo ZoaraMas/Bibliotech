@@ -19,7 +19,12 @@ import com.Entite.User;
 
 @Repository
 public interface InscriptionRepository extends JpaRepository<Inscription, Long> {
-    // Retourne l'inscription d'un utilisateur qui est alors encore inscrit a ce jour
+    // Retourne l'inscription actuelle, verifier d'abord si le user est bien inscrit
+    // avant de le faire
+    Optional<Inscription> findFirstByUserIdOrderByDateInscriptionDesc(Long userId);
+
+    // Retourne l'inscription d'un utilisateur qui est alors encore inscrit a ce
+    // jour
     @Query(value = "SELECT * FROM inscription WHERE id_user = :id_user AND DATE_ADD(date_inscription, INTERVAL duree_mois MONTH) > NOW()", nativeQuery = true)
     Inscription estActuellementInscrit(@Param("id_user") long idUser);
 }

@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import com.Entite.Exemplaire;
+import com.Entite.Inscription;
 import com.Entite.Livre;
 import com.Entite.Pret;
 import com.Entite.PretParametreView;
+import com.Entite.TypePret;
 import com.Entite.User;
 import com.Entite.Livre;
 import com.Repository.LivreRepository;
@@ -32,12 +35,62 @@ public class PretService {
     private AdherentQuotaService adherentQuotaService;
     @Autowired
     private PretParametreViewService pretParametreViewService;
+    @Autowired
+    private ExemplaireService exemplaireService;
+    @Autowired
+    private InscriptionService inscriptionService;
+    @Autowired
+    private TypePretService typePretService;
 
     // Fonctionalite 1
     // Preter un livre a un membre selon le type d’adherant, le type de livre et la
     // disponibilite du livre en elle meme.
-    public void preterUnExemplaireLivre(long idUser, long idEmploye, long idExemplaire) {
+    public void preterUnExemplaireLivre(long idUser, long idEmploye, long idExemplaire, Integer idTypePret)
+            throws Exception {
+        // le membre existe
+        if (!userService.userExists(idUser)) {
+            throw new Exception("L'utilisateur ID:" + idUser + " n'existe pas");
+        }
+        // l’exemplaire du livre existe
+        if (!exemplaireService.exemplaireExists(idExemplaire)) {
+            throw new Exception("L'exemplaire de livre ID:" + idExemplaire + " n'existe pas");
+        }
+        // Exemplaire disponible
+        if (!exemplaireService.exemplaireDisponible(idExemplaire)) {
+            throw new Exception("L'exemplaire de livre ID:" + idExemplaire + " n'est pas encore disponible");
+        }
 
+        // Membre actuellement inscrit
+        if (!inscriptionService.estActuellementInscrit(idUser)) {
+            throw new Exception("Actuellement l'utilisateur ID:" + idUser + " n'est pas inscrit");
+        }
+
+        // Le membre ne subit pas de penalite
+        Inscription currInscription = inscriptionService.getCurrentInscription(idUser);
+        PenaliteResponse penaliteResponse = this.subitPenalite(currInscription.getId());
+        if (penaliteResponse.isSubitPenalite()) {
+            throw new Exception(penaliteResponse.getMessage());
+        }
+
+        TypePret typePret = this.typePretService.findById(idTypePret);
+        // Le membre n’a pas encore termine tout son quota
+        // Si il prend sur place, la regle ne s'applique pas
+        if (!this.quotaNonNull(currInscription.getId()) && idTypePret != 2) {
+            throw new Exception("Quota insuffisant, veuillez rendre au moins un livre d'abord.");
+        }
+        // l'employe existe
+        if (!userService.userExists(idEmploye)) {
+            throw new Exception("L'utilisateur employe ID:" + idEmploye + " n'existe pas");
+        }
+        // l'exemplaiire existe
+        Exemplaire exemplaire = this.exemplaireService.findById(idExemplaire);
+
+        // typePret existe
+
+        LocalDateTime now = LocalDateTime.now();
+        User employe = this.userService.findById(idEmploye);
+        Pret pret = new Pret(currInscription, exemplaire, typePret, now, employe);
+        this.pretRepository.save(pret);
     }
 
     // Verifier si le membre subit une penalite ou non
@@ -83,8 +136,13 @@ public class PretService {
         return PenaliteResponse.getNonPenalite(user);
     }
 
+    public int quotaNonNullFromUserId(Long idUser) throws Exception {
+        Inscription currInscription = inscriptionService.getCurrentInscription(idUser);
+        return this.getQuotaRestant(currInscription.getId());
+    }
+
     public boolean quotaNonNull(Long idInscription) {
-        if (this.getQuotaRestant(idInscription) == 0)
+        if (this.getQuotaRestant(idInscription) <= 0)
             return false;
         return true;
     }

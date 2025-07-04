@@ -19,10 +19,24 @@ import java.util.Optional;
 public class InscriptionService {
     @Autowired
     private InscriptionRepository inscriptionRepository;
-     // Retourne l'inscription d'un utilisateur qui est alors encore inscrit a ce jour
+
+    public Inscription getCurrentInscription(Long idUser) throws Exception {
+        if (estActuellementInscrit(idUser)) {
+            Inscription result = this.inscriptionRepository.findFirstByUserIdOrderByDateInscriptionDesc(idUser)
+                    .orElse(null);
+            if (result == null)
+                throw new Exception("Erreur dans l'obtention de l'inscription, veuillez contacter les administrateurs");
+            return result;
+        }
+        throw new Exception("Utilisateur " + idUser + " non inscrit");
+    }
+
+    // Retourne l'inscription d'un utilisateur qui est alors encore inscrit a ce
+    // jour
     public boolean estActuellementInscrit(long idUser) {
         Inscription inscription = this.inscriptionRepository.estActuellementInscrit(idUser);
-        if(inscription == null) return false;
+        if (inscription == null)
+            return false;
         return true;
     }
 }
