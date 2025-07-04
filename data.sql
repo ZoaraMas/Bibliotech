@@ -107,62 +107,62 @@ INSERT INTO exemplaire (id_livre, reference, date_arrivee) VALUES
 (15, 'EX015-SDA-002', '2024-04-15');
 
 -- Insertion des paramètres de prêt
-INSERT INTO parametre_pret (id_type_adherent, id_type_pret, id_genre, nb_jour_pret, nb_livre_pretable_en_meme_temps, penalite_jours, nb_jours_avant_prolongation, nb_jours_prolongation) VALUES
+INSERT INTO parametre_pret (id_type_adherent, id_type_pret, id_genre, nb_jour_pret, penalite_jours, nb_jours_avant_prolongation, nb_jours_prolongation) VALUES
 -- Étudiant
-(1, 1, 1, 14, 3, 2, 3, 7),  -- Roman à domicile
-(1, 1, 2, 14, 3, 2, 3, 7),  -- SF à domicile
-(1, 1, 3, 21, 2, 3, 3, 10), -- Histoire à domicile
-(1, 1, 4, 14, 2, 2, 3, 7),  -- Biographie à domicile
-(1, 1, 5, 21, 2, 3, 3, 10), -- Informatique à domicile
-(1, 1, 6, 14, 2, 2, 3, 7),  -- Philosophie à domicile
-(1, 1, 7, 14, 2, 2, 3, 7),  -- Poésie à domicile
-(1, 1, 8, 14, 2, 2, 3, 7),  -- Théâtre à domicile
-(1, 1, 9, 14, 2, 2, 3, 7),  -- Essai à domicile
-(1, 1, 10, 14, 3, 2, 3, 7), -- Jeunesse à domicile
-(1, 2, 1, 1, 5, 0, 0, 0),   -- Roman sur place
-(1, 2, 2, 1, 5, 0, 0, 0),   -- SF sur place
-(1, 2, 3, 1, 3, 0, 0, 0),   -- Histoire sur place
-(1, 2, 4, 1, 3, 0, 0, 0),   -- Biographie sur place
-(1, 2, 5, 1, 3, 0, 0, 0),   -- Informatique sur place
+(1, 1, 1, 14, 2, 3, 7),  -- Roman à domicile
+(1, 1, 2, 14, 2, 3, 7),  -- SF à domicile
+(1, 1, 3, 21, 3, 3, 10), -- Histoire à domicile
+(1, 1, 4, 14, 2, 3, 7),  -- Biographie à domicile
+(1, 1, 5, 21, 3, 3, 10), -- Informatique à domicile
+(1, 1, 6, 14, 2, 3, 7),  -- Philosophie à domicile
+(1, 1, 7, 14, 2, 3, 7),  -- Poésie à domicile
+(1, 1, 8, 14, 2, 3, 7),  -- Théâtre à domicile
+(1, 1, 9, 14, 2, 3, 7),  -- Essai à domicile
+(1, 1, 10, 14, 2, 3, 7), -- Jeunesse à domicile
+(1, 2, 1, 1, 0, 0, 0),   -- Roman sur place
+(1, 2, 2, 1, 0, 0, 0),   -- SF sur place
+(1, 2, 3, 1, 0, 0, 0),   -- Histoire sur place
+(1, 2, 4, 1, 0, 0, 0),   -- Biographie sur place
+(1, 2, 5, 1, 0, 0, 0),   -- Informatique sur place
 -- Professeur
-(2, 1, 1, 21, 5, 1, 5, 14), -- Roman à domicile
-(2, 1, 2, 21, 5, 1, 5, 14), -- SF à domicile
-(2, 1, 3, 30, 5, 2, 5, 14), -- Histoire à domicile
-(2, 1, 4, 21, 5, 1, 5, 14), -- Biographie à domicile
-(2, 1, 5, 30, 5, 2, 5, 14), -- Informatique à domicile
-(2, 1, 6, 21, 5, 1, 5, 14), -- Philosophie à domicile
-(2, 1, 7, 21, 5, 1, 5, 14), -- Poésie à domicile
-(2, 1, 8, 21, 5, 1, 5, 14), -- Théâtre à domicile
-(2, 1, 9, 21, 5, 1, 5, 14), -- Essai à domicile
-(2, 1, 10, 21, 5, 1, 5, 14), -- Jeunesse à domicile
-(2, 2, 1, 1, 10, 0, 0, 0),  -- Roman sur place
-(2, 2, 2, 1, 10, 0, 0, 0),  -- SF sur place
-(2, 2, 3, 1, 10, 0, 0, 0),  -- Histoire sur place
-(2, 2, 4, 1, 10, 0, 0, 0),  -- Biographie sur place
-(2, 2, 5, 1, 10, 0, 0, 0),  -- Informatique sur place
+(2, 1, 1, 21, 1, 5, 14), -- Roman à domicile
+(2, 1, 2, 21, 1, 5, 14), -- SF à domicile
+(2, 1, 3, 30, 2, 5, 14), -- Histoire à domicile
+(2, 1, 4, 21, 1, 5, 14), -- Biographie à domicile
+(2, 1, 5, 30, 2, 5, 14), -- Informatique à domicile
+(2, 1, 6, 21, 1, 5, 14), -- Philosophie à domicile
+(2, 1, 7, 21, 1, 5, 14), -- Poésie à domicile
+(2, 1, 8, 21, 1, 5, 14), -- Théâtre à domicile
+(2, 1, 9, 21, 1, 5, 14), -- Essai à domicile
+(2, 1, 10, 21, 1, 5, 14), -- Jeunesse à domicile
+(2, 2, 1, 1, 0, 0, 0),  -- Roman sur place
+(2, 2, 2, 1, 0, 0, 0),  -- SF sur place
+(2, 2, 3, 1, 0, 0, 0),  -- Histoire sur place
+(2, 2, 4, 1, 0, 0, 0),  -- Biographie sur place
+(2, 2, 5, 1, 0, 0, 0),  -- Informatique sur place
 -- Professionnel
-(3, 1, 1, 14, 3, 2, 3, 7),  -- Roman à domicile
-(3, 1, 2, 14, 3, 2, 3, 7),  -- SF à domicile
-(3, 1, 3, 21, 3, 3, 3, 10), -- Histoire à domicile
-(3, 1, 4, 14, 3, 2, 3, 7),  -- Biographie à domicile
-(3, 1, 5, 21, 3, 3, 3, 10), -- Informatique à domicile
-(3, 1, 6, 14, 3, 2, 3, 7),  -- Philosophie à domicile
-(3, 1, 7, 14, 3, 2, 3, 7),  -- Poésie à domicile
-(3, 1, 8, 14, 3, 2, 3, 7),  -- Théâtre à domicile
-(3, 1, 9, 14, 3, 2, 3, 7),  -- Essai à domicile
-(3, 1, 10, 14, 3, 2, 3, 7), -- Jeunesse à domicile
-(3, 2, 1, 1, 5, 0, 0, 0),   -- Roman sur place
-(3, 2, 2, 1, 5, 0, 0, 0),   -- SF sur place
-(3, 2, 3, 1, 5, 0, 0, 0),   -- Histoire sur place
-(3, 2, 4, 1, 5, 0, 0, 0),   -- Biographie sur place
-(3, 2, 5, 1, 5, 0, 0, 0),   -- Informatique sur place
+(3, 1, 1, 14, 2, 3, 7),  -- Roman à domicile
+(3, 1, 2, 14, 2, 3, 7),  -- SF à domicile
+(3, 1, 3, 21, 3, 3, 10), -- Histoire à domicile
+(3, 1, 4, 14, 2, 3, 7),  -- Biographie à domicile
+(3, 1, 5, 21, 3, 3, 10), -- Informatique à domicile
+(3, 1, 6, 14, 2, 3, 7),  -- Philosophie à domicile
+(3, 1, 7, 14, 2, 3, 7),  -- Poésie à domicile
+(3, 1, 8, 14, 2, 3, 7),  -- Théâtre à domicile
+(3, 1, 9, 14, 2, 3, 7),  -- Essai à domicile
+(3, 1, 10, 14, 2, 3, 7), -- Jeunesse à domicile
+(3, 2, 1, 1, 0, 0, 0),   -- Roman sur place
+(3, 2, 2, 1, 0, 0, 0),   -- SF sur place
+(3, 2, 3, 1, 0, 0, 0),   -- Histoire sur place
+(3, 2, 4, 1, 0, 0, 0),   -- Biographie sur place
+(3, 2, 5, 1, 0, 0, 0),   -- Informatique sur place
 -- Anonyme (restrictions plus importantes)
-(4, 1, 1, 7, 1, 5, 2, 3),   -- Roman à domicile
-(4, 1, 2, 7, 1, 5, 2, 3),   -- SF à domicile
-(4, 1, 10, 7, 2, 5, 2, 3),  -- Jeunesse à domicile
-(4, 2, 1, 1, 2, 0, 0, 0),   -- Roman sur place
-(4, 2, 2, 1, 2, 0, 0, 0),   -- SF sur place
-(4, 2, 10, 1, 3, 0, 0, 0);  -- Jeunesse sur place
+(4, 1, 1, 7, 5, 2, 3),   -- Roman à domicile
+(4, 1, 2, 7, 5, 2, 3),   -- SF à domicile
+(4, 1, 10, 7, 5, 2, 3),  -- Jeunesse à domicile
+(4, 2, 1, 1, 0, 0, 0),   -- Roman sur place
+(4, 2, 2, 1, 0, 0, 0),   -- SF sur place
+(4, 2, 10, 1, 0, 0, 0);  -- Jeunesse sur place
 
 -- Inscription des membres (mises à jour pour 2025)
 INSERT INTO inscription (date_inscription, id_user, id_type_adherent, duree_mois, id_employe) VALUES

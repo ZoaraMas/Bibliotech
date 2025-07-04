@@ -124,7 +124,6 @@ CREATE OR REPLACE TABLE parametre_pret (
     id_type_pret INT NOT NULL,
     id_genre INT NOT NULL,
     nb_jour_pret INT NOT NULL,
-    nb_livre_pretable_en_meme_temps INT NOT NULL,
     penalite_jours INT DEFAULT 0,
     nb_jours_avant_prolongation INT DEFAULT 3,
     nb_jours_prolongation INT DEFAULT 7,
@@ -177,7 +176,6 @@ CREATE OR REPLACE VIEW pret_parametre AS (
         pp.id_type_pret AS pp_id_type_pret, -- Aliased to avoid conflict with p.id_type_pret
         pp.id_genre,
         pp.nb_jour_pret,
-        pp.nb_livre_pretable_en_meme_temps,
         pp.penalite_jours,
         pp.nb_jours_avant_prolongation,
         pp.nb_jours_prolongation,

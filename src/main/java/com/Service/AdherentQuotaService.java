@@ -21,7 +21,7 @@ public class AdherentQuotaService {
     @Autowired
     private AdherentQuotaRepository adherentQuotaRepository;
 
-    public int getQuotaInscription(int idInscription) {
+    public int getQuotaInscription(Long idInscription) {
         return this.adherentQuotaRepository.getQuotaDepenseActuel(idInscription);
     } 
 }

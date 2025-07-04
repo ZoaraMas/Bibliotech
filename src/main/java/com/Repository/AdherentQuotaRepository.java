@@ -21,6 +21,6 @@ import com.Entite.User;
 @Repository
 public interface AdherentQuotaRepository extends JpaRepository<AdherentQuota, Long> {
     @Query(value = "SELECT aq.quota FROM inscription AS i JOIN adherent_quota AS aq ON aq.id_type_adherent = i.id_type_adherent WHERE i.id = :idInscription", nativeQuery = true)
-    public Integer getQuotaDepenseActuel(@Param("idInscription") Integer idInscription);
+    public Integer getQuotaDepenseActuel(@Param("idInscription") Long idInscription);
 
 }
