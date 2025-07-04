@@ -10,7 +10,7 @@ import java.util.List;
 public class TypeAdherent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false, unique = true, length = 50)
     private String libelle;
@@ -32,14 +32,7 @@ public class TypeAdherent {
         this.libelle = libelle;
     }
 
-    // Getters et Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    
 
     public String getLibelle() {
         return libelle;
@@ -55,6 +48,14 @@ public class TypeAdherent {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     // public List<Inscription> getInscriptions() {

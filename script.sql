@@ -42,7 +42,7 @@ CREATE OR REPLACE TABLE type_user (
 
 -- Table Employé
 CREATE OR REPLACE TABLE user (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     prenom VARCHAR(100) NOT NULL,
     date_naissance DATE NOT NULL,
@@ -94,7 +94,7 @@ CREATE OR REPLACE TABLE livre (
 
 -- Table Exemplaire
 CREATE OR REPLACE TABLE exemplaire (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     id_livre INT NOT NULL,
     reference VARCHAR(50) NOT NULL UNIQUE,
     date_arrivee DATE NOT NULL,
@@ -105,12 +105,12 @@ CREATE OR REPLACE TABLE exemplaire (
 
 -- Table Inscription
 CREATE OR REPLACE TABLE inscription (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     date_inscription DATE NOT NULL,
-    id_user INT NOT NULL,
+    id_user BIGINT NOT NULL,
     id_type_adherent INT NOT NULL,
     duree_mois INT NOT NULL,
-    id_employe INT NOT NULL,
+    id_employe BIGINT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_type_adherent) REFERENCES type_adherent(id),
     FOREIGN KEY (id_user) REFERENCES user(id),
@@ -139,11 +139,11 @@ CREATE OR REPLACE TABLE parametre_pret (
 -- Table Prêt
 CREATE OR REPLACE TABLE pret (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    id_inscription INT NOT NULL,
-    id_exemplaire INT NOT NULL,
+    id_inscription BIGINT NOT NULL,
+    id_exemplaire BIGINT NOT NULL,
     id_type_pret INT NOT NULL,
     date_pret DATE NOT NULL,
-    id_employe INT NOT NULL,
+    id_employe BIGINT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_inscription) REFERENCES inscription(id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (id_exemplaire) REFERENCES exemplaire(id) ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -157,7 +157,7 @@ CREATE OR REPLACE TABLE remise_livre (
     id_pret BIGINT NOT NULL,
     date_remise DATE NOT NULL,
     commentaire TEXT,
-    id_employe INT NOT NULL,
+    id_employe BIGINT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_pret) REFERENCES pret(id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE
