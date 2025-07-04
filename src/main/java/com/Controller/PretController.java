@@ -3,6 +3,7 @@ package com.Controller;
 import com.Entite.User;
 import com.Service.PretService;
 import com.Service.UserService;
+import com.dto.PenaliteResponse;
 import com.Service.UserService;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpSession;
@@ -30,13 +31,14 @@ public class PretController {
 
     @GetMapping(value = "penalite", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<String> exemplaireEstDisponible(@RequestParam(name = "idInscription") Integer idInscription)
+    public ResponseEntity<PenaliteResponse> estPenalise(@RequestParam(name = "idInscription") Long idInscription)
             throws Exception {
         try {
-            boolean result = this.pretService.exemplaireEstDisponible(idInscription.longValue());
-            return ResponseEntity.ok("resultat trouve = " + result);
+            PenaliteResponse result = this.pretService.subitPenalite(idInscription);
+            String temp = "Penalisation en cours";
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
-            return ResponseEntity.ok("Erreur = " + e.getMessage());
+            return ResponseEntity.ok(null);
             // TODO: handle exception
         }
     }

@@ -12,6 +12,7 @@ import com.Entite.Livre;
 import com.Repository.LivreRepository;
 import com.Repository.PretParametreViewRepository;
 import com.Repository.UserRepository;
+import com.dto.PenaliteResponse;
 import com.Repository.PretRepository;
 
 import jakarta.transaction.Transactional;
@@ -41,21 +42,26 @@ public class PretService {
 
     // Verifier si le membre subit une penalite ou non
     // Miverina daoly ny boky zay vo mande ny nombre de jour de penalite
-    public boolean subitPenalite(Long idInscription) {
+    public PenaliteResponse subitPenalite(Long idInscription) {
+        User user = this.userService.findByInscriptionId(idInscription);
         int nombreJourPenaliteTotal = 0;
+        // On ajoutera le nombre de jour de penalite total a cette variable en dessous
+        LocalDateTime debutPenalite = null; // c'est la derniere la remise en retard la plus recente avant aujourd'hui
         List<PretParametreView> liste = this.pretParametreViewService
-                .getAllPretOrderByDateFinAscByIdInscription(idInscription);
+                .getAllPretOrderByDateFinAscByIdInscription(idInscription); // obtenir les prets avec la date des
+                                                                            // remises trie par datefinPret asc
         LocalDateTime now = LocalDateTime.now();
         for (int i = 0; i < liste.size(); i++) {
             PretParametreView pretParametreDTO = liste.get(i);
             LocalDateTime dateFin = pretParametreDTO.getDateFinPret();
             LocalDateTime dateRemise = pretParametreDTO.getDateRemise();
             if (dateFin.isBefore(now)) {
-                if (dateRemise == null) {
+                if (dateRemise == null) { // livre non rendu encore
                     // nous somme apres la date fin(date fin + 1)
-                    return true; // penalite indetermine encore, rendre le livre pour connaitre le nombre de jour
-                                 // de penalite apres
+                    return PenaliteResponse.getPenaliteIndeterminee(user);
+                    // de penalite apres
                 } else if (dateFin.isBefore(dateRemise)) { // on remet le livre apres le deadline
+                    debutPenalite = dateRemise;
                     int nombreJourPenalite = pretParametreDTO.getPenaliteJours();
                     nombreJourPenaliteTotal += nombreJourPenalite;
                     // Logique ou on attend pas de rendre tout les livres avant de lancer la
@@ -66,12 +72,15 @@ public class PretService {
                 }
             }
         }
-        // Arrive a ce stade, tout les livres on ete rendus, obtenir la date de la fin
+        // Arrive a ce stade, tout les livres on ete rendus (ou fin date pret < now())
         // de toutes les penalites successives
-        LocalDateTime finPenalite = liste.get(liste.size() - 1).getDateRemise().plusDays(nombreJourPenaliteTotal);
-        if (finPenalite.isBefore(now))
-            return false;
-        return true;
+        if (debutPenalite != null) {
+            LocalDateTime finPenalite = debutPenalite.plusDays(nombreJourPenaliteTotal);
+            if (finPenalite.isBefore(now))
+                return PenaliteResponse.getNonPenalite(user);
+            return PenaliteResponse.getPenaliteDeterminee(user, debutPenalite, finPenalite, nombreJourPenaliteTotal);
+        } // si c'est null, a ce stade du code, il n'y a pas de penalite en cours
+        return PenaliteResponse.getNonPenalite(user);
     }
 
     public boolean quotaNonNull(Long idInscription) {

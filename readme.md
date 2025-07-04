@@ -114,6 +114,8 @@ plus que la fonction update, initialiser les categories avant de mettre les chec
 # 04-07-25
 Mon probleme etait de comment interpreter la vue pret_parametre vers une entite
 
+- Plus tard on aura des prets qui existeront deja pour des dates > now(), on ne les comptes pas quand on va verifier la penalisation actuelle
+
 
 
 
