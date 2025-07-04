@@ -6,15 +6,16 @@ import org.springframework.stereotype.Service;
 
 import com.Entite.Livre;
 import com.Entite.Pret;
+import com.Entite.PretParametreView;
 import com.Entite.User;
 import com.Entite.Livre;
 import com.Repository.LivreRepository;
 import com.Repository.UserRepository;
-import com.dto.PretParametreDTO;
 import com.Repository.PretRepository;
 
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -36,9 +37,32 @@ public class PretService {
     }
 
     // Verifier si le membre subit une penalite ou non
+    // Miverina daoly ny boky zay vo mande ny nombre de jour de penalite
     public boolean subitPenalite(int idInscription) {
-        int nombreJourPenalite = 0;
-        List<PretParametreDTO> liste = this.pretRepository.getAllPretOrderByDateFinAsc(idInscription);
+        int nombreJourPenaliteTotal = 0;
+        List<PretParametreView> liste = this.pretRepository.getAllPretOrderByDateFinAscByIdInscription(idInscription);
+        LocalDate now = LocalDate.now();
+        for (int i = 0; i < liste.size(); i++) {
+            PretParametreView pretParametreDTO = liste.get(i);
+            LocalDate dateFin = pretParametreDTO.getDateFinPret();
+            LocalDate dateRemise = pretParametreDTO.getDateRemise();
+            if (dateFin.isBefore(now)) {
+                if (dateRemise == null) {
+                    // nous somme apres la date fin(date fin + 1)
+                    return true; // penalite indetermine encore, rendre le livre pour connaitre le nombre de jour
+                                 // de penalite apres
+                } else if (dateFin.isBefore(dateRemise)) { // on remet le livre apres le deadline
+                    int nombreJourPenalite = pretParametreDTO.getPenaliteJours();
+                    nombreJourPenaliteTotal += nombreJourPenalite;
+                    // Logique ou on attend pas de rendre tout les livres avant de lancer la penalite
+                    // if(currFinPenalite == null) currFinPenalite = dateRemise.plusDays(nombreJourPenalite);
+                    // else currFinPenalite = currFinPenalite.plusDays(nombreJourPenalite);
+                }
+            }
+        }
+        // Arrive a ce stade, tout les livres on ete rendus, obtenir la date de la fin de toutes les penalites successives
+        LocalDate finPenalite = liste.get(liste.size() - 1).getDateRemise().plusDays(nombreJourPenaliteTotal);
+        if(finPenalite.isBefore(now)) return false;
         return true;
     }
 
@@ -60,7 +84,7 @@ public class PretService {
 
     public boolean exemplaireEstDisponible(Long idExemplaire) throws Exception {
         LocalDateTime dateCible = LocalDateTime.now();
-        PretParametreDTO pretParametreDTO = this.pretRepository.findPretWhereExemplaireIn(dateCible, idExemplaire);
+        PretParametreView pretParametreDTO = this.pretRepository.findPretWhereExemplaireIn(dateCible, idExemplaire);
         if (pretParametreDTO == null)
             return true;
         throw new Exception("l'exemplaire de livre " + idExemplaire + "n'est pas encore disponible jusqu'au "

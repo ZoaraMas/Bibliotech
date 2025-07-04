@@ -216,7 +216,7 @@ INSERT INTO pret (id_inscription, id_exemplaire, id_type_pret, date_pret, id_emp
 INSERT INTO remise_livre (id_pret, date_remise, commentaire, id_employe) VALUES
 -- Retours de juin 2025 (certains en avance, certains en retard)
 (1, '2025-06-14', 'Retour en avance, livre en parfait état', 1),  -- Le Petit Prince - en avance (prévu 15/06)
-(2, '2025-06-28', 'Retour avec 4 jours de retard', 2),           -- 1984 - en retard (prévu 24/06)
+(2, '2025-07-04', 'Retour avec 4 jours de retard', 2),           -- 1984 - en retard (prévu 24/06)
 (3, '2025-06-18', 'Retour à temps', 1),                          -- Steve Jobs - à temps (prévu 19/06)
 (4, '2025-06-27', 'Retour en avance de 2 jours', 2),             -- Clean Code - en avance (prévu 29/06)
 (5, '2025-07-03', 'Retour avec 2 jours de retard', 1),           -- Harry Potter - en retard (prévu 01/07)

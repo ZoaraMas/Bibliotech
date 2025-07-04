@@ -183,7 +183,7 @@ CREATE OR REPLACE VIEW pret_parametre AS (
         pp.nb_jours_prolongation,
         pp.created_at AS pp_created_at, -- Aliased to avoid conflict with p.created_at
         DATE_ADD(p.date_pret, INTERVAL pp.nb_jour_pret DAY) AS date_fin_pret,
-        rm.date_remise
+        COALESCE(rm.date_remise, NULL) AS date_remise
     FROM
         pret AS p
     JOIN

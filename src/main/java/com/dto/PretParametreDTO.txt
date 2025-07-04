@@ -4,35 +4,36 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class PretParametreDTO {
-      private Long id;
-    private Long idInscription; // Assuming camelCase for Java fields
+    private Long id;
+    private Long idInscription;
     private Long idExemplaire;
     private Long idTypePret;
-    private LocalDateTime datePret; // Use LocalDate if it's just date, LocalDateTime if it includes time
+    private LocalDateTime datePret;
     private Long idEmploye;
-    private LocalDateTime createdAt; // Assuming LocalDateTime for created_at
+    private LocalDateTime createdAt;
 
     // Columns from 'parametre_pret' (pp.*)
-    private Long ppId; // Maps to pp.id
-    private Long idTypeAdherent; // No collision with p.id_type_adherent
-    private Long ppIdTypePret; // Maps to pp.id_type_pret
-    private Long idGenre; // No collision with p.id_genre
+    private Long ppId;
+    private Long idTypeAdherent;
+    private Long ppIdTypePret;
+    private Long idGenre;
     private Integer nbJourPret;
     private Integer nbLivrePretableEnMemeTemps;
     private Integer penaliteJours;
     private Integer nbJoursAvantProlongation;
     private Integer nbJoursProlongation;
-    private LocalDateTime ppCreatedAt; // Maps to pp.created_at
+    private LocalDateTime ppCreatedAt;
 
     // Calculated column from view
-    private LocalDate dateFinPret; // Use LocalDate for dates
+    private LocalDate dateFinPret;
+    private LocalDate dateRemise; // Can be NULL
 
-    
+    // Main constructor that handles NULL dateRemise
     public PretParametreDTO(Long id, Long idInscription, Long idExemplaire, Long idTypePret, LocalDateTime datePret,
             Long idEmploye, LocalDateTime createdAt, Long ppId, Long idTypeAdherent, Long ppIdTypePret, Long idGenre,
             Integer nbJourPret, Integer nbLivrePretableEnMemeTemps, Integer penaliteJours,
             Integer nbJoursAvantProlongation, Integer nbJoursProlongation, LocalDateTime ppCreatedAt,
-            LocalDate dateFinPret) {
+            LocalDate dateFinPret, LocalDate dateRemise) {
         this.id = id;
         this.idInscription = idInscription;
         this.idExemplaire = idExemplaire;
@@ -51,8 +52,45 @@ public class PretParametreDTO {
         this.nbJoursProlongation = nbJoursProlongation;
         this.ppCreatedAt = ppCreatedAt;
         this.dateFinPret = dateFinPret;
+        this.dateRemise = dateRemise; // This can be NULL and that's OK
     }
 
+    // Constructor without dateRemise (for backward compatibility)
+    public PretParametreDTO(Long id, Long idInscription, Long idExemplaire, Long idTypePret, LocalDateTime datePret,
+            Long idEmploye, LocalDateTime createdAt, Long ppId, Long idTypeAdherent, Long ppIdTypePret, Long idGenre,
+            Integer nbJourPret, Integer nbLivrePretableEnMemeTemps, Integer penaliteJours,
+            Integer nbJoursAvantProlongation, Integer nbJoursProlongation, LocalDateTime ppCreatedAt,
+            LocalDate dateFinPret) {
+        this(id, idInscription, idExemplaire, idTypePret, datePret, idEmploye, createdAt, ppId, idTypeAdherent,
+                ppIdTypePret, idGenre, nbJourPret, nbLivrePretableEnMemeTemps, penaliteJours,
+                nbJoursAvantProlongation, nbJoursProlongation, ppCreatedAt, dateFinPret, null);
+    }
+
+    // Default constructor
+    public PretParametreDTO() {
+        // Default constructor for frameworks that require it
+    }
+
+    // Utility methods
+    public boolean isBookReturned() {
+        return this.dateRemise != null;
+    }
+
+    public boolean isOverdue() {
+        if (isBookReturned()) {
+            return false; // Book is returned, so not overdue
+        }
+        return LocalDate.now().isAfter(this.dateFinPret);
+    }
+
+    public long getDaysOverdue() {
+        if (!isOverdue()) {
+            return 0;
+        }
+        return java.time.temporal.ChronoUnit.DAYS.between(this.dateFinPret, LocalDate.now());
+    }
+
+    // All getters and setters
     public Long getId() {
         return id;
     }
@@ -197,5 +235,22 @@ public class PretParametreDTO {
         this.dateFinPret = dateFinPret;
     }
 
-    
+    public LocalDate getDateRemise() {
+        return dateRemise;
+    }
+
+    public void setDateRemise(LocalDate dateRemise) {
+        this.dateRemise = dateRemise;
+    }
+
+    @Override
+    public String toString() {
+        return "PretParametreDTO{" +
+                "id=" + id +
+                ", idInscription=" + idInscription +
+                ", idExemplaire=" + idExemplaire +
+                ", dateRemise=" + (dateRemise != null ? dateRemise : "NOT_RETURNED") +
+                ", isOverdue=" + isOverdue() +
+                '}';
+    }
 }
