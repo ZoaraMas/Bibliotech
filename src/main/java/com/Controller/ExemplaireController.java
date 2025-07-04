@@ -5,7 +5,6 @@ import com.Repository.ExemplaireRepository;
 import com.Service.ExemplaireService;
 import com.Service.PretService;
 import com.Service.UserService;
-import com.dto.PretParametreDTO;
 import com.Service.UserService;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpSession;

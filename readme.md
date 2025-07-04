@@ -111,6 +111,15 @@ plus que la fonction update, initialiser les categories avant de mettre les chec
     - verifier si l'exemplaire du livre est encore disponible => il va falloir prendre en compte les prets deja existant pour verifier si un exemplaire(en tant qu'individu propre) est encore disponible ou non
     - Je vais creer les vues necessaires pour creer la fonction sql qui va verifier si un exemplaire est disponible maintenant ou non
 
+# 04-07-25
+Mon probleme etait de comment interpreter la vue pret_parametre vers une entite
+
+- Plus tard on aura des prets qui existeront deja pour des dates > now(), on ne les comptes pas quand on va verifier la penalisation actuelle
+
+
+
+
+
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
 - [a verifier] CopyJsp pour copier uniquement les jsp

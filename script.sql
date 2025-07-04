@@ -42,7 +42,7 @@ CREATE OR REPLACE TABLE type_user (
 
 -- Table Employé
 CREATE OR REPLACE TABLE user (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     prenom VARCHAR(100) NOT NULL,
     date_naissance DATE NOT NULL,
@@ -94,7 +94,7 @@ CREATE OR REPLACE TABLE livre (
 
 -- Table Exemplaire
 CREATE OR REPLACE TABLE exemplaire (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     id_livre INT NOT NULL,
     reference VARCHAR(50) NOT NULL UNIQUE,
     date_arrivee DATE NOT NULL,
@@ -105,12 +105,12 @@ CREATE OR REPLACE TABLE exemplaire (
 
 -- Table Inscription
 CREATE OR REPLACE TABLE inscription (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     date_inscription DATE NOT NULL,
-    id_user INT NOT NULL,
+    id_user BIGINT NOT NULL,
     id_type_adherent INT NOT NULL,
     duree_mois INT NOT NULL,
-    id_employe INT NOT NULL,
+    id_employe BIGINT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_type_adherent) REFERENCES type_adherent(id),
     FOREIGN KEY (id_user) REFERENCES user(id),
@@ -124,7 +124,6 @@ CREATE OR REPLACE TABLE parametre_pret (
     id_type_pret INT NOT NULL,
     id_genre INT NOT NULL,
     nb_jour_pret INT NOT NULL,
-    nb_livre_pretable_en_meme_temps INT NOT NULL,
     penalite_jours INT DEFAULT 0,
     nb_jours_avant_prolongation INT DEFAULT 3,
     nb_jours_prolongation INT DEFAULT 7,
@@ -138,18 +137,29 @@ CREATE OR REPLACE TABLE parametre_pret (
 
 -- Table Prêt
 CREATE OR REPLACE TABLE pret (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_inscription INT NOT NULL,
-    id_exemplaire INT NOT NULL,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_inscription BIGINT NOT NULL,
+    id_exemplaire BIGINT NOT NULL,
     id_type_pret INT NOT NULL,
     date_pret DATE NOT NULL,
-    id_employe INT NOT NULL,
+    id_employe BIGINT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_inscription) REFERENCES inscription(id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (id_exemplaire) REFERENCES exemplaire(id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (id_type_pret) REFERENCES type_pret(id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE,
     INDEX idx_pret_dates (date_pret)
+);
+
+CREATE OR REPLACE TABLE remise_livre (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_pret BIGINT NOT NULL,
+    date_remise DATE NOT NULL,
+    commentaire TEXT,
+    id_employe BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_pret) REFERENCES pret(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE OR REPLACE VIEW pret_parametre AS (
@@ -166,12 +176,12 @@ CREATE OR REPLACE VIEW pret_parametre AS (
         pp.id_type_pret AS pp_id_type_pret, -- Aliased to avoid conflict with p.id_type_pret
         pp.id_genre,
         pp.nb_jour_pret,
-        pp.nb_livre_pretable_en_meme_temps,
         pp.penalite_jours,
         pp.nb_jours_avant_prolongation,
         pp.nb_jours_prolongation,
         pp.created_at AS pp_created_at, -- Aliased to avoid conflict with p.created_at
-        DATE_ADD(p.date_pret, INTERVAL pp.nb_jour_pret DAY) AS date_fin_pret
+        DATE_ADD(p.date_pret, INTERVAL pp.nb_jour_pret DAY) AS date_fin_pret,
+        COALESCE(rm.date_remise, NULL) AS date_remise
     FROM
         pret AS p
     JOIN
@@ -180,26 +190,27 @@ CREATE OR REPLACE VIEW pret_parametre AS (
         exemplaire AS e ON e.id = p.id_exemplaire
     JOIN
         livre AS l ON l.id = e.id_livre
+    LEFT JOIN
+        remise_livre AS rm ON p.id = rm.id_pret
     JOIN
         parametre_pret AS pp ON
             p.id_type_pret = pp.id_type_pret AND
             i.id_type_adherent = pp.id_type_adherent AND
-            l.id_genre = pp.id_genre
+            l.id_genre = pp.id_genre 
+);
+
+-- Table Paramètres de prêt (règles de gestion)
+CREATE OR REPLACE TABLE adherent_quota (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_type_adherent INT NOT NULL,
+    quota INT NOT NULL,
+    FOREIGN KEY (id_type_adherent) REFERENCES type_adherent(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Checkpoint
 
 -- Table Remise de livre
-CREATE OR REPLACE TABLE remise_livre (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_pret INT NOT NULL,
-    date_remise DATE NOT NULL,
-    commentaire TEXT,
-    id_employe INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_pret) REFERENCES pret(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_employe) REFERENCES employe(id) ON DELETE RESTRICT ON UPDATE CASCADE
-);
+
 
 -- Table Réservation
 CREATE OR REPLACE TABLE reservation (

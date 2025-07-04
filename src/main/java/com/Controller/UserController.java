@@ -44,7 +44,7 @@ public class UserController {
             @RequestParam(name = "password", required = true) String password) {
         User target = this.userService.login(user, password);
         if (target != null) {
-            session.setAttribute("auth", "true");
+            session.setAttribute("auth", target.getId());
             System.out.println("cheese null");
             return "redirect:../";
         }
