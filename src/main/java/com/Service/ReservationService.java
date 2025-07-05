@@ -5,6 +5,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.Entite.Exemplaire;
+import com.Entite.Genre;
 import com.Entite.Inscription;
 import com.Entite.Livre;
 import com.Entite.Pret;
@@ -43,11 +44,17 @@ public class ReservationService {
     private ExemplaireService exemplaireService;
     @Autowired
     private PretService pretService;
+    @Autowired
+    private ParametrePretService parametrePretService;
 
     // disponibilite du livre en elle meme.
     public void demanderReservation(long idUser, long idEmploye, long idExemplaire, Integer idTypePret,
-            LocalDateTime dateVoulue)
+            LocalDateTime dateVoulue, String commentaire)
             throws Exception {
+        // Date valide -> date apres aujourd'hui
+        if (!MyDate.dateValideReservation(dateVoulue)) {
+            throw new IllegalArgumentException("La date de reservation doit etre apres aujourd'hui");
+        }
         // le membre existe
         if (!userService.userExists(idUser)) {
             throw new Exception("L'utilisateur ID:" + idUser + " n'existe pas");
@@ -67,7 +74,8 @@ public class ReservationService {
             throw new Exception("Actuellement l'utilisateur ID:" + idUser + " n'est pas inscrit");
         }
 
-        // Verifier que si la reservation devienne un pret plus tard, l'inscription actuelle couvre tout le pret
+        // Verifier que si la reservation devienne un pret plus tard, l'inscription
+        // actuelle couvre tout le pret
 
         // Le membre ne subit pas de penalite
         // Ici aussi, quand le pret sera creer a la date d, il fa faloir que le membre
@@ -98,8 +106,16 @@ public class ReservationService {
         LocalDateTime now = LocalDateTime.now();
         User employe = this.userService.findById(idEmploye);
 
-        // Reservation reservation = new Reservation(currInscription, exemplaire);
-        Pret pret = new Pret(currInscription, exemplaire, typePret, now, employe);
-        // this.pretRepository.save(pret);
+        Genre genreFromExemplaire = this.exemplaireService.getGenreFromIdExemplaire(idExemplaire);
+        // L'inscription couvre tout le pret
+        if (!this.parametrePretService.pretCouvertEntierementDansInscription(currInscription.getTypeAdherent(),
+                typePret, genreFromExemplaire, currInscription, dateVoulue)) {
+            throw new Exception("Impossible de reserver le livre a la date " + dateVoulue
+                    + ", le pret n'est pas couvert par l'inscription.");
+        }
+
+        Reservation reservation = new Reservation(currInscription, exemplaire, typePret, dateVoulue, commentaire,
+                employe);
+        this.reservationRepository.save(reservation);
     }
 }

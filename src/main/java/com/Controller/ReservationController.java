@@ -35,20 +35,21 @@ public class ReservationController {
 
     @PostMapping("/creer")
     @ResponseBody
-    public ResponseEntity<String> creerRemiseLivre(@RequestParam("idExemplaire") Long idExemplaire,
-            @RequestParam(value = "date", required = false) LocalDateTime dateRemise,
+    public ResponseEntity<String> creerReservation(@RequestParam("idUser") Long idUser,
+            @RequestParam("idExemplaire") Long idExemplaire,
+            @RequestParam("idTypePret") Integer idTypePret,
+            @RequestParam("dateCible") LocalDateTime dateCible,
             @RequestParam("commentaire") String commentaire,
             Model model, HttpSession session) {
         try {
-            if (dateRemise == null) {
-                dateRemise = LocalDateTime.now();
-            }
             Long idEmp = (Long) session.getAttribute("auth");
-            // remiseLivreService.remettreUnExemplaireDeLivre(idExemplaire, idEmp, dateRemise, commentaire);
-            return ResponseEntity.ok("Remise créé avec succès !");
+            this.reservationService.demanderReservation(idUser, idEmp, idExemplaire, idTypePret, dateCible,
+                    commentaire);
+            model.addAttribute("message", "Demande de reservation cree avec succes!");
+            return ResponseEntity.ok("Demande de reservation cree avec succes!");
         } catch (Exception e) {
-            model.addAttribute("error", "Erreur lors de la création de la remise : " + e.getMessage());
-            return ResponseEntity.ok("Erreur lors de la création de la remise: " + e.getMessage());
+            model.addAttribute("error", "Erreur lors de la création de la demande de reservation : " + e.getMessage());
+            return ResponseEntity.ok("Erreur lors de la création de la demande de reservation: " + e.getMessage());
         }
     }
 

@@ -11,11 +11,14 @@ import org.springframework.data.jpa.repository.EntityGraph;
 //  import org.springframework.data.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.Entite.Exemplaire;
+import com.Entite.Livre;
 import com.Entite.User;
 
 @Repository
 public interface ExemplaireRepository extends JpaRepository<Exemplaire, Long> {
-
+    @Query(value = "SELECT e FROM Exemplaire e JOIN FETCH e.livre l JOIN FETCH l.genre g WHERE e.id = :idExemplaire")
+    public Optional<Exemplaire> findByIdWithLivreAndGenre(@Param("idExemplaire") Long idExemplaire);
 }

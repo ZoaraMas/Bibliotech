@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.Entite.Exemplaire;
+import com.Entite.Genre;
 import com.Entite.Livre;
 import com.Entite.User;
 import com.Entite.Livre;
@@ -25,6 +26,13 @@ public class ExemplaireService {
 
     @Autowired
     private PretService pretService;
+
+    public Genre getGenreFromIdExemplaire(Long idExemplaire) throws Exception {
+        Exemplaire exemplaire = this.exemplaireRepository.findByIdWithLivreAndGenre(idExemplaire).orElse(null);
+        if (exemplaire == null)
+            throw new Exception("Exemplaire with id: " + idExemplaire + " not found");
+        return exemplaire.getLivre().getGenre();
+    }
 
     public Exemplaire findById(Long idExemplaire) {
         Exemplaire result = this.exemplaireRepository.findById(idExemplaire)
