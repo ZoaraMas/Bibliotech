@@ -117,6 +117,23 @@ Mon probleme etait de comment interpreter la vue pret_parametre vers une entite
 - Plus tard on aura des prets qui existeront deja pour des dates > now(), on ne les comptes pas quand on va verifier la penalisation actuelle
 
 
+# 05-07-2025
+- Le pret etant regle on enchaine les foncitonalites, du plus vital au moins vital
+
+- remettre un exemplaire de livre
+- reserver un exemplaire de livre
+- valider une reservation 
+- gestion jour ferrie
+- automatiser script + securite pour les parametres
+- looping
+- mise en forme liste de fonctionalites
+- frontend
+
+
+- demande de prolongation de pret
+- validation de prolongement de pret
+- dashboard
+
 
 
 
