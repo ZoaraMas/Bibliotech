@@ -177,6 +177,10 @@ public class PretService {
 
     public boolean exemplaireEstNonDisponible(Long idExemplaire) throws Exception {
         LocalDateTime dateCible = LocalDateTime.now();
+        return this.exemplaireEstNonDisponible(idExemplaire, dateCible);
+    }
+
+    public boolean exemplaireEstNonDisponible(Long idExemplaire, LocalDateTime dateCible) throws Exception {
         PretParametreView pretParametreDTO = this.pretParametreViewService.findPretWhereExemplaireIn(dateCible,
                 idExemplaire);
         if (pretParametreDTO == null)
