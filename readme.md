@@ -136,6 +136,7 @@ Mon probleme etait de comment interpreter la vue pret_parametre vers une entite
 
 
 - 1) Remettre un exemplaire de livre
+    - on doit pouvoir selectioner la date de remise du livre, cela implique de rajouter les fonctions necessaires qui prenaient jusqu'a maintenant pas d'argument de date mais qui utilisaient now()
 
 
 # BIBLIOTECH

@@ -41,6 +41,10 @@ public class ExemplaireService {
         return this.pretService.exemplaireEstNonDisponible(idExemplaire);
     }
 
+    public boolean exemplaireEstNonDisponible(Long idExemplaire, LocalDateTime date) throws Exception {
+        return this.pretService.exemplaireEstNonDisponible(idExemplaire, date);
+    }
+
     public boolean exemplaireExists(Long id) {
         return this.exemplaireRepository.existsById(id);
     }
