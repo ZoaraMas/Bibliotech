@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import com.Entite.Inscription;
 import com.Entite.Livre;
 import com.Entite.Pret;
 import com.Entite.PretParametreView;
@@ -29,6 +30,11 @@ public class PretParametreViewService {
     private UserService userService;
     @Autowired
     private AdherentQuotaService adherentQuotaService;
+
+
+    // Verifier que si la reservation devienne un pret plus tard, l'inscription actuelle couvre tout le pret
+    // public boolean pretEstCouvertDansInscription(Inscription inscription, )
+
 
     public PretParametreView getCurrPretWithIdExemplaire(Long idExemplaire) throws Exception {
         List<PretParametreView> liste = this.pretParametreViewRepository

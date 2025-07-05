@@ -37,6 +37,10 @@ public class ExemplaireService {
         return this.pretService.exemplaireEstDisponible(idExemplaire);
     }
 
+    public boolean exemplaireDisponible(Long idExemplaire, LocalDateTime date) throws Exception {
+        return this.pretService.exemplaireEstDisponible(idExemplaire, date);
+    }
+
     public boolean exemplaireEstNonDisponible(Long idExemplaire) throws Exception {
         return this.pretService.exemplaireEstNonDisponible(idExemplaire);
     }

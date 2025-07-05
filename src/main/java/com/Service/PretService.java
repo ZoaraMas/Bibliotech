@@ -155,18 +155,33 @@ public class PretService {
         return true;
     }
 
-    public int getQuotaRestant(Long idInscription) {
-        return this.adherentQuotaService.getQuotaInscription(idInscription) - this.getNombrePretActuel(idInscription);
+    public boolean quotaNonNull(Long idInscription, LocalDateTime dateCible) {
+        if (this.getQuotaRestant(idInscription, dateCible) <= 0)
+            return false;
+        return true;
     }
 
-    public int getNombrePretActuel(Long idInscription) {
+    public int getQuotaRestant(Long idInscription) {
         LocalDateTime dateCible = LocalDateTime.now();
+        return this.getQuotaRestant(idInscription, dateCible);
+    }
+
+    public int getQuotaRestant(Long idInscription, LocalDateTime dateCible) {
+        return this.adherentQuotaService.getQuotaInscription(idInscription)
+                - this.getNombrePretActuel(idInscription, dateCible);
+    }
+
+    public int getNombrePretActuel(Long idInscription, LocalDateTime dateCible) {
         Integer result = this.pretParametreViewService.getQuotaDepenseActuel(dateCible, idInscription);
         return result;
     }
 
     public boolean exemplaireEstDisponible(Long idExemplaire) throws Exception {
         LocalDateTime dateCible = LocalDateTime.now();
+        return this.exemplaireEstDisponible(idExemplaire, dateCible);
+    }
+
+    public boolean exemplaireEstDisponible(Long idExemplaire, LocalDateTime dateCible) throws Exception {
         PretParametreView pretParametreDTO = this.pretParametreViewService.findPretWhereExemplaireIn(dateCible,
                 idExemplaire);
         if (pretParametreDTO == null)

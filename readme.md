@@ -138,6 +138,10 @@ Mon probleme etait de comment interpreter la vue pret_parametre vers une entite
 - 1) Remettre un exemplaire de livre
     - on doit pouvoir selectioner la date de remise du livre, cela implique de rajouter les fonctions necessaires qui prenaient jusqu'a maintenant pas d'argument de date mais qui utilisaient now()
 
+- reprise:
+les regles de gestions sont plies, implementer la fonction save
+
+maintenant je vais creer une fonction qui verifie si un pret sera couvert par une inscription, donc je vais aller creer l'entite parametre_pret
 
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
