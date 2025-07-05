@@ -37,6 +37,10 @@ public class ExemplaireService {
         return this.pretService.exemplaireEstDisponible(idExemplaire);
     }
 
+    public boolean exemplaireEstNonDisponible(Long idExemplaire) throws Exception {
+        return this.pretService.exemplaireEstNonDisponible(idExemplaire);
+    }
+
     public boolean exemplaireExists(Long id) {
         return this.exemplaireRepository.existsById(id);
     }

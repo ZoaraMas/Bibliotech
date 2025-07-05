@@ -42,6 +42,14 @@ public class PretService {
     @Autowired
     private TypePretService typePretService;
 
+    // Obtenir le pret d'un exemplaire qui est en cours
+    public Pret getPretFromExemplaireActuel(Long idExemplaire) throws Exception {
+        PretParametreView temp = this.pretParametreViewService.getCurrPretWithIdExemplaire(idExemplaire);
+        Pret pret = this.pretRepository.findById(temp.getId()).orElseThrow(() -> new Exception(
+                "L'id exemplaire ne semble pas etre prete en ce moment, veuillez contacter l'admin"));
+        return pret;
+    }
+
     // Fonctionalite 1
     // Preter un livre a un membre selon le type d’adherant, le type de livre et la
     // disponibilite du livre en elle meme.
@@ -165,6 +173,15 @@ public class PretService {
             return true;
         throw new Exception("l'exemplaire de livre " + idExemplaire + "n'est pas encore disponible jusqu'au "
                 + pretParametreDTO.getDateFinPret().toString());
+    }
+
+    public boolean exemplaireEstNonDisponible(Long idExemplaire) throws Exception {
+        LocalDateTime dateCible = LocalDateTime.now();
+        PretParametreView pretParametreDTO = this.pretParametreViewService.findPretWhereExemplaireIn(dateCible,
+                idExemplaire);
+        if (pretParametreDTO == null)
+            throw new Exception("l'exemplaire de livre " + idExemplaire + "est toujours disponible");
+        return true;
     }
 
     // Verifier si le membre est actuellement inscrit

@@ -6,6 +6,14 @@ import java.text.SimpleDateFormat;
 
 
 public class MyDate {
+    public static boolean dateValide(java.time.LocalDateTime date) {
+        return date.isBefore(java.time.LocalDateTime.now());
+    }
+
+    public static boolean dateValide(java.time.LocalDate date) {
+        return date.isBefore(java.time.LocalDate.now());
+    }
+
     public static String getString(Date date) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(date);

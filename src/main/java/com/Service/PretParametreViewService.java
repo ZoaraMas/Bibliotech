@@ -30,6 +30,16 @@ public class PretParametreViewService {
     @Autowired
     private AdherentQuotaService adherentQuotaService;
 
+    public PretParametreView getCurrPretWithIdExemplaire(Long idExemplaire) throws Exception {
+        List<PretParametreView> liste = this.pretParametreViewRepository
+                .findPretByExemplaireWhereDateRemiseIsNotNullOrderByDatePretDesc(idExemplaire);
+        if (liste == null)
+            throw new Exception("L'id exemplaire ne semble pas etre prete en ce moment, veuillez contacter l'admin");
+        if (liste.size() == 0)
+            throw new Exception("L'id exemplaire ne semble pas etre prete en ce moment, veuillez contacter l'admin");
+        return liste.get(0);
+    }
+
     public List<PretParametreView> getAllPretOrderByDateFinAscByIdInscription(Long idInscription) {
         return this.pretParametreViewRepository.getAllPretOrderByDateFinAscByIdInscription(idInscription);
     }
