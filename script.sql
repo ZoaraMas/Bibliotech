@@ -152,7 +152,7 @@ CREATE OR REPLACE TABLE pret (
 );
 
 CREATE OR REPLACE TABLE remise_livre (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     id_pret BIGINT NOT NULL,
     date_remise DATE NOT NULL,
     commentaire TEXT,

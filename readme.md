@@ -135,6 +135,7 @@ Mon probleme etait de comment interpreter la vue pret_parametre vers une entite
 - dashboard
 
 
+- 1) Remettre un exemplaire de livre
 
 
 # BIBLIOTECH
