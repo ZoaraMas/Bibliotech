@@ -1,11 +1,12 @@
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="com.Entite.Film" %>
-<%@ page import="com.Entite.Categorie" %>
+<%@ page import="com.Entite.Pret" %>
+<%-- <%@ page import="com.Entite.Categorie" %> --%>
 <%@ page import="java.util.List" %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 // sdf
+    Pret pret = new Pret();
     Film film = new Film(-1L, "", -1f);
     Film tempFilm = (Film)request.getAttribute("film");
     if(tempFilm != null) {
@@ -23,7 +24,7 @@
     <title>Formulaire Film</title>
 </head>
 <body>
-    <h1>Formulaire Film</h1>
+    <h1>Preter un exemplaire de livre</h1>
     <!-- Formulaire qui redirige vers resultat.jsp -->
     <form action="create-film" method="post">
         <label for="nom">Nom :</label><br>
