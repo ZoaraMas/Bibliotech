@@ -1,6 +1,7 @@
 package com.Controller;
 
 import com.Entite.RemiseLivre;
+import com.Entite.TypePret;
 import com.Entite.User;
 import com.Service.PretService;
 import com.Service.RemiseLivreService;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class RemiseLivreController {
     @Autowired
     private RemiseLivreService remiseLivreService;
+
+    @GetMapping("/form-remise")
+    public String form(Model model) {
+        return "remise/form-remise";
+    }
 
     @PostMapping("/creer")
     @ResponseBody

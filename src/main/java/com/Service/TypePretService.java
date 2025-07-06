@@ -25,6 +25,9 @@ public class TypePretService {
     @Autowired
     private TypePretRepository typePretRepository;
 
+    public List<TypePret> findAll() {
+        return this.typePretRepository.findAll();
+    }
     public TypePret findById(Integer typePretId) {
         TypePret result = this.typePretRepository.findById(typePretId)
                 .orElseThrow(() -> new IllegalArgumentException(
