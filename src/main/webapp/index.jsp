@@ -12,6 +12,9 @@
     <% }
 %>
 <h2> LIVRES</h2>
-<a href="pret/demander-pret">Demander un pret</a>
+<a href="pret/form-pret">Preter un livre</a>
+<a href="remise-livre/form-remise">Remettre un livre</a>
+<a href="reservation/form-reservation">Demander a reserver un livre</a>
+<a href="etat-reservation/form-etat">Valider ou Annuler une reservation</a>
 </body>
 </html>

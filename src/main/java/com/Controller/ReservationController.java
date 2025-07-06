@@ -1,10 +1,12 @@
 package com.Controller;
 
 import com.Entite.RemiseLivre;
+import com.Entite.TypePret;
 import com.Entite.User;
 import com.Service.PretService;
 import com.Service.RemiseLivreService;
 import com.Service.ReservationService;
+import com.Service.TypePretService;
 import com.Service.UserService;
 import com.dto.PenaliteResponse;
 import com.Service.UserService;
@@ -14,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ReservationController {
     @Autowired
     private ReservationService reservationService;
+    @Autowired
+    private TypePretService typePretService;
+    
+    @GetMapping("/form-reservation")
+    public String form(Model model) {
+           List<TypePret> listeTypePret = this.typePretService.findAll();
+        model.addAttribute("listeTypePret", listeTypePret);
+        return "reservation/form-reservation";
+    }
 
     @PostMapping("/creer")
     @ResponseBody

@@ -1,7 +1,9 @@
 package com.Controller;
 
+import com.Entite.TypePret;
 import com.Entite.User;
 import com.Service.PretService;
+import com.Service.TypePretService;
 import com.Service.UserService;
 import com.dto.PenaliteResponse;
 import com.Service.UserService;
@@ -10,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +31,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class PretController {
     @Autowired
     private PretService pretService;
+    @Autowired
+    private TypePretService typePretService;
 
     @GetMapping("/form-pret")
     public String form(Model model) {
+        List<TypePret> listeTypePret = this.typePretService.findAll();
+        model.addAttribute("listeTypePret", listeTypePret);
         return "pret/form-pret";
     }
 
