@@ -34,14 +34,13 @@ public interface PretParametreViewRepository extends JpaRepository<PretParametre
                         @Param("idInscription") Long idInscription);
 
         // On ne prend pas encore en compte les remises
-        @Query(value = "SELECT * FROM pret_parametre WHERE :dateCible BETWEEN date_pret AND date_fin_pret AND id_exemplaire = :idExemplaire", nativeQuery = true)
+        @Query(value = "SELECT * FROM pret_parametre WHERE :dateCible >= date_pret AND (date_remise IS NULL OR :dateCible <= date_remise) AND id_exemplaire = :idExemplaire", nativeQuery = true)
         public PretParametreView findPretWhereExemplaireIn(@Param("dateCible") LocalDateTime dateCible,
                         @Param("idExemplaire") Long idExemplaire);
 
         // on suppose ici que si date_remise n'est pas null, c'est que date_remise est
         // forcement avant aujourd'hui.
-        @Query(value = "SELECT COUNT(*) FROM pret_parametre WHERE :dateCible BETWEEN date_pret AND date_fin_pret AND id_inscription = :idInscription AND date_remise is null", nativeQuery = true)
+        @Query(value = "SELECT COUNT(*) FROM pret_parametre WHERE :dateCible >= date_pret AND date_remise IS NULL AND id_inscription = :idInscription", nativeQuery = true)
         public Integer getQuotaDepenseActuel(@Param("dateCible") LocalDateTime dateCible,
                         @Param("idInscription") Long idInscription);
-
 }
