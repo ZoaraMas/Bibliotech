@@ -103,7 +103,7 @@ public class PretService {
 
     // Verifier si le membre subit une penalite ou non
     // Miverina daoly ny boky zay vo mande ny nombre de jour de penalite
-    public PenaliteResponse subitPenalite(Long idInscription) {
+    public PenaliteResponse subitPenalite(Long idInscription, LocalDateTime now) {
         User user = this.userService.findByInscriptionId(idInscription);
         int nombreJourPenaliteTotal = 0;
         // On ajoutera le nombre de jour de penalite total a cette variable en dessous
@@ -111,7 +111,6 @@ public class PretService {
         List<PretParametreView> liste = this.pretParametreViewService
                 .getAllPretOrderByDateFinAscByIdInscription(idInscription); // obtenir les prets avec la date des
                                                                             // remises trie par datefinPret asc
-        LocalDateTime now = LocalDateTime.now();
         for (int i = 0; i < liste.size(); i++) {
             PretParametreView pretParametreDTO = liste.get(i);
             LocalDateTime dateFin = pretParametreDTO.getDateFinPret();
@@ -144,6 +143,10 @@ public class PretService {
         return PenaliteResponse.getNonPenalite(user);
     }
 
+    public PenaliteResponse subitPenalite(Long idInscription) {
+        return this.subitPenalite(idInscription, LocalDateTime.now());
+    }
+
     public int quotaNonNullFromUserId(Long idUser) throws Exception {
         Inscription currInscription = inscriptionService.getCurrentInscription(idUser);
         return this.getQuotaRestant(currInscription.getId());
@@ -155,18 +158,33 @@ public class PretService {
         return true;
     }
 
-    public int getQuotaRestant(Long idInscription) {
-        return this.adherentQuotaService.getQuotaInscription(idInscription) - this.getNombrePretActuel(idInscription);
+    public boolean quotaNonNull(Long idInscription, LocalDateTime dateCible) {
+        if (this.getQuotaRestant(idInscription, dateCible) <= 0)
+            return false;
+        return true;
     }
 
-    public int getNombrePretActuel(Long idInscription) {
+    public int getQuotaRestant(Long idInscription) {
         LocalDateTime dateCible = LocalDateTime.now();
+        return this.getQuotaRestant(idInscription, dateCible);
+    }
+
+    public int getQuotaRestant(Long idInscription, LocalDateTime dateCible) {
+        return this.adherentQuotaService.getQuotaInscription(idInscription)
+                - this.getNombrePretActuel(idInscription, dateCible);
+    }
+
+    public int getNombrePretActuel(Long idInscription, LocalDateTime dateCible) {
         Integer result = this.pretParametreViewService.getQuotaDepenseActuel(dateCible, idInscription);
         return result;
     }
 
     public boolean exemplaireEstDisponible(Long idExemplaire) throws Exception {
         LocalDateTime dateCible = LocalDateTime.now();
+        return this.exemplaireEstDisponible(idExemplaire, dateCible);
+    }
+
+    public boolean exemplaireEstDisponible(Long idExemplaire, LocalDateTime dateCible) throws Exception {
         PretParametreView pretParametreDTO = this.pretParametreViewService.findPretWhereExemplaireIn(dateCible,
                 idExemplaire);
         if (pretParametreDTO == null)

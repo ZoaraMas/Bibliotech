@@ -207,41 +207,42 @@ CREATE OR REPLACE TABLE adherent_quota (
     FOREIGN KEY (id_type_adherent) REFERENCES type_adherent(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Checkpoint
 
 -- Table Remise de livre
 
 
 -- Table Réservation
 CREATE OR REPLACE TABLE reservation (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_inscription INT NOT NULL,
-    id_livre INT NOT NULL,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_inscription BIGINT NOT NULL,
+    id_exemplaire BIGINT NOT NULL,
     id_type_pret INT NOT NULL,
     date_reservation DATE NOT NULL,
-    date_pret_souhaitee DATE NOT NULL,
     commentaire TEXT,
-    id_employe INT NOT NULL,
+    id_employe BIGINT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_inscription) REFERENCES inscription(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_livre) REFERENCES livre(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_inscription) REFERENCES inscription(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (id_exemplaire) REFERENCES exemplaire(id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (id_type_pret) REFERENCES type_pret(id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (id_employe) REFERENCES employe(id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    INDEX idx_reservation_dates (date_reservation, date_pret_souhaitee)
+    FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    INDEX idx_reservation_dates (date_reservation)
 );
 
 -- Table État réservation (historique)
 CREATE OR REPLACE TABLE etat_reservation (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_reservation INT NOT NULL,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_reservation BIGINT NOT NULL,
     date_changement DATE NOT NULL,
-    etat ENUM('EN_ATTENTE', 'VALIDEE', 'REFUSEE', 'TRANSFORMEE_EN_PRET') NOT NULL,
+    etat ENUM('VALIDEE', 'REFUSEE') NOT NULL,
     commentaire TEXT,
-    id_employe INT NOT NULL,
+    id_employe BIGINT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_reservation) REFERENCES reservation(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_employe) REFERENCES employe(id) ON DELETE RESTRICT ON UPDATE CASCADE
+    FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+-- Checkpoint
+
 
 -- Table Prolongement de prêt
 CREATE OR REPLACE TABLE prolongement_pret (

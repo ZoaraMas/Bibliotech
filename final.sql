@@ -152,7 +152,7 @@ CREATE OR REPLACE TABLE pret (
 );
 
 CREATE OR REPLACE TABLE remise_livre (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     id_pret BIGINT NOT NULL,
     date_remise DATE NOT NULL,
     commentaire TEXT,
@@ -207,6 +207,39 @@ CREATE OR REPLACE TABLE adherent_quota (
     FOREIGN KEY (id_type_adherent) REFERENCES type_adherent(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+
+-- Table Remise de livre
+
+
+-- Table Réservation
+CREATE OR REPLACE TABLE reservation (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_inscription BIGINT NOT NULL,
+    id_exemplaire BIGINT NOT NULL,
+    id_type_pret INT NOT NULL,
+    date_reservation DATE NOT NULL,
+    commentaire TEXT,
+    id_employe BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_inscription) REFERENCES inscription(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (id_exemplaire) REFERENCES exemplaire(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (id_type_pret) REFERENCES type_pret(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    INDEX idx_reservation_dates (date_reservation)
+);
+
+-- Table État réservation (historique)
+CREATE OR REPLACE TABLE etat_reservation (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_reservation BIGINT NOT NULL,
+    date_changement DATE NOT NULL,
+    etat ENUM('VALIDEE', 'REFUSEE') NOT NULL,
+    commentaire TEXT,
+    id_employe BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_reservation) REFERENCES reservation(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
 
 INSERT INTO type_user (libelle, description) VALUES
 ('Bibliothecaire', 'Bibliothécaire principal avec tous les droits'),
@@ -457,3 +490,17 @@ INSERT INTO remise_livre (id_pret, date_remise, commentaire, id_employe) VALUES
 -- Ajout de quelques retours avec des commentaires spéciaux
 (23, '2025-08-20', 'Retour avec 2 jours de retard, pages cornées', 2),  -- Emma - Les Fleurs du Mal - en retard (prévu 18/08)
 (24, '2025-08-11', 'Retour en avance, excellent état', 1); 
+-- Checkpoint
+
+
+-- Insertion des réservations
+-- INSERT INTO reservation (id_inscription, id_livre, id_type_pret, date_reservation, date_pret_souhaitee, commentaire, id_user) VALUES
+-- (1, 4, 1, '2024-06-25', '2024-07-05', 'Réservation pour les vacances', 1),
+-- (4, 2, 1, '2024-06-28', '2024-07-10', 'Besoin pour un projet étudiant', 2),
+-- (9, 11, 1, '2024-06-20', '2024-07-01', 'Réservation confirmée', 1),
+-- (13, 1, 1, '2024-06-30', '2024-07-15', 'Lecture d\'été', 2),
+-- (15, 15, 1, '2024-07-01', '2024-07-20', 'Pour les vacances', 1),
+-- (11, 6, 1, '2024-07-02', '2024-07-25', 'Lecture philosophique', 2);
+
+-- -- Insertion des états de réservation
+-- INSERT INTO etat_reservation (id_reservation,

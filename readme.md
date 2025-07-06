@@ -120,16 +120,16 @@ Mon probleme etait de comment interpreter la vue pret_parametre vers une entite
 # 05-07-2025
 - Le pret etant regle on enchaine les foncitonalites, du plus vital au moins vital
 
-- remettre un exemplaire de livre
+[ok]- remettre un exemplaire de livre
 - reserver un exemplaire de livre
 - valider une reservation 
-- gestion jour ferrie
 - automatiser script + securite pour les parametres
 - looping
 - mise en forme liste de fonctionalites
 - frontend
 
 
+- gestion jour ferrie
 - demande de prolongation de pret
 - validation de prolongement de pret
 - dashboard
@@ -137,6 +137,23 @@ Mon probleme etait de comment interpreter la vue pret_parametre vers une entite
 
 - 1) Remettre un exemplaire de livre
     - on doit pouvoir selectioner la date de remise du livre, cela implique de rajouter les fonctions necessaires qui prenaient jusqu'a maintenant pas d'argument de date mais qui utilisaient now()
+
+- reprise:
+les regles de gestions sont plies, implementer la fonction save
+
+maintenant je vais creer une fonction qui verifie si un pret sera couvert par une inscription, donc je vais aller creer l'entite parametre_pret
+
+# 06-07-2025
+- Alea possible:
+    - est ce que mon programme permet de detecter un exemplaire disponible s'il a ete rendu avant la date limite? est ce que je part des remise pour verifier la disponibilite d'un exemplaire?
+
+[regle]- probleme l'utilisateur 13 de l'inscription 12 sera penalise apre le 11 Juillet car il n'aura pas encore remis le livre
+
+
+
+# Elements a reverifier:
+- quota a un certain date lors de la reservation par exemple
+
 
 
 # BIBLIOTECH

@@ -33,6 +33,7 @@ public interface PretParametreViewRepository extends JpaRepository<PretParametre
         public List<PretParametreView> getAllPretOrderByDateFinAscByIdInscription(
                         @Param("idInscription") Long idInscription);
 
+        // On ne prend pas encore en compte les remises
         @Query(value = "SELECT * FROM pret_parametre WHERE :dateCible BETWEEN date_pret AND date_fin_pret AND id_exemplaire = :idExemplaire", nativeQuery = true)
         public PretParametreView findPretWhereExemplaireIn(@Param("dateCible") LocalDateTime dateCible,
                         @Param("idExemplaire") Long idExemplaire);
