@@ -143,6 +143,19 @@ les regles de gestions sont plies, implementer la fonction save
 
 maintenant je vais creer une fonction qui verifie si un pret sera couvert par une inscription, donc je vais aller creer l'entite parametre_pret
 
+# 06-07-2025
+- Alea possible:
+    - est ce que mon programme permet de detecter un exemplaire disponible s'il a ete rendu avant la date limite? est ce que je part des remise pour verifier la disponibilite d'un exemplaire?
+
+[regle]- probleme l'utilisateur 13 de l'inscription 12 sera penalise apre le 11 Juillet car il n'aura pas encore remis le livre
+
+
+
+# Elements a reverifier:
+- quota a un certain date lors de la reservation par exemple
+
+
+
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
 - [a verifier] CopyJsp pour copier uniquement les jsp

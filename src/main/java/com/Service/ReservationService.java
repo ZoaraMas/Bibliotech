@@ -64,8 +64,9 @@ public class ReservationService {
             throw new Exception("L'exemplaire de livre ID:" + idExemplaire + " n'existe pas");
         }
         // Exemplaire disponible
-        if (!exemplaireService.exemplaireDisponible(idExemplaire)) {
-            throw new Exception("L'exemplaire de livre ID:" + idExemplaire + " n'est pas encore disponible");
+        if (!exemplaireService.exemplaireDisponible(idExemplaire, dateVoulue)) {
+            throw new Exception(
+                    "L'exemplaire de livre ID:" + idExemplaire + " n'est pas encore disponible a la date voulue");
         }
         // Membre actuellement inscrit
         // Actuellement inscrit seulement car dans tout les cas, creer un pret necessite
@@ -81,9 +82,15 @@ public class ReservationService {
         // Ici aussi, quand le pret sera creer a la date d, il fa faloir que le membre
         // n'ai pas de penalite ce jour la
         Inscription currInscription = inscriptionService.getCurrentInscription(idUser);
+        // Subit une penalite maintenant
         PenaliteResponse penaliteResponse = this.pretService.subitPenalite(currInscription.getId());
         if (penaliteResponse.isSubitPenalite()) {
-            throw new Exception(penaliteResponse.getMessage());
+            throw new Exception("Vous etes actuellement penalise, " + penaliteResponse.getMessage());
+        }
+        // Subit une penalite lors du jour demande a reserver
+        penaliteResponse = this.pretService.subitPenalite(currInscription.getId(), dateVoulue);
+        if (penaliteResponse.isSubitPenalite()) {
+            throw new Exception("Vous serez encore penalise a la date voulue, " + penaliteResponse.getMessage());
         }
 
         TypePret typePret = this.typePretService.findById(idTypePret);

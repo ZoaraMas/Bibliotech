@@ -103,7 +103,7 @@ public class PretService {
 
     // Verifier si le membre subit une penalite ou non
     // Miverina daoly ny boky zay vo mande ny nombre de jour de penalite
-    public PenaliteResponse subitPenalite(Long idInscription) {
+    public PenaliteResponse subitPenalite(Long idInscription, LocalDateTime now) {
         User user = this.userService.findByInscriptionId(idInscription);
         int nombreJourPenaliteTotal = 0;
         // On ajoutera le nombre de jour de penalite total a cette variable en dessous
@@ -111,7 +111,6 @@ public class PretService {
         List<PretParametreView> liste = this.pretParametreViewService
                 .getAllPretOrderByDateFinAscByIdInscription(idInscription); // obtenir les prets avec la date des
                                                                             // remises trie par datefinPret asc
-        LocalDateTime now = LocalDateTime.now();
         for (int i = 0; i < liste.size(); i++) {
             PretParametreView pretParametreDTO = liste.get(i);
             LocalDateTime dateFin = pretParametreDTO.getDateFinPret();
@@ -142,6 +141,10 @@ public class PretService {
             return PenaliteResponse.getPenaliteDeterminee(user, debutPenalite, finPenalite, nombreJourPenaliteTotal);
         } // si c'est null, a ce stade du code, il n'y a pas de penalite en cours
         return PenaliteResponse.getNonPenalite(user);
+    }
+
+    public PenaliteResponse subitPenalite(Long idInscription) {
+        return this.subitPenalite(idInscription, LocalDateTime.now());
     }
 
     public int quotaNonNullFromUserId(Long idUser) throws Exception {
