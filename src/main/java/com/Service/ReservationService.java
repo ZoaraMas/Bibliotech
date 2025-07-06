@@ -125,4 +125,17 @@ public class ReservationService {
                 employe);
         this.reservationRepository.save(reservation);
     }
+
+    public Reservation findByIdWithAllRelations(long idReservation) {
+        Optional<Reservation> reservation = reservationRepository.findByIdWithAllRelations(idReservation);
+        if (reservation.isPresent()) {
+            return reservation.get();
+        } else {
+            throw new RuntimeException("Reservation avec ID: " + idReservation + " n'existe pas");
+        }
+    }
+
+    public boolean reservationExiste(Long idReservation) {
+        return this.reservationRepository.existsById(idReservation);
+    }
 }

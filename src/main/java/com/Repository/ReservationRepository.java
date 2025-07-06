@@ -26,6 +26,14 @@ import com.Entite.User;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
+   @Query("SELECT r FROM Reservation r " +
+           "JOIN FETCH r.inscription i " +
+           "JOIN FETCH i.user " +
+           "JOIN FETCH r.exemplaire " +
+           "JOIN FETCH r.typePret " +
+           "JOIN FETCH r.employe " +
+           "WHERE r.id = :id")
+    Optional<Reservation> findByIdWithAllRelations(@Param("id") Long id);
     // obtenir tout les prets avec leurs parametres
     // @Query(value = "SELECT pp FROM pret_parametre pp WHERE id_inscription =
     // :idInscription ORDER BY date_fin_pret ASC", nativeQuery = true)
