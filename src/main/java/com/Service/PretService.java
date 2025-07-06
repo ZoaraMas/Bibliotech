@@ -58,6 +58,12 @@ public class PretService {
     // disponibilite du livre en elle meme.
     public void preterUnExemplaireLivre(long idUser, long idEmploye, long idExemplaire, Integer idTypePret)
             throws Exception {
+        this.preterUnExemplaireLivre(idUser, idEmploye, idExemplaire, idTypePret, LocalDateTime.now());
+    }
+
+    public void preterUnExemplaireLivre(long idUser, long idEmploye, long idExemplaire, Integer idTypePret,
+            LocalDateTime datePret)
+            throws Exception {
         // le membre existe
         if (!userService.userExists(idUser)) {
             throw new Exception("L'utilisateur ID:" + idUser + " n'existe pas");
@@ -67,7 +73,7 @@ public class PretService {
             throw new Exception("L'exemplaire de livre ID:" + idExemplaire + " n'existe pas");
         }
         // Exemplaire disponible
-        if (!exemplaireService.exemplaireDisponible(idExemplaire)) {
+        if (!exemplaireService.exemplaireDisponible(idExemplaire, datePret)) {
             throw new Exception("L'exemplaire de livre ID:" + idExemplaire + " n'est pas encore disponible");
         }
 
@@ -78,15 +84,21 @@ public class PretService {
 
         // Le membre ne subit pas de penalite
         Inscription currInscription = inscriptionService.getCurrentInscription(idUser);
+        // Subit une penalite maintenant
         PenaliteResponse penaliteResponse = this.subitPenalite(currInscription.getId());
         if (penaliteResponse.isSubitPenalite()) {
-            throw new Exception(penaliteResponse.getMessage());
+            throw new Exception("Vous etes actuellement penalise, " + penaliteResponse.getMessage());
+        }
+        // Subit une penalite lors du jour demande a reserver
+        penaliteResponse = this.subitPenalite(currInscription.getId(), datePret);
+        if (penaliteResponse.isSubitPenalite()) {
+            throw new Exception("Vous serez encore penalise a la date voulue, " + penaliteResponse.getMessage());
         }
 
         TypePret typePret = this.typePretService.findById(idTypePret);
         // Le membre n’a pas encore termine tout son quota
         // Si il prend sur place, la regle ne s'applique pas
-        if (!this.quotaNonNull(currInscription.getId()) && idTypePret != 2) {
+        if (!this.quotaNonNull(currInscription.getId(), datePret) && idTypePret != 2) {
             throw new Exception("Quota insuffisant, veuillez rendre au moins un livre d'abord.");
         }
         // l'employe existe
@@ -101,7 +113,7 @@ public class PretService {
         Genre genreFromExemplaire = this.exemplaireService.getGenreFromIdExemplaire(idExemplaire);
         // L'inscription couvre tout le pret
         if (!this.parametrePretService.pretCouvertEntierementDansInscription(currInscription.getTypeAdherent(),
-                typePret, genreFromExemplaire, currInscription, now)) {
+                typePret, genreFromExemplaire, currInscription, datePret)) {
             throw new Exception("Le pret n'est pas couvert par l'inscription.");
         }
         User employe = this.userService.findById(idEmploye);

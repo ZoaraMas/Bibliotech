@@ -150,6 +150,8 @@ maintenant je vais creer une fonction qui verifie si un pret sera couvert par un
 [regle]- probleme l'utilisateur 13 de l'inscription 12 sera penalise apre le 11 Juillet car il n'aura pas encore remis le livre
 
 
+- Debut fonctionalite validation validation-reservation
+
 
 # Elements a reverifier:
 - quota a un certain date lors de la reservation par exemple
