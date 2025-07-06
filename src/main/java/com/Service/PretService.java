@@ -5,6 +5,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.Entite.Exemplaire;
+import com.Entite.Genre;
 import com.Entite.Inscription;
 import com.Entite.Livre;
 import com.Entite.Pret;
@@ -41,6 +42,8 @@ public class PretService {
     private InscriptionService inscriptionService;
     @Autowired
     private TypePretService typePretService;
+    @Autowired
+    private ParametrePretService parametrePretService;
 
     // Obtenir le pret d'un exemplaire qui est en cours
     public Pret getPretFromExemplaireActuel(Long idExemplaire) throws Exception {
@@ -94,8 +97,13 @@ public class PretService {
         Exemplaire exemplaire = this.exemplaireService.findById(idExemplaire);
 
         // typePret existe
-
         LocalDateTime now = LocalDateTime.now();
+        Genre genreFromExemplaire = this.exemplaireService.getGenreFromIdExemplaire(idExemplaire);
+        // L'inscription couvre tout le pret
+        if (!this.parametrePretService.pretCouvertEntierementDansInscription(currInscription.getTypeAdherent(),
+                typePret, genreFromExemplaire, currInscription, now)) {
+            throw new Exception("Le pret n'est pas couvert par l'inscription.");
+        }
         User employe = this.userService.findById(idEmploye);
         Pret pret = new Pret(currInscription, exemplaire, typePret, now, employe);
         this.pretRepository.save(pret);
