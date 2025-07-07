@@ -117,7 +117,7 @@ public class PretService {
             throw new Exception("Le pret n'est pas couvert par l'inscription.");
         }
         User employe = this.userService.findById(idEmploye);
-        Pret pret = new Pret(currInscription, exemplaire, typePret, now, employe);
+        Pret pret = new Pret(currInscription, exemplaire, typePret, datePret, employe);
         this.pretRepository.save(pret);
     }
 
