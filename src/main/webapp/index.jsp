@@ -16,5 +16,6 @@
 <a href="remise-livre/form-remise">Remettre un livre</a>
 <a href="reservation/form-reservation">Demander a reserver un livre</a>
 <a href="etat-reservation/form-etat">Valider ou Annuler une reservation</a>
+<a href="dashboard/livre">Stat livre</a>
 </body>
 </html>

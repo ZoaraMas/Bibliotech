@@ -8,6 +8,7 @@ import com.Entite.User;
 import com.Entite.Livre;
 import com.Repository.LivreRepository;
 import com.Repository.UserRepository;
+import com.dto.LivreNombre;
 import com.Repository.LivreRepository;
 
 import jakarta.transaction.Transactional;
@@ -22,11 +23,12 @@ public class LivreService {
     
     @Autowired 
     private UserService userService;
-    // Fonctionalite 1
-    // Preter un livre a un membre selon le type d’adherant, le type de livre et la disponibilite du livre en elle meme.
-    public void preterUnExemplaireLivre(long idUser, long idEmploye, long idExemplaire) {
 
+    public List<LivreNombre> findLivresLesPlusPretes() {
+        return this.livreRepository.findLivresLesPlusPretes();
     }
+
+
 
     // Verifier si le membre est actuellement inscrit
     public boolean membreEstInscrit() {

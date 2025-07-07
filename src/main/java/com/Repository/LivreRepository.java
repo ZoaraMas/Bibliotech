@@ -15,8 +15,11 @@ import org.springframework.data.repository.query.Param;
 
 import com.Entite.Livre;
 import com.Entite.User;
+import com.dto.LivreNombre;
 
 @Repository
 public interface LivreRepository extends JpaRepository<Livre, Long> {
-    
+    // Obtenir tout les livres avec nombre de pret trie decroissant
+    @Query(value = "SELECT * FROM pret_nombre_desc 5", nativeQuery = true)
+    public List<LivreNombre> findLivresLesPlusPretes();
 }

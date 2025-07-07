@@ -241,6 +241,31 @@ CREATE OR REPLACE TABLE etat_reservation (
     FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+
+
+CREATE OR REPLACE VIEW pret_nombre_desc AS (
+    SELECT 
+        l.id,
+        l.titre,
+        count(*) as nombre_pret
+    FROM
+        pret AS p
+    JOIN
+        exemplaire AS e ON e.id = p.id_exemplaire
+    JOIN
+        livre AS l ON l.id = e.id_livre
+    GROUP BY l.id
+    ORDER BY nombre_pret DESC
+);
+
+
+
+
+-- INSERTS
+
+
+
+
 INSERT INTO type_user (libelle, description) VALUES
 ('Bibliothecaire', 'Bibliothécaire principal avec tous les droits'),
 ('Membre', 'Membre simple ayant acces a des fonctionalites limites');
