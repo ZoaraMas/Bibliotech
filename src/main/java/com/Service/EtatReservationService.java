@@ -45,6 +45,7 @@ public class EtatReservationService {
     @Autowired
     private PretService pretService;
 
+    @Transactional
     public void ajouterEtatReservation(Long idEmp, Long idReservation, Boolean confirmer, String commentaire)
             throws Exception {
         // l'employe existe
@@ -77,8 +78,9 @@ public class EtatReservationService {
             long idUser = reservation.getInscription().getUser().getId();
             long idExemplaire = reservation.getExemplaire().getId();
             Integer idTypePret = reservation.getTypePret().getId();
-
             this.pretService.preterUnExemplaireLivre(idUser, idUser, idExemplaire, idTypePret, dateVoulue);
+            etatReservation.setEtat(EtatReservationEnum.VALIDEE);
+            this.etatReservationRepository.save(etatReservation);
         }
 
     }
