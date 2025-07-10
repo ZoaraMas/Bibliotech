@@ -50,6 +50,6 @@ public class DashboardController {
     public String form(Model model) {
         // List<TypePret> listeTypePret = this.typePretService.findAll();
         // model.addAttribute("listeTypePret", listeTypePret);
-        return "dashboard/livre";
+        return "dashboard/stat-livre";
     }
 }

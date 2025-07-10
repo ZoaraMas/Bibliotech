@@ -1,0 +1,1 @@
+insert into inscription (date_inscription, id_user, id_type_adherent, duree_mois, id_employe) values('2025-07-02', 1, 1, 10, 1);

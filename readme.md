@@ -149,13 +149,19 @@ maintenant je vais creer une fonction qui verifie si un pret sera couvert par un
 
 [regle]- probleme l'utilisateur 13 de l'inscription 12 sera penalise apre le 11 Juillet car il n'aura pas encore remis le livre
 
-
 - Debut fonctionalite validation validation-reservation
-
 
 # Elements a reverifier:
 - quota a un certain date lors de la reservation par exemple
 
+# 07-07-25
+Ne peut pas convertir le resultat du repo en LivreNombre
+
+# 10-07-25
+Testons la reservation ainsi que la validation de reservation:
+insert into inscription (date_inscription, id_user, id_type_adherent, duree_mois, id_employe) values('2025-07-02', 1, 1, 10, 1);
+
+- la validation de reservation semble deja marcher actuellement
 
 
 # BIBLIOTECH
