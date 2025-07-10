@@ -10,6 +10,8 @@ import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpSession;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -36,6 +38,21 @@ public class ExemplaireController {
             throws Exception {
         try {
             boolean result = this.exemplaireService.exemplaireDisponible(idExemplaire);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.ok(false);
+            // TODO: handle exception
+        }
+    }
+
+    @GetMapping(value = "exemplaire-disponible-date", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<Boolean> exemplaireEstDisponible(
+            @RequestParam(name = "idExemplaire") Long idExemplaire,
+            @RequestParam(name = "date") LocalDateTime date)
+            throws Exception {
+        try {
+            boolean result = this.exemplaireService.exemplaireDisponible(idExemplaire, date);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.ok(false);

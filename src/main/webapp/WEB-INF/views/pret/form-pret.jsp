@@ -43,7 +43,7 @@
                             <% } %>
                         </div>
                         
-                        <form id="pretForm" method="post" action="<%= request.getContextPath() %>/pret/creer">
+                        <form id="pretForm" method="post" action="<%= request.getContextPath() %>/pret/creer-date">
                             <!-- ID de l'utilisateur (adhérent) -->
                             <div class="mb-3">
                                 <label for="idUser" class="form-label">
@@ -108,8 +108,8 @@
                                         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                                         String dateAujourdhui = sdf.format(new Date());
                                     %>
-                                    <input type="text" class="form-control" 
-                                           value="<%= dateAujourdhui %>" readonly>
+                                    <input type="datetime-local" class="form-control" 
+                                           value="<%= dateAujourdhui %>" name="date">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">

@@ -176,8 +176,11 @@ insert into inscription (date_inscription, id_user, id_typ  e_adherent, duree_mo
 - Je dois d'abord rajouter la possibilite de creer un pret a une date donnee
     - Pour l''instant ca marche sans encore les verifications metiers rigoureuses
 
+- cela etant fait:  
+    Voici les fonctionalites a tester:
+        - pret
+        - reservation qui sont finalement la meme chose
 
-    `
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
 - [a verifier] CopyJsp pour copier uniquement les jsp
