@@ -8,6 +8,7 @@ import com.Entite.PretNombreDescView;
 import com.Entite.User;
 import com.Entite.Livre;
 import com.Repository.LivreRepository;
+import com.Repository.PretNombreDescViewRepository;
 import com.Repository.UserRepository;
 import com.Repository.LivreRepository;
 
@@ -17,26 +18,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class LivreService {
+public class PretNombreDescViewService {
     @Autowired
-    private LivreRepository livreRepository;
+    private PretNombreDescViewRepository pretNombreDescViewRepository;
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private PretNombreDescViewService pretNombreDescViewService;
-
-    public List<PretNombreDescView> findLivresLesPlusPretes() {
-        return this.pretNombreDescViewService.findAll();
-    }
+    // public List<PretNombreDescView> findLivresLesPlusPretes() {
+    // return this.livreRepository.findLivresLesPlusPretes();
+    // }
 
     // Verifier si le membre est actuellement inscrit
-    public boolean membreEstInscrit() {
-        return true;
-    }
-
-    public List<Livre> findAll() {
-        return this.livreRepository.findAll();
+    public List<PretNombreDescView> findAll() {
+        return this.pretNombreDescViewRepository.findAll();
     }
 }

@@ -1,12 +1,12 @@
 package com.Controller;
 
+import com.Entite.PretNombreDescView;
 import com.Entite.TypePret;
 import com.Entite.User;
 import com.Service.DashboardService;
 import com.Service.PretService;
 import com.Service.TypePretService;
 import com.Service.UserService;
-import com.dto.LivreNombre;
 import com.dto.PenaliteResponse;
 import com.Service.UserService;
 import jakarta.servlet.RequestDispatcher;
@@ -39,10 +39,10 @@ public class DashboardController {
     private TypePretService typePretService;
 
     // Rest
-    @GetMapping("/livre-les-plus-pretes")
+    @GetMapping("/livre-les-plus-pretes-ws")
     @ResponseBody
-    public List<LivreNombre> lesPlusPretes(Model model) throws Exception {
-        List<LivreNombre> result = this.dashboardService.findLivresLesPlusPretes();
+    public List<PretNombreDescView> lesPlusPretesWs(Model model) throws Exception {
+        List<PretNombreDescView> result = this.dashboardService.findLivresLesPlusPretes();
         return result;
     }
 

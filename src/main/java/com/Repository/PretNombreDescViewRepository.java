@@ -18,8 +18,9 @@ import com.Entite.PretNombreDescView;
 import com.Entite.User;
 
 @Repository
-public interface LivreRepository extends JpaRepository<Livre, Long> {
+public interface PretNombreDescViewRepository extends JpaRepository<PretNombreDescView, Long> {
     // Obtenir tout les livres avec nombre de pret trie decroissant
     // @Query(value = "SELECT id, titre, nombre_pret AS nombre FROM
     // pret_nombre_desc", nativeQuery = true)
+    public List<PretNombreDescView> findAll();
 }

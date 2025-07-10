@@ -121,10 +121,10 @@ Mon probleme etait de comment interpreter la vue pret_parametre vers une entite
 - Le pret etant regle on enchaine les foncitonalites, du plus vital au moins vital
 
 [ok]- remettre un exemplaire de livre
-- reserver un exemplaire de livre
-- valider une reservation 
-- automatiser script + securite pour les parametres
-- looping
+[ok]- reserver un exemplaire de livre
+[ok]- valider une reservation 
+[ok]- automatiser script + securite pour les parametres
+[ok]- looping -> mysqlWorkBench
 - mise en forme liste de fonctionalites
 - frontend
 
@@ -155,13 +155,19 @@ maintenant je vais creer une fonction qui verifie si un pret sera couvert par un
 - quota a un certain date lors de la reservation par exemple
 
 # 07-07-25
-Ne peut pas convertir le resultat du repo en LivreNombre
+Ne peut pas convertir le resultat du repo en LivreNombre DTO dans livreService
 
 # 10-07-25
 Testons la reservation ainsi que la validation de reservation:
-insert into inscription (date_inscription, id_user, id_type_adherent, duree_mois, id_employe) values('2025-07-02', 1, 1, 10, 1);
+insert into inscription (date_inscription, id_user, id_typ  e_adherent, duree_mois, id_employe) values('2025-07-02', 1, 1, 10, 1);
 
 - la validation de reservation semble deja marcher actuellement
+
+=>PB: Ne peut pas convertir le resultat du repo en LivreNombre DTO dans livreService 
+- mamorona vue ho an'ny pret_nombre_desc dia apiasaina @ repo an'ny livre mba hireglena ny erreur.
+
+
+- - Comment tester le bon fonctionnement des modules?
 
 
 # BIBLIOTECH
@@ -183,3 +189,20 @@ insert into inscription (date_inscription, id_user, id_type_adherent, duree_mois
 # Prevoir 
 - demande de pret
 - config age
+
+# DEVELOPPEMENT
+# astuces:
+- Enlever la fonctionalite de login:
+Dans le web.xml: commenter /*, et mettre un autre url lambda
+<url-pattern>/user/hello</url-pattern>
+        <!-- <url-pattern>/*</url-pattern> -->
+
+# Les fichiers du projet:
+# LES SCRIPTS DE BASE DE DONNEE
+- script.sql: conception de base prevu(il y a des tables qui sont non present dans final.sql, mais que je vais ajouter petit a petit a final.sql)
+- data.sql: donnees fonctionnels
+- query.sql: test de script tout simplement
+    - inconnu: reverse.sql
+    
+- final: script + donnees finale, script pret a etre execute
+- cross.sql: peupler les possibilites de parametres de pret non insere encore   

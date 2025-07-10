@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.Entite.Livre;
+import com.Entite.PretNombreDescView;
 import com.Entite.User;
 import com.Entite.Livre;
 import com.Repository.AdherentQuotaRepository;
 import com.Repository.LivreRepository;
 import com.Repository.UserRepository;
-import com.dto.LivreNombre;
 import com.Repository.LivreRepository;
 
 import jakarta.transaction.Transactional;
@@ -26,8 +26,8 @@ public class DashboardService {
     @Autowired
     private LivreService livreService;
 
-    public List<LivreNombre> findLivresLesPlusPretes() throws Exception {
-        List<LivreNombre> result = this.livreService.findLivresLesPlusPretes();
+    public List<PretNombreDescView> findLivresLesPlusPretes() throws Exception {
+        List<PretNombreDescView> result = this.livreService.findLivresLesPlusPretes();
         if (result == null || result.size() == 0)
             throw new Exception("Erreurs lors de la recuperation des donnees statistiques");
         return result;
