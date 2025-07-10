@@ -168,8 +168,16 @@ insert into inscription (date_inscription, id_user, id_typ  e_adherent, duree_mo
 
 
 - - Comment tester le bon fonctionnement des modules?
+    - Creer un systeme(excel ou autre)
+    - Avoir des donnees logiques et coherentes et graphes 
+        - inclure des donnees de toutes les sortes.
 
 
+- Je dois d'abord rajouter la possibilite de creer un pret a une date donnee
+    - Pour l''instant ca marche sans encore les verifications metiers rigoureuses
+
+
+    `
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
 - [a verifier] CopyJsp pour copier uniquement les jsp
@@ -196,6 +204,8 @@ insert into inscription (date_inscription, id_user, id_typ  e_adherent, duree_mo
 Dans le web.xml: commenter /*, et mettre un autre url lambda
 <url-pattern>/user/hello</url-pattern>
         <!-- <url-pattern>/*</url-pattern> -->
+        Par contre les insertions ne marcheront plus
+A utiliser pour les requetes GET
 
 # Les fichiers du projet:
 # LES SCRIPTS DE BASE DE DONNEE

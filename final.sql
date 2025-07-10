@@ -312,9 +312,9 @@ INSERT INTO type_adherent (libelle) VALUES
 ('Anonyme');
 
 INSERT INTO adherent_quota (id_type_adherent, quota) VALUES
-(1, 5),  -- Etudiant (assuming ID 1) can borrow 5 books
-(2, 10), -- Professeur (assuming ID 2) can borrow 10 books
-(3, 7),  -- Professionnel (assuming ID 3) can borrow 7 books
+(1, 3),  -- Etudiant (assuming ID 1) can borrow 5 books
+(2, 4), -- Professeur (assuming ID 2) can borrow 10 books
+(3, 5),  -- Professionnel (assuming ID 3) can borrow 7 books
 (4, 2);   -- Anonyme (assuming ID 4) can borrow 2 books
 
 -- Insertion des types de prêt
@@ -454,30 +454,30 @@ INSERT INTO inscription (date_inscription, id_user, id_type_adherent, duree_mois
 INSERT INTO pret (id_inscription, id_exemplaire, id_type_pret, date_pret, id_employe) VALUES
 -- Prêts de juin 2025
 (1, 1, 1, '2025-06-01', 1),    -- membre - Le Petit Prince (14 jours -> fin: 15/06)
-(2, 4, 1, '2025-06-03', 1),    -- Pierre - 1984 (21 jours -> fin: 24/06)
-(3, 7, 1, '2025-06-05', 2),    -- Sophie - Steve Jobs (14 jours -> fin: 19/06)
-(4, 9, 1, '2025-06-08', 1),    -- Jean - Clean Code (21 jours -> fin: 29/06)
-(5, 15, 1, '2025-06-10', 2),   -- Anne - Harry Potter (21 jours -> fin: 01/07)
-(6, 12, 1, '2025-06-12', 1),   -- Paul - Méditations (14 jours -> fin: 26/06)
-(7, 16, 1, '2025-06-15', 2),   -- Visitor - Harry Potter (7 jours -> fin: 22/06)
-(8, 17, 1, '2025-06-18', 1),   -- Lucas - Dune (14 jours -> fin: 02/07)
-(9, 20, 1, '2025-06-20', 2),   -- Emma - Introduction algo (21 jours -> fin: 11/07)
-(10, 22, 1, '2025-06-22', 1),  -- Hugo - Sapiens (14 jours -> fin: 06/07)
-(11, 2, 1, '2025-06-25', 2),   -- Camille - Le Petit Prince (14 jours -> fin: 09/07)
-(12, 18, 1, '2025-06-27', 1),  -- Nicolas - Dune (14 jours -> fin: 11/07)
--- Prêts de juillet 2025
-(13, 14, 1, '2025-07-01', 2),  -- Léa - Hamlet (14 jours -> fin: 15/07)
-(14, 19, 1, '2025-07-03', 1),  -- Maxime - Les Misérables (21 jours -> fin: 24/07)
-(15, 23, 1, '2025-07-05', 2),  -- Clara - Le Seigneur des Anneaux (14 jours -> fin: 19/07)
-(1, 5, 1, '2025-07-10', 1),    -- membre - 1984 (14 jours -> fin: 24/07)
-(2, 11, 1, '2025-07-12', 2),   -- Pierre - Méditations (21 jours -> fin: 02/08)
-(3, 21, 1, '2025-07-15', 1),   -- Sophie - Introduction algo (14 jours -> fin: 29/07)
-(4, 6, 1, '2025-07-18', 2),    -- Jean - Histoire de France (21 jours -> fin: 08/08)
-(5, 24, 1, '2025-07-20', 1),   -- Anne - Le Seigneur des Anneaux (21 jours -> fin: 10/08)
-(6, 8, 1, '2025-07-22', 2),    -- Paul - Steve Jobs (14 jours -> fin: 05/08)
-(8, 3, 1, '2025-07-25', 1),    -- Lucas - Le Petit Prince (14 jours -> fin: 08/08)
-(9, 13, 1, '2025-07-28', 2),   -- Emma - Les Fleurs du Mal (21 jours -> fin: 18/08)
-(10, 10, 1, '2025-07-30', 1);  -- Hugo - Clean Code (14 jours -> fin: 13/08)
+-- (2, 4, 1, '2025-06-03', 1),    -- Pierre - 1984 (21 jours -> fin: 24/06)
+-- (3, 7, 1, '2025-06-05', 2),    -- Sophie - Steve Jobs (14 jours -> fin: 19/06)
+-- (4, 9, 1, '2025-06-08', 1),    -- Jean - Clean Code (21 jours -> fin: 29/06)
+-- (5, 15, 1, '2025-06-10', 2),   -- Anne - Harry Potter (21 jours -> fin: 01/07)
+-- (6, 12, 1, '2025-06-12', 1),   -- Paul - Méditations (14 jours -> fin: 26/06)
+-- (7, 16, 1, '2025-06-15', 2),   -- Visitor - Harry Potter (7 jours -> fin: 22/06)
+-- (8, 17, 1, '2025-06-18', 1),   -- Lucas - Dune (14 jours -> fin: 02/07)
+-- (9, 20, 1, '2025-06-20', 2),   -- Emma - Introduction algo (21 jours -> fin: 11/07)
+-- (10, 22, 1, '2025-06-22', 1),  -- Hugo - Sapiens (14 jours -> fin: 06/07)
+-- (11, 2, 1, '2025-06-25', 2),   -- Camille - Le Petit Prince (14 jours -> fin: 09/07)
+-- (12, 18, 1, '2025-06-27', 1),  -- Nicolas - Dune (14 jours -> fin: 11/07)
+-- -- Prêts de juillet 2025
+-- (13, 14, 1, '2025-07-01', 2),  -- Léa - Hamlet (14 jours -> fin: 15/07)
+-- (14, 19, 1, '2025-07-03', 1),  -- Maxime - Les Misérables (21 jours -> fin: 24/07)
+-- (15, 23, 1, '2025-07-05', 2),  -- Clara - Le Seigneur des Anneaux (14 jours -> fin: 19/07)
+-- (1, 5, 1, '2025-07-10', 1),    -- membre - 1984 (14 jours -> fin: 24/07)
+-- (2, 11, 1, '2025-07-12', 2),   -- Pierre - Méditations (21 jours -> fin: 02/08)
+-- (3, 21, 1, '2025-07-15', 1),   -- Sophie - Introduction algo (14 jours -> fin: 29/07)
+-- (4, 6, 1, '2025-07-18', 2),    -- Jean - Histoire de France (21 jours -> fin: 08/08)
+-- (5, 24, 1, '2025-07-20', 1),   -- Anne - Le Seigneur des Anneaux (21 jours -> fin: 10/08)
+-- (6, 8, 1, '2025-07-22', 2),    -- Paul - Steve Jobs (14 jours -> fin: 05/08)
+-- (8, 3, 1, '2025-07-25', 1),    -- Lucas - Le Petit Prince (14 jours -> fin: 08/08)
+-- (9, 13, 1, '2025-07-28', 2),   -- Emma - Les Fleurs du Mal (21 jours -> fin: 18/08)
+-- (10, 10, 1, '2025-07-30', 1);  -- Hugo - Clean Code (14 jours -> fin: 13/08)
 
 
 -- Insertion des remises de livre

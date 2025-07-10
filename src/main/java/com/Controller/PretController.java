@@ -11,6 +11,7 @@ import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpSession;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +50,24 @@ public class PretController {
         try {
             Long idEmp = (Long) session.getAttribute("auth");
             pretService.preterUnExemplaireLivre(idUser, idEmp, idExemplaire, idTypePret);
+            model.addAttribute("message", "Prêt créé avec succès !");
+            return ResponseEntity.ok("Prêt créé avec succès !");
+        } catch (Exception e) {
+            model.addAttribute("error", "Erreur lors de la création du prêt : " + e.getMessage());
+            return ResponseEntity.ok("Erreur lors de la création du prêt : " + e.getMessage());
+        }
+    }
+
+    // Creer un pret a une date donnee
+    @PostMapping("/creer-date")
+    @ResponseBody
+    public ResponseEntity<String> creerPretAUneDate(@RequestParam("idUser") Long idUser,
+            @RequestParam("idExemplaire") Long idExemplaire,
+            @RequestParam("date") LocalDateTime date,
+            @RequestParam("idTypePret") Integer idTypePret, Model model, HttpSession session) {
+        try {
+            Long idEmp = (Long) session.getAttribute("auth");
+            pretService.preterUnExemplaireLivre(idUser, idEmp, idExemplaire, idTypePret, date);
             model.addAttribute("message", "Prêt créé avec succès !");
             return ResponseEntity.ok("Prêt créé avec succès !");
         } catch (Exception e) {
