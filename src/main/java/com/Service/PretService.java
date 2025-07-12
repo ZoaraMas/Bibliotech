@@ -207,8 +207,9 @@ public class PretService {
                 idExemplaire);
         if (pretParametreDTO == null)
             return true;
-        throw new Exception("l'exemplaire de livre " + idExemplaire + "n'est pas encore disponible jusqu'au "
-                + pretParametreDTO.getDateFinPret().toString());
+        throw new Exception("l'exemplaire de livre " + idExemplaire + " n'est pas encore disponible jusqu'au "
+                + pretParametreDTO.getDateFinPret().toString()
+                + " sinon le livre n'a pas encore ete rendu par le preteur actuel");
     }
 
     public boolean exemplaireEstNonDisponible(Long idExemplaire) throws Exception {

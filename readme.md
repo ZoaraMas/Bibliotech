@@ -166,7 +166,6 @@ insert into inscription (date_inscription, id_user, id_typ  e_adherent, duree_mo
 =>PB: Ne peut pas convertir le resultat du repo en LivreNombre DTO dans livreService 
 - mamorona vue ho an'ny pret_nombre_desc dia apiasaina @ repo an'ny livre mba hireglena ny erreur.
 
-
 - - Comment tester le bon fonctionnement des modules?
     - Creer un systeme(excel ou autre)
     - Avoir des donnees logiques et coherentes et graphes 
@@ -180,6 +179,23 @@ insert into inscription (date_inscription, id_user, id_typ  e_adherent, duree_mo
     Voici les fonctionalites a tester:
         - pret
         - reservation qui sont finalement la meme chose
+
+- Fonctionalites a rajouter dans le dashboard:
+    - liste des personnes penalises a une telle date 
+
+# 12-07-2025
+- Probleme:
+    -  un membre reserve un livre a preter sur place le 15 Aout
+    - ensuite un membre prete le livre le 15 Aout
+    - on valide ensuite la reservation et le pret est encore insere, alors que le livre a deja ete  pris par le preteur qui n'a pas reserve
+=> le probleme c'est l'heure de la date qui est inferieur au pret deja existant alors que dans ma requete ca faite :date >= datePret
+[ok]
+
+- ISSUE 
+    - quand on prete sur place, le pret devrait se faire jusqu'a 20h le jour meme juste, je modifie alors la vue
+[ok]
+
+- J'ai fait assez de verification pour aujourd'hui, je vais maintenant appliquer un template css et mettre la validation ou refus de reservation dans la liste des reservations, et ensuite implementer le dashboard.
 
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF

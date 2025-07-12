@@ -109,7 +109,7 @@
                                         String dateAujourdhui = sdf.format(new Date());
                                     %>
                                     <input type="datetime-local" class="form-control" 
-                                           value="<%= dateAujourdhui %>" name="date">
+                                        name="date">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">
