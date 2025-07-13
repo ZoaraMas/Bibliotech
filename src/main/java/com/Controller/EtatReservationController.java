@@ -42,9 +42,9 @@ public class EtatReservationController {
         return "etat/form-etat";
     }
 
-    @PostMapping("/creer")
+    @PostMapping("/creer-rest")
     @ResponseBody
-    public ResponseEntity<String> ajouterEtatReservation(
+    public ResponseEntity<String> ajouterEtatReservationRest(
             @RequestParam("idReservation") Long idReservation,
             @RequestParam("confirmer") Boolean confirmer,
             @RequestParam(value = "commentaire", required = false) String commentaire,
@@ -60,6 +60,26 @@ public class EtatReservationController {
         } catch (Exception e) {
             model.addAttribute("Erreur: " + customMessage + " non realise: " + e.getMessage());
             return ResponseEntity.ok("Erreur: " + customMessage + " non realise: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/creer")
+    public String ajouterEtatReservation(
+            @RequestParam("idReservation") Long idReservation,
+            @RequestParam("confirmer") Boolean confirmer,
+            @RequestParam(value = "commentaire", required = false) String commentaire,
+            Model model, HttpSession session) {
+        String customMessage = "Reservation VALIDEE";
+        if (!confirmer)
+            customMessage = "Reservation REFUSEE";
+        try {
+            Long idEmp = (Long) session.getAttribute("auth");
+            this.etatReservationService.ajouterEtatReservation(idEmp, idReservation, confirmer, commentaire);
+            String succes = "?succes= " + customMessage;
+            return "redirect:/reservation/liste-reservation" + succes;
+        } catch (Exception e) {
+            String error = "?error= " + e.getMessage();
+            return "redirect:/reservation/liste-reservation" + error;
         }
     }
 
