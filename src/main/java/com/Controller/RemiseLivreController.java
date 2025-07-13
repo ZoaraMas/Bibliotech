@@ -39,9 +39,9 @@ public class RemiseLivreController {
         return "remise/form-remise";
     }
 
-    @PostMapping("/creer")
+    @PostMapping("/creer-rest")
     @ResponseBody
-    public ResponseEntity<String> creerRemiseLivre(@RequestParam("idExemplaire") Long idExemplaire,
+    public ResponseEntity<String> creerRemiseLivreRest(@RequestParam("idExemplaire") Long idExemplaire,
             @RequestParam(value = "date", required = false) LocalDateTime dateRemise,
             @RequestParam("commentaire") String commentaire,
             Model model, HttpSession session) {
@@ -55,6 +55,25 @@ public class RemiseLivreController {
         } catch (Exception e) {
             model.addAttribute("error", "Erreur lors de la création de la remise : " + e.getMessage());
             return ResponseEntity.ok("Erreur lors de la création de la remise: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/creer")
+    public String creerRemiseLivre(@RequestParam("idExemplaire") Long idExemplaire,
+            @RequestParam(value = "date", required = false) LocalDateTime dateRemise,
+            @RequestParam("commentaire") String commentaire,
+            Model model, HttpSession session) {
+        try {
+            if (dateRemise == null) {
+                dateRemise = LocalDateTime.now();
+            }
+            Long idEmp = (Long) session.getAttribute("auth");
+            remiseLivreService.remettreUnExemplaireDeLivre(idExemplaire, idEmp, dateRemise, commentaire);
+            String succes = "?succes= Remise effectue avec succes";
+            return "redirect:../pret/liste-pret" + succes;
+        } catch (Exception e) {
+            String error = "?error=Erreur lors de la création de la remise : " + e.getMessage();
+            return "redirect:../pret/liste-pret" + error;
         }
     }
 
