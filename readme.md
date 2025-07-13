@@ -121,10 +121,10 @@ Mon probleme etait de comment interpreter la vue pret_parametre vers une entite
 - Le pret etant regle on enchaine les foncitonalites, du plus vital au moins vital
 
 [ok]- remettre un exemplaire de livre
-- reserver un exemplaire de livre
-- valider une reservation 
-- automatiser script + securite pour les parametres
-- looping
+[ok]- reserver un exemplaire de livre
+[ok]- valider une reservation 
+[ok]- automatiser script + securite pour les parametres
+[ok]- looping -> mysqlWorkBench
 - mise en forme liste de fonctionalites
 - frontend
 
@@ -149,14 +149,53 @@ maintenant je vais creer une fonction qui verifie si un pret sera couvert par un
 
 [regle]- probleme l'utilisateur 13 de l'inscription 12 sera penalise apre le 11 Juillet car il n'aura pas encore remis le livre
 
-
 - Debut fonctionalite validation validation-reservation
-
 
 # Elements a reverifier:
 - quota a un certain date lors de la reservation par exemple
 
+# 07-07-25
+Ne peut pas convertir le resultat du repo en LivreNombre DTO dans livreService
 
+# 10-07-25
+Testons la reservation ainsi que la validation de reservation:
+insert into inscription (date_inscription, id_user, id_typ  e_adherent, duree_mois, id_employe) values('2025-07-02', 1, 1, 10, 1);
+
+- la validation de reservation semble deja marcher actuellement
+
+=>PB: Ne peut pas convertir le resultat du repo en LivreNombre DTO dans livreService 
+- mamorona vue ho an'ny pret_nombre_desc dia apiasaina @ repo an'ny livre mba hireglena ny erreur.
+
+- - Comment tester le bon fonctionnement des modules?
+    - Creer un systeme(excel ou autre)
+    - Avoir des donnees logiques et coherentes et graphes 
+        - inclure des donnees de toutes les sortes.
+
+
+- Je dois d'abord rajouter la possibilite de creer un pret a une date donnee
+    - Pour l''instant ca marche sans encore les verifications metiers rigoureuses
+
+- cela etant fait:  
+    Voici les fonctionalites a tester:
+        - pret
+        - reservation qui sont finalement la meme chose
+
+- Fonctionalites a rajouter dans le dashboard:
+    - liste des personnes penalises a une telle date 
+
+# 12-07-2025
+- Probleme:
+    -  un membre reserve un livre a preter sur place le 15 Aout
+    - ensuite un membre prete le livre le 15 Aout
+    - on valide ensuite la reservation et le pret est encore insere, alors que le livre a deja ete  pris par le preteur qui n'a pas reserve
+=> le probleme c'est l'heure de la date qui est inferieur au pret deja existant alors que dans ma requete ca faite :date >= datePret
+[ok]
+
+- ISSUE 
+    - quand on prete sur place, le pret devrait se faire jusqu'a 20h le jour meme juste, je modifie alors la vue
+[ok]
+
+- J'ai fait assez de verification pour aujourd'hui, je vais maintenant appliquer un template css et mettre la validation ou refus de reservation dans la liste des reservations, et ensuite implementer le dashboard.
 
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
@@ -177,3 +216,22 @@ maintenant je vais creer une fonction qui verifie si un pret sera couvert par un
 # Prevoir 
 - demande de pret
 - config age
+
+# DEVELOPPEMENT
+# astuces:
+- Enlever la fonctionalite de login:
+Dans le web.xml: commenter /*, et mettre un autre url lambda
+<url-pattern>/user/hello</url-pattern>
+        <!-- <url-pattern>/*</url-pattern> -->
+        Par contre les insertions ne marcheront plus
+A utiliser pour les requetes GET
+
+# Les fichiers du projet:
+# LES SCRIPTS DE BASE DE DONNEE
+- script.sql: conception de base prevu(il y a des tables qui sont non present dans final.sql, mais que je vais ajouter petit a petit a final.sql)
+- data.sql: donnees fonctionnels
+- query.sql: test de script tout simplement
+    - inconnu: reverse.sql
+    
+- final: script + donnees finale, script pret a etre execute
+- cross.sql: peupler les possibilites de parametres de pret non insere encore   

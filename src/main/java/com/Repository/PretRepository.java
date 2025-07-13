@@ -24,7 +24,6 @@ import com.Entite.User;
 
 @Repository
 public interface PretRepository extends JpaRepository<Pret, Long> {
-   
     // obtenir tout les prets avec leurs parametres
 //     @Query(value = "SELECT pp FROM pret_parametre pp WHERE id_inscription = :idInscription ORDER BY date_fin_pret ASC", nativeQuery = true)
 //     public List<PretParametreView> getAllPretOrderByDateFinAscByIdInscription(

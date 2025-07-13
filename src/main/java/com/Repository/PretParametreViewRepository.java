@@ -33,10 +33,17 @@ public interface PretParametreViewRepository extends JpaRepository<PretParametre
         public List<PretParametreView> getAllPretOrderByDateFinAscByIdInscription(
                         @Param("idInscription") Long idInscription);
 
-        // On ne prend pas encore en compte les remises
-        @Query(value = "SELECT * FROM pret_parametre WHERE :dateCible >= date_pret AND (date_remise IS NULL OR :dateCible <= date_remise) AND id_exemplaire = :idExemplaire", nativeQuery = true)
+        // Version corrige qui prend en compte l'heure:
+        @Query(value = "SELECT * FROM pret_parametre WHERE CAST(:dateCible AS DATE) >= CAST(date_pret AS DATE) AND (date_remise IS NULL OR CAST(:dateCible AS DATE) <= CAST(date_remise AS DATE)) AND id_exemplaire = :idExemplaire", nativeQuery = true)
         public PretParametreView findPretWhereExemplaireIn(@Param("dateCible") LocalDateTime dateCible,
                         @Param("idExemplaire") Long idExemplaire);
+        // On ne prend pas encore en compte les remises
+        // @Query(value = "SELECT * FROM pret_parametre WHERE :dateCible >= date_pret
+        // AND (date_remise IS NULL OR :dateCible <= date_remise) AND id_exemplaire =
+        // :idExemplaire", nativeQuery = true)
+        // public PretParametreView findPretWhereExemplaireIn(@Param("dateCible")
+        // LocalDateTime dateCible,
+        // @Param("idExemplaire") Long idExemplaire);
 
         // on suppose ici que si date_remise n'est pas null, c'est que date_remise est
         // forcement avant aujourd'hui.

@@ -55,16 +55,17 @@ public class RemiseLivreService {
                     + " a deja ete rendu ou n'est encore prete maintenant, il y a erreur.");
         }
         // Date valide
-        if (!MyDate.dateValide(dateRemise)) {
-            throw new IllegalArgumentException("La date doit etre avant aujourd'hui");
-        }
+        // if (!MyDate.dateValide(dateRemise)) {
+        // throw new IllegalArgumentException("La date doit etre avant aujourd'hui");
+        // }
 
         // Dans tout les cas, getPretFromExemplaireActuel qui va prendre le dernier pret
         // avec l'exemplaire sera toujours le dernier malgre
         // la possiblite de choix de date, en effet personne n'aurait pu repreter le
         // livre jusqu'a aujourd'hui.
-        
-        //Aussi les prets avec date superieur a aujourd'hui ne devraient pas exister, changer la logique si on peut choisir la date d'un pret 
+
+        // Aussi les prets avec date superieur a aujourd'hui ne devraient pas exister,
+        // changer la logique si on peut choisir la date d'un pret
         Pret pret = this.pretService.getPretFromExemplaireActuel(idExemplaire);
         User emp = userService.findById(idEmploye);
         RemiseLivre remiseLivre = new RemiseLivre(pret, dateRemise, commentaire, emp);

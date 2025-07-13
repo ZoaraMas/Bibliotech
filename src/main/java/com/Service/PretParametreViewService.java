@@ -31,10 +31,13 @@ public class PretParametreViewService {
     @Autowired
     private AdherentQuotaService adherentQuotaService;
 
-
-    // Verifier que si la reservation devienne un pret plus tard, l'inscription actuelle couvre tout le pret
+    // Verifier que si la reservation devienne un pret plus tard, l'inscription
+    // actuelle couvre tout le pret
     // public boolean pretEstCouvertDansInscription(Inscription inscription, )
 
+    public List<PretParametreView> findAll() {
+        return this.pretParametreViewRepository.findAll();
+    }
 
     public PretParametreView getCurrPretWithIdExemplaire(Long idExemplaire) throws Exception {
         List<PretParametreView> liste = this.pretParametreViewRepository

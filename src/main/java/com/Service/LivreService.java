@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.Entite.Livre;
+import com.Entite.PretNombreDescView;
 import com.Entite.User;
 import com.Entite.Livre;
 import com.Repository.LivreRepository;
@@ -19,13 +20,15 @@ import java.util.Optional;
 public class LivreService {
     @Autowired
     private LivreRepository livreRepository;
-    
-    @Autowired 
-    private UserService userService;
-    // Fonctionalite 1
-    // Preter un livre a un membre selon le type d’adherant, le type de livre et la disponibilite du livre en elle meme.
-    public void preterUnExemplaireLivre(long idUser, long idEmploye, long idExemplaire) {
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private PretNombreDescViewService pretNombreDescViewService;
+
+    public List<PretNombreDescView> findLivresLesPlusPretes() {
+        return this.pretNombreDescViewService.findAll();
     }
 
     // Verifier si le membre est actuellement inscrit

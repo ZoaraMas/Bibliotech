@@ -180,7 +180,11 @@ CREATE OR REPLACE VIEW pret_parametre AS (
         pp.nb_jours_avant_prolongation,
         pp.nb_jours_prolongation,
         pp.created_at AS pp_created_at, -- Aliased to avoid conflict with p.created_at
-        DATE_ADD(p.date_pret, INTERVAL pp.nb_jour_pret DAY) AS date_fin_pret,
+        CASE 
+            WHEN p.id_type_pret = 2 THEN TIMESTAMP(DATE(p.date_pret), '20:00:00')
+            ELSE DATE_ADD(p.date_pret, INTERVAL pp.nb_jour_pret DAY)
+        END
+            AS date_fin_pret,
         COALESCE(rm.date_remise, NULL) AS date_remise
     FROM
         pret AS p
@@ -241,6 +245,31 @@ CREATE OR REPLACE TABLE etat_reservation (
     FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+
+
+CREATE OR REPLACE VIEW pret_nombre_desc AS (
+    SELECT 
+        l.id,
+        l.titre,
+        count(*) as nombre_pret
+    FROM
+        pret AS p
+    JOIN
+        exemplaire AS e ON e.id = p.id_exemplaire
+    JOIN
+        livre AS l ON l.id = e.id_livre
+    GROUP BY l.id
+    ORDER BY nombre_pret DESC
+);
+
+
+
+
+-- INSERTS
+
+
+
+
 INSERT INTO type_user (libelle, description) VALUES
 ('Bibliothecaire', 'Bibliothécaire principal avec tous les droits'),
 ('Membre', 'Membre simple ayant acces a des fonctionalites limites');
@@ -287,9 +316,9 @@ INSERT INTO type_adherent (libelle) VALUES
 ('Anonyme');
 
 INSERT INTO adherent_quota (id_type_adherent, quota) VALUES
-(1, 5),  -- Etudiant (assuming ID 1) can borrow 5 books
-(2, 10), -- Professeur (assuming ID 2) can borrow 10 books
-(3, 7),  -- Professionnel (assuming ID 3) can borrow 7 books
+(1, 3),  -- Etudiant (assuming ID 1) can borrow 5 books
+(2, 4), -- Professeur (assuming ID 2) can borrow 10 books
+(3, 5),  -- Professionnel (assuming ID 3) can borrow 7 books
 (4, 2);   -- Anonyme (assuming ID 4) can borrow 2 books
 
 -- Insertion des types de prêt
@@ -428,68 +457,68 @@ INSERT INTO inscription (date_inscription, id_user, id_type_adherent, duree_mois
 -- Insertion des prêts (juin et juillet 2025)
 INSERT INTO pret (id_inscription, id_exemplaire, id_type_pret, date_pret, id_employe) VALUES
 -- Prêts de juin 2025
-(1, 1, 1, '2025-06-01', 1),    -- membre - Le Petit Prince (14 jours -> fin: 15/06)
-(2, 4, 1, '2025-06-03', 1),    -- Pierre - 1984 (21 jours -> fin: 24/06)
-(3, 7, 1, '2025-06-05', 2),    -- Sophie - Steve Jobs (14 jours -> fin: 19/06)
-(4, 9, 1, '2025-06-08', 1),    -- Jean - Clean Code (21 jours -> fin: 29/06)
-(5, 15, 1, '2025-06-10', 2),   -- Anne - Harry Potter (21 jours -> fin: 01/07)
-(6, 12, 1, '2025-06-12', 1),   -- Paul - Méditations (14 jours -> fin: 26/06)
-(7, 16, 1, '2025-06-15', 2),   -- Visitor - Harry Potter (7 jours -> fin: 22/06)
-(8, 17, 1, '2025-06-18', 1),   -- Lucas - Dune (14 jours -> fin: 02/07)
-(9, 20, 1, '2025-06-20', 2),   -- Emma - Introduction algo (21 jours -> fin: 11/07)
-(10, 22, 1, '2025-06-22', 1),  -- Hugo - Sapiens (14 jours -> fin: 06/07)
-(11, 2, 1, '2025-06-25', 2),   -- Camille - Le Petit Prince (14 jours -> fin: 09/07)
-(12, 18, 1, '2025-06-27', 1),  -- Nicolas - Dune (14 jours -> fin: 11/07)
--- Prêts de juillet 2025
-(13, 14, 1, '2025-07-01', 2),  -- Léa - Hamlet (14 jours -> fin: 15/07)
-(14, 19, 1, '2025-07-03', 1),  -- Maxime - Les Misérables (21 jours -> fin: 24/07)
-(15, 23, 1, '2025-07-05', 2),  -- Clara - Le Seigneur des Anneaux (14 jours -> fin: 19/07)
-(1, 5, 1, '2025-07-10', 1),    -- membre - 1984 (14 jours -> fin: 24/07)
-(2, 11, 1, '2025-07-12', 2),   -- Pierre - Méditations (21 jours -> fin: 02/08)
-(3, 21, 1, '2025-07-15', 1),   -- Sophie - Introduction algo (14 jours -> fin: 29/07)
-(4, 6, 1, '2025-07-18', 2),    -- Jean - Histoire de France (21 jours -> fin: 08/08)
-(5, 24, 1, '2025-07-20', 1),   -- Anne - Le Seigneur des Anneaux (21 jours -> fin: 10/08)
-(6, 8, 1, '2025-07-22', 2),    -- Paul - Steve Jobs (14 jours -> fin: 05/08)
-(8, 3, 1, '2025-07-25', 1),    -- Lucas - Le Petit Prince (14 jours -> fin: 08/08)
-(9, 13, 1, '2025-07-28', 2),   -- Emma - Les Fleurs du Mal (21 jours -> fin: 18/08)
-(10, 10, 1, '2025-07-30', 1);  -- Hugo - Clean Code (14 jours -> fin: 13/08)
+(1, 1, 1, '2025-07-05', 1);    -- membre - Le Petit Prince (14 jours -> fin: 15/06)
+-- (2, 4, 1, '2025-06-03', 1),    -- Pierre - 1984 (21 jours -> fin: 24/06)
+-- (3, 7, 1, '2025-06-05', 2),    -- Sophie - Steve Jobs (14 jours -> fin: 19/06)
+-- (4, 9, 1, '2025-06-08', 1),    -- Jean - Clean Code (21 jours -> fin: 29/06)
+-- (5, 15, 1, '2025-06-10', 2),   -- Anne - Harry Potter (21 jours -> fin: 01/07)
+-- (6, 12, 1, '2025-06-12', 1),   -- Paul - Méditations (14 jours -> fin: 26/06)
+-- (7, 16, 1, '2025-06-15', 2),   -- Visitor - Harry Potter (7 jours -> fin: 22/06)
+-- (8, 17, 1, '2025-06-18', 1),   -- Lucas - Dune (14 jours -> fin: 02/07)
+-- (9, 20, 1, '2025-06-20', 2),   -- Emma - Introduction algo (21 jours -> fin: 11/07)
+-- (10, 22, 1, '2025-06-22', 1),  -- Hugo - Sapiens (14 jours -> fin: 06/07)
+-- (11, 2, 1, '2025-06-25', 2),   -- Camille - Le Petit Prince (14 jours -> fin: 09/07)
+-- (12, 18, 1, '2025-06-27', 1),  -- Nicolas - Dune (14 jours -> fin: 11/07)
+-- -- Prêts de juillet 2025
+-- (13, 14, 1, '2025-07-01', 2),  -- Léa - Hamlet (14 jours -> fin: 15/07)
+-- (14, 19, 1, '2025-07-03', 1),  -- Maxime - Les Misérables (21 jours -> fin: 24/07)
+-- (15, 23, 1, '2025-07-05', 2),  -- Clara - Le Seigneur des Anneaux (14 jours -> fin: 19/07)
+-- (1, 5, 1, '2025-07-10', 1),    -- membre - 1984 (14 jours -> fin: 24/07)
+-- (2, 11, 1, '2025-07-12', 2),   -- Pierre - Méditations (21 jours -> fin: 02/08)
+-- (3, 21, 1, '2025-07-15', 1),   -- Sophie - Introduction algo (14 jours -> fin: 29/07)
+-- (4, 6, 1, '2025-07-18', 2),    -- Jean - Histoire de France (21 jours -> fin: 08/08)
+-- (5, 24, 1, '2025-07-20', 1),   -- Anne - Le Seigneur des Anneaux (21 jours -> fin: 10/08)
+-- (6, 8, 1, '2025-07-22', 2),    -- Paul - Steve Jobs (14 jours -> fin: 05/08)
+-- (8, 3, 1, '2025-07-25', 1),    -- Lucas - Le Petit Prince (14 jours -> fin: 08/08)
+-- (9, 13, 1, '2025-07-28', 2),   -- Emma - Les Fleurs du Mal (21 jours -> fin: 18/08)
+-- (10, 10, 1, '2025-07-30', 1);  -- Hugo - Clean Code (14 jours -> fin: 13/08)
 
 
 -- Insertion des remises de livre
-INSERT INTO remise_livre (id_pret, date_remise, commentaire, id_employe) VALUES
--- Retours de juin 2025 (certains en avance, certains en retard)
-(1, '2025-06-14', 'Retour en avance, livre en parfait état', 1),  -- Le Petit Prince - en avance (prévu 15/06)
-(2, '2025-07-04', 'Retour avec 4 jours de retard', 2),           -- 1984 - en retard (prévu 24/06)
-(3, '2025-06-18', 'Retour à temps', 1),                          -- Steve Jobs - à temps (prévu 19/06)
-(4, '2025-06-27', 'Retour en avance de 2 jours', 2),             -- Clean Code - en avance (prévu 29/06)
-(5, '2025-07-03', 'Retour avec 2 jours de retard', 1),           -- Harry Potter - en retard (prévu 01/07)
-(6, '2025-06-25', 'Retour en avance', 2),                        -- Méditations - en avance (prévu 26/06)
-(7, '2025-06-30', 'Retour avec 8 jours de retard, pénalité appliquée', 1), -- Visitor HP - très en retard (prévu 22/06)
-(8, '2025-07-01', 'Retour en avance', 2),                        -- Dune - en avance (prévu 02/07)
--- Le prêt 9 (Emma - algo) n'est pas encore rendu (prévu 11/07)
-(10, '2025-07-08', 'Retour avec 2 jours de retard', 1),          -- Hugo - Sapiens - en retard (prévu 06/07)
-(11, '2025-07-07', 'Retour en avance', 2),                       -- Camille - Le Petit Prince - en avance (prévu 09/07)
--- Le prêt 12 (Nicolas - Dune) n'est pas encore rendu (prévu 11/07)
+-- INSERT INTO remise_livre (id_pret, date_remise, commentaire, id_employe) VALUES
+-- -- Retours de juin 2025 (certains en avance, certains en retard)
+-- (1, '2025-06-14', 'Retour en avance, livre en parfait état', 1),  -- Le Petit Prince - en avance (prévu 15/06)
+-- (2, '2025-07-04', 'Retour avec 4 jours de retard', 2),           -- 1984 - en retard (prévu 24/06)
+-- (3, '2025-06-18', 'Retour à temps', 1),                          -- Steve Jobs - à temps (prévu 19/06)
+-- (4, '2025-06-27', 'Retour en avance de 2 jours', 2),             -- Clean Code - en avance (prévu 29/06)
+-- (5, '2025-07-03', 'Retour avec 2 jours de retard', 1),           -- Harry Potter - en retard (prévu 01/07)
+-- (6, '2025-06-25', 'Retour en avance', 2),                        -- Méditations - en avance (prévu 26/06)
+-- (7, '2025-06-30', 'Retour avec 8 jours de retard, pénalité appliquée', 1), -- Visitor HP - très en retard (prévu 22/06)
+-- (8, '2025-07-01', 'Retour en avance', 2),                        -- Dune - en avance (prévu 02/07)
+-- -- Le prêt 9 (Emma - algo) n'est pas encore rendu (prévu 11/07)
+-- (10, '2025-07-08', 'Retour avec 2 jours de retard', 1),          -- Hugo - Sapiens - en retard (prévu 06/07)
+-- (11, '2025-07-07', 'Retour en avance', 2),                       -- Camille - Le Petit Prince - en avance (prévu 09/07)
+-- -- Le prêt 12 (Nicolas - Dune) n'est pas encore rendu (prévu 11/07)
 
--- Retours de juillet 2025 (plus récents)
-(13, '2025-07-14', 'Retour en avance', 1),                       -- Léa - Hamlet - en avance (prévu 15/07)
-(14, '2025-07-26', 'Retour avec 2 jours de retard', 2),          -- Maxime - Les Misérables - en retard (prévu 24/07)
-(15, '2025-07-18', 'Retour en avance', 1),                       -- Clara - LOTR - en avance (prévu 19/07)
-(16, '2025-07-23', 'Retour en avance', 2),                       -- membre - 1984 - en avance (prévu 24/07)
--- Le prêt 17 (Pierre - Méditations) n'est pas encore rendu (prévu 02/08)
-(18, '2025-07-30', 'Retour avec 1 jour de retard', 1),           -- Sophie - algo - en retard (prévu 29/07)
--- Les prêts 19-24 ne sont pas encore rendus (dates d'échéance futures)
+-- -- Retours de juillet 2025 (plus récents)
+-- (13, '2025-07-14', 'Retour en avance', 1),                       -- Léa - Hamlet - en avance (prévu 15/07)
+-- (14, '2025-07-26', 'Retour avec 2 jours de retard', 2),          -- Maxime - Les Misérables - en retard (prévu 24/07)
+-- (15, '2025-07-18', 'Retour en avance', 1),                       -- Clara - LOTR - en avance (prévu 19/07)
+-- (16, '2025-07-23', 'Retour en avance', 2),                       -- membre - 1984 - en avance (prévu 24/07)
+-- -- Le prêt 17 (Pierre - Méditations) n'est pas encore rendu (prévu 02/08)
+-- (18, '2025-07-30', 'Retour avec 1 jour de retard', 1),           -- Sophie - algo - en retard (prévu 29/07)
+-- -- Les prêts 19-24 ne sont pas encore rendus (dates d'échéance futures)
 
--- Retours supplémentaires avec commentaires variés
-(19, '2025-08-10', 'Retour avec 2 jours de retard, livre légèrement abîmé', 2), -- Jean - Histoire (prévu 08/08)
-(20, '2025-08-08', 'Retour en avance', 1),                       -- Anne - LOTR - en avance (prévu 10/08)
-(21, '2025-08-04', 'Retour en avance', 2),                       -- Paul - Steve Jobs - en avance (prévu 05/08)
-(22, '2025-08-06', 'Retour en avance', 1),                       -- Lucas - Le Petit Prince - en avance (prévu 08/08)
--- Les prêts 23 et 24 restent non rendus pour simulation
+-- -- Retours supplémentaires avec commentaires variés
+-- (19, '2025-08-10', 'Retour avec 2 jours de retard, livre légèrement abîmé', 2), -- Jean - Histoire (prévu 08/08)
+-- (20, '2025-08-08', 'Retour en avance', 1),                       -- Anne - LOTR - en avance (prévu 10/08)
+-- (21, '2025-08-04', 'Retour en avance', 2),                       -- Paul - Steve Jobs - en avance (prévu 05/08)
+-- (22, '2025-08-06', 'Retour en avance', 1),                       -- Lucas - Le Petit Prince - en avance (prévu 08/08)
+-- -- Les prêts 23 et 24 restent non rendus pour simulation
 
--- Ajout de quelques retours avec des commentaires spéciaux
-(23, '2025-08-20', 'Retour avec 2 jours de retard, pages cornées', 2),  -- Emma - Les Fleurs du Mal - en retard (prévu 18/08)
-(24, '2025-08-11', 'Retour en avance, excellent état', 1); 
+-- -- Ajout de quelques retours avec des commentaires spéciaux
+-- (23, '2025-08-20', 'Retour avec 2 jours de retard, pages cornées', 2),  -- Emma - Les Fleurs du Mal - en retard (prévu 18/08)
+-- (24, '2025-08-11', 'Retour en avance, excellent état', 1); 
 -- Checkpoint
 
 

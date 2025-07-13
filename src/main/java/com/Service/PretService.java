@@ -76,7 +76,6 @@ public class PretService {
         if (!exemplaireService.exemplaireDisponible(idExemplaire, datePret)) {
             throw new Exception("L'exemplaire de livre ID:" + idExemplaire + " n'est pas encore disponible");
         }
-
         // Membre actuellement inscrit
         if (!inscriptionService.estActuellementInscrit(idUser)) {
             throw new Exception("Actuellement l'utilisateur ID:" + idUser + " n'est pas inscrit");
@@ -94,7 +93,6 @@ public class PretService {
         if (penaliteResponse.isSubitPenalite()) {
             throw new Exception("Vous serez encore penalise a la date voulue, " + penaliteResponse.getMessage());
         }
-
         TypePret typePret = this.typePretService.findById(idTypePret);
         // Le membre n’a pas encore termine tout son quota
         // Si il prend sur place, la regle ne s'applique pas
@@ -209,8 +207,9 @@ public class PretService {
                 idExemplaire);
         if (pretParametreDTO == null)
             return true;
-        throw new Exception("l'exemplaire de livre " + idExemplaire + "n'est pas encore disponible jusqu'au "
-                + pretParametreDTO.getDateFinPret().toString());
+        throw new Exception("l'exemplaire de livre " + idExemplaire + " n'est pas encore disponible jusqu'au "
+                + pretParametreDTO.getDateFinPret().toString()
+                + " sinon le livre n'a pas encore ete rendu par le preteur actuel");
     }
 
     public boolean exemplaireEstNonDisponible(Long idExemplaire) throws Exception {
