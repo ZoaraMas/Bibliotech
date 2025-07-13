@@ -203,6 +203,8 @@ CREATE OR REPLACE VIEW pret_parametre AS (
             l.id_genre = pp.id_genre 
 );
 
+
+
 -- Table Paramètres de prêt (règles de gestion)
 CREATE OR REPLACE TABLE adherent_quota (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -262,8 +264,18 @@ CREATE OR REPLACE VIEW pret_nombre_desc AS (
     ORDER BY nombre_pret DESC
 );
 
-
-
+CREATE OR REPLACE VIEW reservation_view AS (
+    SELECT
+        r.id,
+        r.id_inscription,
+        r.id_exemplaire,
+        r.id_type_pret,
+        r.date_reservation,
+        r.commentaire,
+        r.id_employe
+    FROM
+        reservation AS r
+);
 
 -- INSERTS
 

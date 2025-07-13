@@ -82,6 +82,14 @@
                 <i class="menu-icon tf-icons bx bx-table"></i>
                 <div class="text-truncate" data-i18n="Tables">Liste Prets</div>
               </a>
+              <a href="<%= request.getContextPath() %>/reservation/form-reservation" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-table"></i>
+                <div class="text-truncate" data-i18n="Tables">Reservation</div>
+              </a>
+              <a href="<%= request.getContextPath() %>/reservation/liste-reservation" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-table"></i>
+                <div class="text-truncate" data-i18n="Tables">Liste Reservations</div>
+              </a>
           </li>
           <div class="menu-inner-shadow"></div>
           <ul class="menu-inner py-1">
