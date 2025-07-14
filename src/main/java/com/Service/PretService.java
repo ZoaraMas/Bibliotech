@@ -45,6 +45,16 @@ public class PretService {
     @Autowired
     private ParametrePretService parametrePretService;
 
+    public Pret findById(long id) {
+        return this.pretRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Pret with ID: " + id + " not found."));
+    }
+
+    public void pretExists(Long idPret) {
+        Pret pret = this.findById(idPret);
+    }
+
     // Obtenir le pret d'un exemplaire qui est en cours
     public Pret getPretFromExemplaireActuel(Long idExemplaire) throws Exception {
         PretParametreView temp = this.pretParametreViewService.getCurrPretWithIdExemplaire(idExemplaire);
@@ -86,7 +96,9 @@ public class PretService {
         // Subit une penalite maintenant
         PenaliteResponse penaliteResponse = this.subitPenalite(currInscription.getId());
         if (penaliteResponse.isSubitPenalite()) {
-            throw new Exception("Vous etes actuellement penalise, " + penaliteResponse.getMessage());
+            throw new Exception(
+                    "1Vous etes actuellement penalise, user: " + idUser + ", idInscription = " + currInscription + ", "
+                            + penaliteResponse.getMessage());
         }
         // Subit une penalite lors du jour demande a reserver
         penaliteResponse = this.subitPenalite(currInscription.getId(), datePret);
@@ -205,7 +217,7 @@ public class PretService {
     public boolean exemplaireEstDisponible(Long idExemplaire, LocalDateTime dateCible) throws Exception {
         PretParametreView pretParametreDTO = this.pretParametreViewService.findPretWhereExemplaireIn(dateCible,
                 idExemplaire);
-        if (pretParametreDTO == null)
+        if (pretParametreDTO == null) // si ca n'existe pas, c'est que le pret a deja ete rendu quelque part
             return true;
         throw new Exception("l'exemplaire de livre " + idExemplaire + " n'est pas encore disponible jusqu'au "
                 + pretParametreDTO.getDateFinPret().toString()

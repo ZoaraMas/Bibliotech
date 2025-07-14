@@ -96,6 +96,23 @@ public class PretParametreView {
         this.dateRemise = dateRemise;
     }
 
+    // Verifier si une date est valable pour la prolongement de ce pret
+    public boolean dateValablePourProlongement(LocalDateTime dateDemande) throws Exception {
+        LocalDateTime debutPret = this.getDatePret();
+        LocalDateTime finPret = this.getDateFinPret();
+        if (dateDemande.isAfter(finPret))
+            throw new Exception(
+                    "La date de demande de prolongation se situe apres la fin prevue pour le pret en question");
+        if (dateDemande.isBefore(debutPret))
+            throw new Exception(
+                    "La date de demande de prolongation se situe avant le debut prevue pour le pret en question");
+        LocalDateTime dateProlongationValable = finPret.minusDays(3);
+        if (dateDemande.isBefore(dateProlongationValable))
+            throw new Exception("Vous devez attendre le " + dateProlongationValable
+                    + " avant de pouvoir demander a prolonger le pret");
+        return true;
+    }
+
     public Long getId() {
         return id;
     }
