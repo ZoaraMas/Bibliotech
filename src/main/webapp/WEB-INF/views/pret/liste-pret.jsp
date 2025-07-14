@@ -26,25 +26,36 @@
                 <th>Id Pret</th>
                 <th>Id Exemplaire</th>
                 <th>Date Pret</th>
-                <th>Action</th>
+                <th>Remise</th>
+                <th>Prolongement</th>
             </tr>
         </thead>
         <tbody class="table-border-bottom-0">
             <% for(int i = 0; i < listePret.size(); i ++) { 
                 PretParametreView pret = listePret.get(i); %>
                 <tr>
-                    <form method="post" action="<%= request.getContextPath() %>/remise-livre/creer">
-                    <input type="hidden" name="idExemplaire" value="<%= pret.getIdExemplaire() %>">
                     <td><%= pret.getId() %></td>
                     <td><%= pret.getIdExemplaire() %></td>
                     <td><%= pret.getDatePret() %></td>
-                    <td>
-                        <input type="text" name="commentaire" placeholder="Ajouter un commentaire">
+                    <form method="post" action="<%= request.getContextPath() %>/remise-livre/creer">
+                        <input type="hidden" name="idExemplaire" value="<%= pret.getIdExemplaire() %>">
+                        <td>
+                            <input type="text" name="commentaire" placeholder="Commentaire remise">
 
-                        <input type="datetime-local" name="date" value="<%= nowFormatted %>" >
+                            <input type="datetime-local" name="date" value="<%= nowFormatted %>" >
 
-                        <button type="submit" class="btn btn-primary">Rendre</button>
-                    </td>
+                            <button type="submit" class="btn btn-primary">Rendre</button>
+                        </td>
+                    </form>
+                    <form method="post" action="<%= request.getContextPath() %>/prolongement/creer">
+                        <input type="hidden" name="idPret" value="<%= pret.getId() %>">
+                        <td>
+                            <input type="text" name="commentaire" placeholder="Commentaire prolongement">
+
+                            <input type="datetime-local" name="dateDemande" value="<%= nowFormatted %>" >
+
+                            <button type="submit" class="btn btn-primary">Demande Prolongation</button>
+                        </td>
                     </form>
                 </tr>
             <% } %>

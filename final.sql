@@ -234,6 +234,17 @@ CREATE OR REPLACE TABLE reservation (
     INDEX idx_reservation_dates (date_reservation)
 );
 
+CREATE OR REPLACE TABLE prolongement_pret (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_pret BIGINT NOT NULL,
+    date_demande DATE NOT NULL,
+    commentaire TEXT,
+    id_employe BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_pret) REFERENCES pret(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
 -- Table État réservation (historique)
 CREATE OR REPLACE TABLE etat_reservation (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -246,6 +257,8 @@ CREATE OR REPLACE TABLE etat_reservation (
     FOREIGN KEY (id_reservation) REFERENCES reservation(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+
 
 
 
@@ -277,6 +290,30 @@ CREATE OR REPLACE VIEW reservation_view AS (
         reservation AS r
 );
 
+CREATE OR REPLACE VIEW prolongement_pret_view AS (
+    SELECT
+        p.id,
+        p.id_pret,
+        p.date_demande,
+        p.commentaire,
+        p.id_employe
+    FROM
+        prolongement_pret AS p
+);
+
+
+-- Table État prolongement de prêt (historique)
+CREATE OR REPLACE TABLE etat_prolongement_pret (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_prolongement_pret BIGINT NOT NULL,
+    date_validation DATE NOT NULL,
+    etat ENUM('EN_ATTENTE', 'VALIDEE', 'REFUSEE') NOT NULL,
+    commentaire TEXT,
+    id_employe BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_prolongement_pret) REFERENCES prolongement_pret(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
 -- INSERTS
 
 
@@ -464,7 +501,8 @@ INSERT INTO inscription (date_inscription, id_user, id_type_adherent, duree_mois
 ('2025-04-15', 13, 3, 12, 1), -- Nicolas Girard
 ('2025-05-01', 14, 1, 6, 1),  -- Léa Faure
 ('2025-05-15', 15, 2, 12, 1), -- Maxime Laurent
-('2025-05-20', 16, 3, 6, 1);  -- Clara Morel
+('2025-05-20', 16, 3, 6, 1),  -- Clara Morel
+('2025-05-20', 1, 3, 6, 1);  -- Clara Morel
 
 -- Insertion des prêts (juin et juillet 2025)
 INSERT INTO pret (id_inscription, id_exemplaire, id_type_pret, date_pret, id_employe) VALUES

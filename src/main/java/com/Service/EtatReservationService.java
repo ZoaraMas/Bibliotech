@@ -82,7 +82,6 @@ public class EtatReservationService {
             etatReservation.setEtat(EtatReservationEnum.VALIDEE);
             this.etatReservationRepository.save(etatReservation);
         }
-
     }
 
     // l’etat change du dernier etat sur la reservation

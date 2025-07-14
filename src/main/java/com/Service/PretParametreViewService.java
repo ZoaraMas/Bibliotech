@@ -31,9 +31,24 @@ public class PretParametreViewService {
     @Autowired
     private AdherentQuotaService adherentQuotaService;
 
+    // Verifier si le pret a deja ete rendu ou non
+    public boolean pretEstRendu(Long idPret) throws Exception {
+        PretParametreView pretParametreView = this.pretParametreViewRepository.findById(idPret)
+                .orElseThrow(() -> new Exception("Pret non trouve avec l'id: " + idPret));
+        if (pretParametreView.getDateRemise() == null)
+            return false;
+        return true;
+    }
+
     // Verifier que si la reservation devienne un pret plus tard, l'inscription
     // actuelle couvre tout le pret
     // public boolean pretEstCouvertDansInscription(Inscription inscription, )
+
+    public PretParametreView findById(Long idPret) throws Exception {
+        // Normalement al vue a la meme id que le pret
+        return this.pretParametreViewRepository.findById(idPret)
+                .orElseThrow(() -> new Exception("Pret avec parametres non trouve avec l'id: " + idPret));
+    }
 
     public List<PretParametreView> findAll() {
         return this.pretParametreViewRepository.findAll();

@@ -24,6 +24,7 @@ import com.Entite.User;
 
 @Repository
 public interface PretParametreViewRepository extends JpaRepository<PretParametreView, Long> {
+
         @Query("SELECT p FROM PretParametreView p WHERE p.idExemplaire = :idExemplaire AND p.dateRemise IS NULL ORDER BY p.datePret DESC")
         List<PretParametreView> findPretByExemplaireWhereDateRemiseIsNotNullOrderByDatePretDesc(
                         @Param("idExemplaire") Long idExemplaire);

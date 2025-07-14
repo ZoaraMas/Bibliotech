@@ -90,6 +90,10 @@
                 <i class="menu-icon tf-icons bx bx-table"></i>
                 <div class="text-truncate" data-i18n="Tables">Liste Reservations</div>
               </a>
+              <a href="<%= request.getContextPath() %>/prolongement/liste-prolongement" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-table"></i>
+                <div class="text-truncate" data-i18n="Tables">Liste Prolongement</div>
+              </a>
           </li>
           <div class="menu-inner-shadow"></div>
           <ul class="menu-inner py-1">

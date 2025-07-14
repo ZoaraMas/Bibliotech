@@ -151,6 +151,8 @@ maintenant je vais creer une fonction qui verifie si un pret sera couvert par un
 
 - Debut fonctionalite validation validation-reservation
 
+
+
 # Elements a reverifier:
 - quota a un certain date lors de la reservation par exemple
 
@@ -196,6 +198,25 @@ insert into inscription (date_inscription, id_user, id_typ  e_adherent, duree_mo
 [ok]
 
 - J'ai fait assez de verification pour aujourd'hui, je vais maintenant appliquer un template css et mettre la validation ou refus de reservation dans la liste des reservations, et ensuite implementer le dashboard.
+
+
+
+# 14-07-25
+- ON reprend
+- Je commence par la demande de prolongement d'un pretr
+
+- Je me rend compte de ce qu'implique la date dans la remise, puisque j'obtiens le dernier pret non rendu juste, mais finalement
+c'est pas grave car deja c'est un scenrio exceptionel d'ajouter une date de remise, de plus l'important est que l'exemplaire est bien revenu sain et sauf et aussi qu'aucun pret n'aurais du etre admis si l'exemplaire en question n'a pas encore ete rendu
+
+- Attention, la mise en place de date dans les formulaires ne devraient pas etre des dates du passe, sinon cela pourrait etre source d'erreur
+
+
+- Mon probleme lors du test de prolongement c'est que l'utilisateur de l'inscription id: 2 est penalise alors qu'il a deja rendu tout les livres a part le livre qu'il veut prolonger.
+
+- Dans mon dernier screen, je ne peux plus creer un pret pour l'utilisateur 1 alors qu'il a deja rendu tout les livres et que j'attend la date propose par la mise en erreur, verifier ce fait, j'ai fait un screen pour l'erreur
+
+- Je viens de creer le controller pour demander une prolongation, ajouter dans le jsp et tester le tout, ensuite lister les prolongations pour les valider
+
 
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
