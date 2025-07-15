@@ -102,6 +102,10 @@
                 <i class="menu-icon tf-icons bx bx-table"></i>
                 <div class="text-truncate" data-i18n="Tables">Exemplaires Livre</div>
               </a>
+              <a href="<%= request.getContextPath() %>/user/form-detail-user" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-table"></i>
+                <div class="text-truncate" data-i18n="Tables">Detail User</div>
+              </a>
               <a href="<%= request.getContextPath() %>/user/unlog" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-table"></i>
                 <div class="text-truncate" data-i18n="Tables">UNLOG</div>

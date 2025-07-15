@@ -246,7 +246,7 @@ http://localhost:8089/Bibliotech/livre/getLivre-avec-exemplaires?idLivre=1
 * Pour faire les jsons, tout doit etre initialiser pour un objet et avec tout les autres objets qui le composent
 
 Alea 4
-http://localhost:8089/Bibliotech/user/info?idUser=1
+http://localhost:8089/Bibliotech/user/info?idUser=4
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
 - [a verifier] CopyJsp pour copier uniquement les jsp
