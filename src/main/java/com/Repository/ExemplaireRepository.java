@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.Entite.Exemplaire;
+import com.dto.ExemplaireDisponibilite;
 import com.Entite.Livre;
 import com.Entite.User;
 
@@ -21,4 +22,13 @@ import com.Entite.User;
 public interface ExemplaireRepository extends JpaRepository<Exemplaire, Long> {
     @Query(value = "SELECT e FROM Exemplaire e JOIN FETCH e.livre l JOIN FETCH l.genre g WHERE e.id = :idExemplaire")
     public Optional<Exemplaire> findByIdWithLivreAndGenre(@Param("idExemplaire") Long idExemplaire);
+
+    // Alea: obtenir tout les exemplaires pour un livre
+    @Query("SELECT NEW com.dto.ExemplaireDisponibilite(e.id, e.reference, e.dateArrivee) "
+            + " FROM Exemplaire e " + " JOIN e.livre l "
+            + " WHERE l.id = :idLivre")
+    public List<ExemplaireDisponibilite> findAllDtoByLivreId(@Param("idLivre") Long idLivre);
+
+    @Query(value = "SELECT e FROM Exemplaire e JOIN FETCH e.livre l JOIN FETCH l.genre g WHERE l.id = :idLivre")
+    public List<Exemplaire> findAllByLivreId(@Param("idLivre") Long idLivre);
 }

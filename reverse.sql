@@ -155,5 +155,39 @@ CREATE TABLE etat_reservation (
     FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+-- Missing Table 1: prolongement_pret
+CREATE TABLE prolongement_pret (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_pret BIGINT NOT NULL,
+    date_demande DATE NOT NULL,
+    commentaire TEXT,
+    id_employe BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_pret) REFERENCES pret(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- Missing Table 2: adherent_quota
+-- (Although it was in your first "reverse" snippet, it was listed later in your full script)
+CREATE TABLE adherent_quota (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_type_adherent INT NOT NULL,
+    quota INT NOT NULL,
+    FOREIGN KEY (id_type_adherent) REFERENCES type_adherent(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Missing Table 3: etat_prolongement_pret
+CREATE TABLE etat_prolongement_pret (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_prolongement_pret BIGINT NOT NULL,
+    date_validation DATE NOT NULL,
+    etat ENUM('EN_ATTENTE', 'VALIDEE', 'REFUSEE') NOT NULL,
+    commentaire TEXT,
+    id_employe BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_prolongement_pret) REFERENCES prolongement_pret(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
 -- Note: Views are not included as they are not needed for schema diagram generation
 -- The pret_parametre view can be added separately if needed

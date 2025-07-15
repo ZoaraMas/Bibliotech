@@ -1,16 +1,21 @@
 package com.Controller;
 
+import com.Entite.AdherentQuota;
 import com.Entite.Inscription;
+import com.Entite.TypeUser;
 import com.Entite.User;
+import com.Service.AdherentQuotaService;
 import com.Service.InscriptionService;
 import com.Service.PretService;
 import com.Service.UserService;
+import com.dto.InfoUserDto;
 import com.dto.PenaliteResponse;
 import com.Service.UserService;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpSession;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -36,6 +41,46 @@ public class UserController {
     private PretService pretService;
     @Autowired
     private InscriptionService inscriptionService;
+    @Autowired
+    private AdherentQuotaService adherentQuotaService;
+
+    // Alea 4 Obtenir les infos sur un utilisateur
+    // [ok]etat inscription, etat quota, etat Penalisation
+    @GetMapping("/info")
+    @ResponseBody
+    public ResponseEntity<?> getInfoAdherent(@RequestParam(name = "idUser") Long idUser) throws Exception {
+        User user = this.userService.findById(idUser);
+        String nom = user.getNom();
+        String prenom = user.getPrenom();
+        TypeUser typeUserObject = user.getTypeUser();
+        String typeUser = typeUserObject.getLibelle();
+        Integer idTypeUser = typeUserObject.getId();
+        Inscription currInscription = inscriptionService.getCurrentInscription(idUser); // throw exception si non
+                                                                                        // inscrit
+        // Obtenir l'etat de la penalisation
+        PenaliteResponse penaliteResponse = this.pretService.subitPenalite(currInscription.getId(),
+                LocalDateTime.now());
+        boolean penalisation = penaliteResponse.isSubitPenalite();
+        String messagePenalisation = penaliteResponse.getMessage();
+        // Obtenir l'etat du quota
+        int quotaInitial = this.adherentQuotaService.getQuotaInscription(currInscription.getId());
+        int quotaUtilise = this.pretService.getNombrePretActuel(currInscription.getId(), LocalDateTime.now());
+        int quotaReste = quotaInitial - quotaUtilise;
+
+        // Obtenir l'etat de l'inscription
+        LocalDate[] debutFinInscription = this.inscriptionService.getDebutFinInscription(idUser);
+        boolean inscrit = false;
+        String messageInscription = "L'adherent " + idUser + " N'est pas inscrit.";
+        if (debutFinInscription != null) {
+            inscrit = true;
+            messageInscription = "Utilisateur " + idUser + " inscrit: debut: " + debutFinInscription[0] + ", fin: "
+                    + debutFinInscription[1];
+        }
+
+        InfoUserDto result = new InfoUserDto(idUser, nom, prenom, idTypeUser, typeUser, penalisation,
+                messagePenalisation, quotaInitial, quotaUtilise, quotaReste, inscrit, messageInscription);
+        return ResponseEntity.ok(result);
+    }
 
     // Verifier l'etat de penalisation d'un use
     @GetMapping("/penalite")

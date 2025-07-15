@@ -31,6 +31,9 @@ public class Pret {
     @JoinColumn(name = "id_employe", nullable = false)
     private User employe;
 
+    @Column(nullable = true, length = 20)
+    private String prolongement;
+
     // Constructeurs
     public Pret() {
     }
@@ -52,6 +55,7 @@ public class Pret {
         this.id = id;
     }
 
+    
     public Inscription getInscription() {
         return inscription;
     }
@@ -90,6 +94,14 @@ public class Pret {
 
     public void setEmploye(User employe) {
         this.employe = employe;
+    }
+
+    public String getProlongement() {
+        return prolongement;
+    }
+
+    public void setProlongement(String prolongement) {
+        this.prolongement = prolongement;
     }
 
 }

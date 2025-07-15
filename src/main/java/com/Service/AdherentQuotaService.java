@@ -23,5 +23,7 @@ public class AdherentQuotaService {
 
     public int getQuotaInscription(Long idInscription) {
         return this.adherentQuotaRepository.getQuotaDepenseActuel(idInscription);
-    } 
+    }
+    
+    
 }

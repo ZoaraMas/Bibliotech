@@ -92,7 +92,6 @@ Pour le tp d'aujourd'hui, on va creer une table film et une table categorie, c'e
 
 # 30-05-2025
 - Pour la creation de film, on a la possibilite de choisir plusieurs categories
-
 [
     J'ai longtemps ete bloque pour l'implementation de la table associative, en effet, quand on creer une nouvelle instance de cette derniere, il faut aussi imperativement mettre a jour l'id embeded a l'interieur, c'est ce qui permet au jpa de sauver le tout. aussi, on ajoute le filmCategorie au payement
 ]
@@ -218,6 +217,36 @@ c'est pas grave car deja c'est un scenrio exceptionel d'ajouter une date de remi
 - Je viens de creer le controller pour demander une prolongation, ajouter dans le jsp et tester le tout, ensuite lister les prolongations pour les valider
 
 
+# 15-07-25
+- On devrait savoir si un pret est une prolongation ou non 
+- maintenant que j'ai ajouter une colonne prolongation dans pret, si le pret est une prolongation, la date de fin dependra du  nombre de jour de prolongation, en inserant un pret, simple, le prolongement sera a null
+- Maintenant je peux creer le nouveau pret lors de la validation de prolongement et le mettre en prolongement
+
+- La question maintenant c'est de savoir si le nouveau pret directement colle a la fin dur pret prolonge creerait des bugs dans le futur, rester tres lucide. 
+
+- 2 etapes avant de creer le nouveau pret de prolongation:
+    - rendre le livre 1h avant la date fin pour eviter la penalisation
+    - creer le nouveau pret a la date fin(on contournant la verification de disponibilite de pret a la date actuelle)
+
+
+- [ok] Dans mon code, c'est encore le meme user qui fait office d'emmploy car j'ai oublie de modifier
+
+- J'arrete la validation de prolongation pour l'instant d'abord pour executer l'alea, je me suis arrete a:
+    - la remise est effectue, mais lors du pret, voici l'erreur: Vous serez encore penalise a la date voulue, membre est penalise indefiniment, veuillez rendre tout les livres d'abord
+
+
+- Debut alea 3: webService
+    - On va essayer de se passer de postman pour essayer
+    - endPoint:
+http://localhost:8089/Bibliotech/livre/getLivre-avec-exemplaires?idLivre=1
+
+
+
+
+* Pour faire les jsons, tout doit etre initialiser pour un objet et avec tout les autres objets qui le composent
+
+Alea 4
+http://localhost:8089/Bibliotech/user/info?idUser=1
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
 - [a verifier] CopyJsp pour copier uniquement les jsp
@@ -240,6 +269,8 @@ c'est pas grave car deja c'est un scenrio exceptionel d'ajouter une date de remi
 
 # DEVELOPPEMENT
 # astuces:
+- Tout se base sur la vue de pret_parametre qui va donner tout les details vitals a connaitre pour un pret
+
 - Enlever la fonctionalite de login:
 Dans le web.xml: commenter /*, et mettre un autre url lambda
 <url-pattern>/user/hello</url-pattern>
@@ -256,3 +287,11 @@ A utiliser pour les requetes GET
     
 - final: script + donnees finale, script pret a etre execute
 - cross.sql: peupler les possibilites de parametres de pret non insere encore   
+[Maintenant, j'ai mis cross.sql a la fin du fichier final.sql, ainsi il n'y a plus qu'a executer le script de final.sql]
+
+- Remarque:
+Dans mon code, j'ai la possibilite d'annuler une reservation deja valide, mais je dois alors encore implementer toute une autre loqique pour ce cas
+
+Voir l'utite du created at dans le code java
+
+Quand on va valider un prolongement, la vue de pret_parametre devrait prendre non pas le nombre de jour de pret mais le nombre de jour de prolongement

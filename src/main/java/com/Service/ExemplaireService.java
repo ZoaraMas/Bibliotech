@@ -11,6 +11,7 @@ import com.Entite.Livre;
 import com.Repository.ExemplaireRepository;
 import com.Repository.LivreRepository;
 import com.Repository.UserRepository;
+import com.dto.ExemplaireDisponibilite;
 import com.Repository.LivreRepository;
 
 import jakarta.transaction.Transactional;
@@ -26,6 +27,17 @@ public class ExemplaireService {
 
     @Autowired
     private PretService pretService;
+
+    // Alea: obtenir tout les exemplaires pour un livre
+    public List<ExemplaireDisponibilite> findAllDtoByLivreId(Long idLivre) {
+        return this.exemplaireRepository.findAllDtoByLivreId(idLivre);
+
+    }
+
+    public List<Exemplaire> findAllByLivreId(Long idLivre) {
+        return this.exemplaireRepository.findAllByLivreId(idLivre);
+
+    }
 
     public Genre getGenreFromIdExemplaire(Long idExemplaire) throws Exception {
         Exemplaire exemplaire = this.exemplaireRepository.findByIdWithLivreAndGenre(idExemplaire).orElse(null);
