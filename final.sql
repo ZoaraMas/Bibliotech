@@ -277,6 +277,21 @@ CREATE OR REPLACE VIEW pret_nombre_desc AS (
     ORDER BY nombre_pret DESC
 );
 
+CREATE OR REPLACE VIEW user_count_pret_desc AS (
+    SELECT 
+        u.id,
+        u.nom,
+        count(*) as nombre_pret
+    FROM
+        pret AS p
+    JOIN
+        inscription AS i ON i.id = p.id_inscription
+    JOIN 
+        user AS u ON u.id = i.id_user
+    GROUP BY u.id
+    ORDER BY nombre_pret DESC
+);
+
 CREATE OR REPLACE VIEW reservation_view AS (
     SELECT
         r.id,

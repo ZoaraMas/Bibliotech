@@ -94,6 +94,14 @@
                 <i class="menu-icon tf-icons bx bx-table"></i>
                 <div class="text-truncate" data-i18n="Tables">Liste Prolongement</div>
               </a>
+              <a href="<%= request.getContextPath() %>/dashboard/livre" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-table"></i>
+                <div class="text-truncate" data-i18n="Tables">Daashboard Livre</div>
+              </a>
+              <a href="<%= request.getContextPath() %>/user/unlog" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-table"></i>
+                <div class="text-truncate" data-i18n="Tables">UNLOG</div>
+              </a>
           </li>
           <div class="menu-inner-shadow"></div>
           <ul class="menu-inner py-1">
@@ -106,7 +114,9 @@
           <!-- Content wrapper -->
           <div class="content-wrapper">
             <!-- Content -->
-            <jsp:include page="<%= targetPage %>"/>
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <jsp:include page="<%= targetPage %>"/>
+            </div>
             <!-- / Content -->
 
             <!-- Footer -->

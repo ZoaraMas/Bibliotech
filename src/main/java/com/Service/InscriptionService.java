@@ -31,6 +31,15 @@ public class InscriptionService {
         throw new Exception("Utilisateur " + idUser + " non inscrit");
     }
 
+    public Inscription getInscription(Long idUser) throws Exception {
+        if (estActuellementInscrit(idUser)) {
+            Inscription result = this.inscriptionRepository.findFirstByUserIdOrderByDateInscriptionDesc(idUser)
+                    .orElse(null);
+            return result;
+        }
+        return null;
+    }
+
     // Retourne l'inscription d'un utilisateur qui est alors encore inscrit a ce
     // jour
     public boolean estActuellementInscrit(long idUser) {
