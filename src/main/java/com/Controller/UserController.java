@@ -80,11 +80,12 @@ public class UserController {
         }
         System.out.println("cheese not null");
         model.addAttribute("error", "Mail or Password wrong or don't match");
-        return "redirect:form-login";
+        return "redirect:form-login?error=login_failed";
     }
 
     @GetMapping("/hello")
     public String hello(Model model) {
         return "user/hello";
     }
+
 }

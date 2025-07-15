@@ -3,6 +3,7 @@ package com.Controller;
 import com.Entite.PretNombreDescView;
 import com.Entite.TypePret;
 import com.Entite.User;
+import com.Entite.UserCountPretDescView;
 import com.Service.DashboardService;
 import com.Service.PretService;
 import com.Service.TypePretService;
@@ -14,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,9 +49,21 @@ public class DashboardController {
     }
 
     @GetMapping("/livre")
-    public String form(Model model) {
+    public String form(Model model) throws Exception {
         // List<TypePret> listeTypePret = this.typePretService.findAll();
         // model.addAttribute("listeTypePret", listeTypePret);
-        return "dashboard/stat-livre";
+        List<PretNombreDescView> LivreLesPlusPretes = this.dashboardService.findLivresLesPlusPretes();
+        model.addAttribute("listeLivre", LivreLesPlusPretes);
+
+        // Les utilisateurs qui on le plus pretes
+        List<UserCountPretDescView> userPlusPretes = this.dashboardService.findUserPlusPretes();
+        model.addAttribute("listeUser", userPlusPretes);
+
+        // Liste des utilisateurs actuellement penalise avec les messages respectifs
+        HashMap<User, String> listeUtilisateurPenalise = this.dashboardService.getListeUserPenalise();
+        model.addAttribute("listeUserPenalise", listeUtilisateurPenalise);
+
+        model.addAttribute("page", "dashboard/stat-livre");
+        return "template";
     }
 }

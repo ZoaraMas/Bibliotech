@@ -24,6 +24,7 @@ import com.Entite.User;
 
 @Repository
 public interface PretRepository extends JpaRepository<Pret, Long> {
+    // Obtenir les utilisateurs qui ont effectues le plus de pret
     @Query(value = "SELECT p FROM Pret p JOIN FETCH p.inscription i JOIN FETCH i.user u WHERE p.id = :idPret")
     public Optional<Pret> findById(@Param("idPret") Long id);
 

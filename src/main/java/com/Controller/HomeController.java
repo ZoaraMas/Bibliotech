@@ -22,8 +22,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/home")
 public class HomeController {
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Model model, HttpSession session) {
         return "template";
+    }
+
+    @GetMapping("/public")
+    public String publicRedirect(Model model, HttpSession session) {
+        return "public/home";
     }
 }
