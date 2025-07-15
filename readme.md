@@ -234,6 +234,9 @@ c'est pas grave car deja c'est un scenrio exceptionel d'ajouter une date de remi
 - J'arrete la validation de prolongation pour l'instant d'abord pour executer l'alea, je me suis arrete a:
     - la remise est effectue, mais lors du pret, voici l'erreur: Vous serez encore penalise a la date voulue, membre est penalise indefiniment, veuillez rendre tout les livres d'abord
 
+
+- Debut alea 3: webService
+
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
 - [a verifier] CopyJsp pour copier uniquement les jsp
