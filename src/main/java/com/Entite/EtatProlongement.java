@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import com.enums.EtatReservationEnum;
 
 @Entity
-@Table(name = "etat_prolongement")
+@Table(name = "etat_prolongement_pret")
 public class EtatProlongement {
 
     @Id

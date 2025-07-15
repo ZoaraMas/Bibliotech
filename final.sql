@@ -144,6 +144,7 @@ CREATE OR REPLACE TABLE pret (
     date_pret DATE NOT NULL,
     id_employe BIGINT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    prolongement VARCHAR(20),
     FOREIGN KEY (id_inscription) REFERENCES inscription(id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (id_exemplaire) REFERENCES exemplaire(id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (id_type_pret) REFERENCES type_pret(id) ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -171,6 +172,7 @@ CREATE OR REPLACE VIEW pret_parametre AS (
         p.date_pret,
         p.id_employe,
         p.created_at,
+        p.prolongement,
         pp.id AS pp_id, -- Aliased to avoid conflict with p.id
         pp.id_type_adherent,
         pp.id_type_pret AS pp_id_type_pret, -- Aliased to avoid conflict with p.id_type_pret
@@ -181,6 +183,7 @@ CREATE OR REPLACE VIEW pret_parametre AS (
         pp.nb_jours_prolongation,
         pp.created_at AS pp_created_at, -- Aliased to avoid conflict with p.created_at
         CASE 
+            WHEN p.prolongement is not null THEN DATE_ADD(p.date_pret, INTERVAL pp.nb_jours_prolongation DAY)
             WHEN p.id_type_pret = 2 THEN TIMESTAMP(DATE(p.date_pret), '20:00:00')
             ELSE DATE_ADD(p.date_pret, INTERVAL pp.nb_jour_pret DAY)
         END

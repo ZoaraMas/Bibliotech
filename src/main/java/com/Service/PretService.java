@@ -131,6 +131,70 @@ public class PretService {
         this.pretRepository.save(pret);
     }
 
+    // Meme code qu'en haut mais pour la validation de prolongatino avec mise en
+    // valeur de la colonne prolongement
+    public void preterUnExemplaireLivrePourProlongement(long idUser, long idEmploye, long idExemplaire,
+            Integer idTypePret,
+            LocalDateTime datePret)
+            throws Exception {
+        // le membre existe
+        if (!userService.userExists(idUser)) {
+            throw new Exception("L'utilisateur ID:" + idUser + " n'existe pas");
+        }
+        // l’exemplaire du livre existe
+        if (!exemplaireService.exemplaireExists(idExemplaire)) {
+            throw new Exception("L'exemplaire de livre ID:" + idExemplaire + " n'existe pas");
+        }
+        // Exemplaire disponible
+        if (!exemplaireService.exemplaireDisponible(idExemplaire, datePret)) {
+            throw new Exception("L'exemplaire de livre ID:" + idExemplaire + " n'est pas encore disponible");
+        }
+        // Membre actuellement inscrit
+        if (!inscriptionService.estActuellementInscrit(idUser)) {
+            throw new Exception("Actuellement l'utilisateur ID:" + idUser + " n'est pas inscrit");
+        }
+
+        // Le membre ne subit pas de penalite
+        Inscription currInscription = inscriptionService.getCurrentInscription(idUser);
+        // Subit une penalite maintenant
+        PenaliteResponse penaliteResponse = this.subitPenalite(currInscription.getId());
+        if (penaliteResponse.isSubitPenalite()) {
+            throw new Exception(
+                    "1Vous etes actuellement penalise, user: " + idUser + ", idInscription = " + currInscription + ", "
+                            + penaliteResponse.getMessage());
+        }
+        // Subit une penalite lors du jour demande a reserver
+        penaliteResponse = this.subitPenalite(currInscription.getId(), datePret);
+        if (penaliteResponse.isSubitPenalite()) {
+            throw new Exception("Vous serez encore penalise a la date voulue, " + penaliteResponse.getMessage());
+        }
+        TypePret typePret = this.typePretService.findById(idTypePret);
+        // Le membre n’a pas encore termine tout son quota
+        // Si il prend sur place, la regle ne s'applique pas
+        if (!this.quotaNonNull(currInscription.getId(), datePret) && idTypePret != 2) {
+            throw new Exception("Quota insuffisant, veuillez rendre au moins un livre d'abord.");
+        }
+        // l'employe existe
+        if (!userService.userExists(idEmploye)) {
+            throw new Exception("L'utilisateur employe ID:" + idEmploye + " n'existe pas");
+        }
+        // l'exemplaiire existe
+        Exemplaire exemplaire = this.exemplaireService.findById(idExemplaire);
+
+        // typePret existe
+        LocalDateTime now = LocalDateTime.now();
+        Genre genreFromExemplaire = this.exemplaireService.getGenreFromIdExemplaire(idExemplaire);
+        // L'inscription couvre tout le pret
+        if (!this.parametrePretService.pretCouvertEntierementDansInscription(currInscription.getTypeAdherent(),
+                typePret, genreFromExemplaire, currInscription, datePret)) {
+            throw new Exception("Le pret n'est pas couvert par l'inscription.");
+        }
+        User employe = this.userService.findById(idEmploye);
+        Pret pret = new Pret(currInscription, exemplaire, typePret, datePret, employe);
+        pret.setProlongement("true");
+        this.pretRepository.save(pret);
+    }
+
     // Verifier si le membre subit une penalite ou non
     // Miverina daoly ny boky zay vo mande ny nombre de jour de penalite
     public PenaliteResponse subitPenalite(Long idInscription, LocalDateTime now) {

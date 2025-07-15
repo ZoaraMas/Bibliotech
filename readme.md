@@ -219,8 +219,20 @@ c'est pas grave car deja c'est un scenrio exceptionel d'ajouter une date de remi
 
 # 15-07-25
 - On devrait savoir si un pret est une prolongation ou non 
+- maintenant que j'ai ajouter une colonne prolongation dans pret, si le pret est une prolongation, la date de fin dependra du  nombre de jour de prolongation, en inserant un pret, simple, le prolongement sera a null
+- Maintenant je peux creer le nouveau pret lors de la validation de prolongement et le mettre en prolongement
+
+- La question maintenant c'est de savoir si le nouveau pret directement colle a la fin dur pret prolonge creerait des bugs dans le futur, rester tres lucide. 
+
+- 2 etapes avant de creer le nouveau pret de prolongation:
+    - rendre le livre 1h avant la date fin pour eviter la penalisation
+    - creer le nouveau pret a la date fin(on contournant la verification de disponibilite de pret a la date actuelle)
 
 
+- [ok] Dans mon code, c'est encore le meme user qui fait office d'emmploy car j'ai oublie de modifier
+
+- J'arrete la validation de prolongation pour l'instant d'abord pour executer l'alea, je me suis arrete a:
+    - la remise est effectue, mais lors du pret, voici l'erreur: Vous serez encore penalise a la date voulue, membre est penalise indefiniment, veuillez rendre tout les livres d'abord
 
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF

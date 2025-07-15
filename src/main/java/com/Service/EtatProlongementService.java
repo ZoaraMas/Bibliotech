@@ -45,6 +45,12 @@ public class EtatProlongementService {
     private ProlongementService prolongementService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private PretService pretService;
+    @Autowired
+    private PretParametreViewService pretParametreViewService;
+    @Autowired
+    private RemiseLivreService remiseLivreService;
 
     @Transactional
     public void ajouterEtatProlongement(Long idEmp, Long idProlongement, Boolean confirmer, String commentaire)
@@ -75,18 +81,26 @@ public class EtatProlongementService {
             this.etatProlongementRepository.save(etatProlongement);
             // this.etatReservationRepository.save(etatReservation);
         } else {
-            throw new Exception(
-                    "Desole, les validations de prolongement ne sont pas encore disponible pour l'instant.");
+            // throw new Exception(
+            // "Desole, les validations de prolongement ne sont pas encore disponible pour
+            // l'instant.");
             // Validation requiert les regles de gestions de pret + date choisie
             // On prepare les argumens propers a prets
-            // LocalDateTime dateDemande = prolongement.getDateDemande();
-            // long idUser = prolongement.getPret().getInscription().getUser().getId();
-            // long idExemplaire = prolongement.getPret().getExemplaire().getId();
-            // Integer idTypePret = prolongement.getPret().getTypePret().getId();
-            // // this.pretService.preterUnExemplaireLivre(idUser, idUser, idExemplaire,
-            // // idTypePret, dateVoulue);
-            // etatProlongement.setEtat(EtatReservationEnum.VALIDEE);
-            // this.etatProlongementRepository.save(etatProlongement);
+            PretParametreView pretAProlonger = this.pretParametreViewService.findById(prolongement.getPret().getId());
+            LocalDateTime dateRemise = pretAProlonger.getDateFinPret().minusMinutes(1);
+            LocalDateTime dateDebut = pretAProlonger.getDateFinPret();
+            dateDebut = dateDebut.plusSeconds(30);
+            long idUser = prolongement.getPret().getInscription().getUser().getId();
+            long idExemplaire = prolongement.getPret().getExemplaire().getId();
+            Integer idTypePret = prolongement.getPret().getTypePret().getId();
+            // On effectue direct la remise avant la date fin pour eviter la penalisation
+            this.remiseLivreService.remettreUnExemplaireDeLivre(idExemplaire, idEmp, dateRemise,
+                    "Remise = " + commentaire);
+            // On cree le pret a la date
+            this.pretService.preterUnExemplaireLivrePourProlongement(idUser, idEmp, idExemplaire, idTypePret,
+                    dateDebut);
+            etatProlongement.setEtat(EtatReservationEnum.VALIDEE);
+            this.etatProlongementRepository.save(etatProlongement);
         }
     }
 
