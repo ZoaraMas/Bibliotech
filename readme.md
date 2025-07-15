@@ -92,7 +92,6 @@ Pour le tp d'aujourd'hui, on va creer une table film et une table categorie, c'e
 
 # 30-05-2025
 - Pour la creation de film, on a la possibilite de choisir plusieurs categories
-
 [
     J'ai longtemps ete bloque pour l'implementation de la table associative, en effet, quand on creer une nouvelle instance de cette derniere, il faut aussi imperativement mettre a jour l'id embeded a l'interieur, c'est ce qui permet au jpa de sauver le tout. aussi, on ajoute le filmCategorie au payement
 ]
@@ -218,6 +217,11 @@ c'est pas grave car deja c'est un scenrio exceptionel d'ajouter une date de remi
 - Je viens de creer le controller pour demander une prolongation, ajouter dans le jsp et tester le tout, ensuite lister les prolongations pour les valider
 
 
+# 15-07-25
+- On devrait savoir si un pret est une prolongation ou non 
+
+
+
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
 - [a verifier] CopyJsp pour copier uniquement les jsp
@@ -240,6 +244,8 @@ c'est pas grave car deja c'est un scenrio exceptionel d'ajouter une date de remi
 
 # DEVELOPPEMENT
 # astuces:
+- Tout se base sur la vue de pret_parametre qui va donner tout les details vitals a connaitre pour un pret
+
 - Enlever la fonctionalite de login:
 Dans le web.xml: commenter /*, et mettre un autre url lambda
 <url-pattern>/user/hello</url-pattern>
@@ -256,3 +262,11 @@ A utiliser pour les requetes GET
     
 - final: script + donnees finale, script pret a etre execute
 - cross.sql: peupler les possibilites de parametres de pret non insere encore   
+[Maintenant, j'ai mis cross.sql a la fin du fichier final.sql, ainsi il n'y a plus qu'a executer le script de final.sql]
+
+- Remarque:
+Dans mon code, j'ai la possibilite d'annuler une reservation deja valide, mais je dois alors encore implementer toute une autre loqique pour ce cas
+
+Voir l'utite du created at dans le code java
+
+Quand on va valider un prolongement, la vue de pret_parametre devrait prendre non pas le nombre de jour de pret mais le nombre de jour de prolongement

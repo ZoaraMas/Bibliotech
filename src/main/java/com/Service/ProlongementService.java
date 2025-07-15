@@ -1,6 +1,7 @@
 package com.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import com.Entite.Inscription;
 import com.Entite.Pret;
 import com.Entite.PretParametreView;
 import com.Entite.Prolongement;
+import com.Entite.Reservation;
 import com.Entite.User;
 import com.Repository.ProlongementRepository;
 import com.dto.PenaliteResponse;
@@ -68,4 +70,18 @@ public class ProlongementService {
             return false;
         return true;
     }
+
+    public Prolongement findByIdWithAllRelations(long idProlongement) {
+        Optional<Prolongement> prolongement = prolongementRepository.findByIdWithAllRelations(idProlongement);
+        if (prolongement.isPresent()) {
+            return prolongement.get();
+        } else {
+            throw new RuntimeException("Prolongation avec ID: " + idProlongement + " n'existe pas");
+        }
+    }
+
+    public boolean prolongementExiste(Long idProlongement) {
+        return this.prolongementRepository.existsById(idProlongement);
+    }
+
 }

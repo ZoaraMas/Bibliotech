@@ -34,7 +34,7 @@
                 ProlongementPretView prolongement = listeProlongement.get(i); %>   
                 <tr>
                     <form method="post" action="<%= request.getContextPath() %>/etat-prolongement/creer">
-                    <input type="hidden" name="idprolongement" value="<%= prolongement.getId() %>">
+                    <input type="hidden" name="idProlongement" value="<%= prolongement.getId() %>">
                     <td><%= prolongement.getId() %></td>
                     <td><%= prolongement.getIdPret() %></td>
                     <td><%= prolongement.getDateDemande() %></td>
