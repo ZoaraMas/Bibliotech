@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +38,13 @@ public class LivreController {
     @Autowired
     private LivreService livreService;
 
+    @GetMapping("/form-livre")
+    public String formLivre(Model model) {
+        model.addAttribute("page", "livre/livre-exemplaire");
+        return "template";
+    }
+
+    @CrossOrigin(origins = "*")
     @GetMapping(value = "getLivre-avec-exemplaires", produces = "application/json")
     @ResponseBody
     public ResponseEntity<?> getLivreAvecExemplaires(@RequestParam(name = "idLivre") Long idLivre)

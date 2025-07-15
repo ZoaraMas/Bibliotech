@@ -43,10 +43,10 @@ public class LivreService {
     public LivreExemplairesDto getLivreWithExemplaires(Long idLivre) throws Exception {
         Livre livre = this.livreRepository.findByIdWithAllRelations(idLivre)
                 .orElseThrow(() -> new Exception("Livre avec l'id: " + idLivre + " n'a pas ete trouve"));
-        List<Exemplaire> listeExemplaire = this.exemplaireService.findAllByLivreId(idLivre);
+        List<ExemplaireDisponibilite> listeExemplaire = this.exemplaireService.findAllDtoByLivreId(idLivre);
         ArrayList<ExemplaireDisponibilite> listeExemplaireAvecDisponibilite = new ArrayList<>();
         for (int i = 0; i < listeExemplaire.size(); i++) {
-            Exemplaire e = listeExemplaire.get(i);
+            ExemplaireDisponibilite e = listeExemplaire.get(i);
             String disponibilite = this.pretService.getDisponibiliteExemplaire(e.getId(), LocalDateTime.now());
             String message = disponibilite;
             boolean estDisponible = false;
@@ -54,8 +54,11 @@ public class LivreService {
                 message = "L'exemplaire est bel et bien disponible";
                 estDisponible = true;
             }
-            ExemplaireDisponibilite exemplaireDisponibilite = new ExemplaireDisponibilite(e, estDisponible, message);
-            listeExemplaireAvecDisponibilite.add(exemplaireDisponibilite);
+            e.setDisponible(estDisponible);
+            e.setMessage(message);
+            // ExemplaireDisponibilite exemplaireDisponibilite = new
+            // ExemplaireDisponibilite(e, estDisponible, message);
+            listeExemplaireAvecDisponibilite.add(e);
         }
         LivreExemplairesDto result = new LivreExemplairesDto(livre, listeExemplaireAvecDisponibilite);
         return result;

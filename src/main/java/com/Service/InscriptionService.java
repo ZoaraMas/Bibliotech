@@ -12,6 +12,7 @@ import com.Repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,18 @@ import java.util.Optional;
 public class InscriptionService {
     @Autowired
     private InscriptionRepository inscriptionRepository;
+
+    // Obtenir date debut date fin de l'inscription
+    public LocalDate[] getDebutFinInscription(long idUser) throws Exception {
+        if (estActuellementInscrit(idUser)) {
+            Inscription inscription = getCurrentInscription(idUser);
+            LocalDate[] result = new LocalDate[2];
+            result[0] = inscription.getDateInscription();
+            result[1] = (inscription.getDateInscription()).plusMonths(inscription.getDureeMois());
+            return result;
+        }
+        return null;
+    }
 
     public Inscription getCurrentInscription(Long idUser) throws Exception {
         if (estActuellementInscrit(idUser)) {

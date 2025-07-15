@@ -96,7 +96,11 @@
               </a>
               <a href="<%= request.getContextPath() %>/dashboard/livre" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-table"></i>
-                <div class="text-truncate" data-i18n="Tables">Daashboard Livre</div>
+                <div class="text-truncate" data-i18n="Tables">Dashboard Livre</div>
+              </a>
+              <a href="<%= request.getContextPath() %>/livre/form-livre" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-table"></i>
+                <div class="text-truncate" data-i18n="Tables">Exemplaires Livre</div>
               </a>
               <a href="<%= request.getContextPath() %>/user/unlog" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-table"></i>
