@@ -15,10 +15,13 @@ import org.springframework.data.repository.query.Param;
 
 import com.Entite.Livre;
 import com.Entite.PretNombreDescView;
+import com.Entite.Prolongement;
 import com.Entite.User;
 
 @Repository
 public interface LivreRepository extends JpaRepository<Livre, Long> {
+    @Query("SELECT l FROM Livre l " + "JOIN FETCH l.genre g " + "WHERE l.id = :id")
+    Optional<Livre> findByIdWithAllRelations(@Param("id") Long id);
     // Obtenir tout les livres avec nombre de pret trie decroissant
     // @Query(value = "SELECT id, titre, nombre_pret AS nombre FROM
     // pret_nombre_desc", nativeQuery = true)

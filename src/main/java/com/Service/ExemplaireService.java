@@ -27,6 +27,11 @@ public class ExemplaireService {
     @Autowired
     private PretService pretService;
 
+    // Alea: obtenir tout les exemplaires pour un livre
+    public List<Exemplaire> findAllByLivreId(Long idLivre) {
+        return this.exemplaireRepository.findAllByLivreId(idLivre);
+    }
+
     public Genre getGenreFromIdExemplaire(Long idExemplaire) throws Exception {
         Exemplaire exemplaire = this.exemplaireRepository.findByIdWithLivreAndGenre(idExemplaire).orElse(null);
         if (exemplaire == null)

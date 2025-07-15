@@ -332,6 +332,30 @@ CREATE OR REPLACE TABLE etat_prolongement_pret (
     FOREIGN KEY (id_prolongement_pret) REFERENCES prolongement_pret(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_employe) REFERENCES user(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+-- Pas encore utilise
+CREATE OR REPLACE VIEW livre_exemplaires AS (
+    SELECT
+        l.id,
+        l.titre,
+        l.auteur,
+        l.id_genre,
+        l.isbn,
+        l.edition,
+        l.nb_page,
+        l.resume
+    FROM
+        livre AS l
+);
+
+
+
+
+
+
+
+
+
 -- INSERTS
 
 

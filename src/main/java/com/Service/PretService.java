@@ -288,6 +288,18 @@ public class PretService {
                 + " sinon le livre n'a pas encore ete rendu par le preteur actuel");
     }
 
+    // Obtenir la disponibilite l'un exemplaire
+    // Retourne null si disponible, retourne un string si ne l'est pas
+    public String getDisponibiliteExemplaire(Long idExemplaire, LocalDateTime dateCible) throws Exception {
+        PretParametreView pretParametreDTO = this.pretParametreViewService.findPretWhereExemplaireIn(dateCible,
+                idExemplaire);
+        if (pretParametreDTO == null) // si ca n'existe pas, c'est que le pret a deja ete rendu quelque part
+            return null;
+        return "l'exemplaire de livre " + idExemplaire + " n'est pas encore disponible jusqu'au "
+                + pretParametreDTO.getDateFinPret().toString()
+                + " sinon le livre n'a pas encore ete rendu par le preteur actuel";
+    }
+
     public boolean exemplaireEstNonDisponible(Long idExemplaire) throws Exception {
         LocalDateTime dateCible = LocalDateTime.now();
         return this.exemplaireEstNonDisponible(idExemplaire, dateCible);

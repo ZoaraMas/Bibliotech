@@ -21,4 +21,8 @@ import com.Entite.User;
 public interface ExemplaireRepository extends JpaRepository<Exemplaire, Long> {
     @Query(value = "SELECT e FROM Exemplaire e JOIN FETCH e.livre l JOIN FETCH l.genre g WHERE e.id = :idExemplaire")
     public Optional<Exemplaire> findByIdWithLivreAndGenre(@Param("idExemplaire") Long idExemplaire);
+
+    // Alea: obtenir tout les exemplaires pour un livre
+    @Query(value = "SELECT e FROM Exemplaire e JOIN FETCH e.livre l JOIN FETCH l.genre g WHERE l.id = :idLivre")
+    public List<Exemplaire> findAllByLivreId(@Param("idLivre") Long idLivre);
 }

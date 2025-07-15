@@ -236,7 +236,12 @@ c'est pas grave car deja c'est un scenrio exceptionel d'ajouter une date de remi
 
 
 - Debut alea 3: webService
+    - On va essayer de se passer de postman pour essayer
+    - endPoint:
+http://localhost:8089/Bibliotech/livre/getLivre-avec-exemplaires?idLivre=1
 
+
+* Pour faire les jsons, tout doit etre initialiser pour un objet et avec tout les autres objets qui le composent
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
 - [a verifier] CopyJsp pour copier uniquement les jsp
