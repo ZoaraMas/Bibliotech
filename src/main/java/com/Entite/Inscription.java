@@ -16,7 +16,7 @@ public class Inscription {
     private java.time.LocalDate dateInscription;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user", nullable = false, foreignKey = @ForeignKey(name = "FK_inscription_user")) 
+    @JoinColumn(name = "id_user", nullable = false, foreignKey = @ForeignKey(name = "FK_inscription_user"))
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,31 +30,38 @@ public class Inscription {
     @JoinColumn(name = "id_employe", nullable = false, foreignKey = @ForeignKey(name = "FK_inscription_employe"))
     private User employe;
 
+    @Column(name = "date_fin", nullable = true)
+    private java.time.LocalDate dateFin;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // @OneToMany(mappedBy = "inscription", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // @OneToMany(mappedBy = "inscription", cascade = CascadeType.ALL, fetch =
+    // FetchType.LAZY)
     // private List<Pret> prets = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "inscription", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // @OneToMany(mappedBy = "inscription", cascade = CascadeType.ALL, fetch =
+    // FetchType.LAZY)
     // private List<Reservation> reservations = new ArrayList<>();
 
     // Constructeurs
     public Inscription() {
     }
 
-    public Inscription(TypeAdherent typeAdherent, Integer dureeMois, User user, User employe) {
-        this.typeAdherent = typeAdherent;
-        this.dureeMois = dureeMois;
-        this.user = user;
-        this.employe = employe;
-        this.dateInscription = java.time.LocalDate.now();
-    }
+    // public Inscription(TypeAdherent typeAdherent, Integer dureeMois, User user,
+    // User employe) {
+    // this.typeAdherent = typeAdherent;
+    // this.dureeMois = dureeMois;
+    // this.user = user;
+    // this.employe = employe;
+    // }
 
     // Getters et Setters
     public Long getId() {
         return id;
     }
+
+    
 
     public void setId(Long id) {
         this.id = id;
@@ -108,19 +115,27 @@ public class Inscription {
         this.createdAt = createdAt;
     }
 
+    public java.time.LocalDate getDateFin() {
+        return dateFin;
+    }
+
+    public void setDateFin(java.time.LocalDate dateFin) {
+        this.dateFin = dateFin;
+    }
+
     // public List<Pret> getPrets() {
-    //     return prets;
+    // return prets;
     // }
 
     // public void setPrets(List<Pret> prets) {
-    //     this.prets = prets;
+    // this.prets = prets;
     // }
 
     // public List<Reservation> getReservations() {
-    //     return reservations;
+    // return reservations;
     // }
 
     // public void setReservations(List<Reservation> reservations) {
-    //     this.reservations = reservations;
+    // this.reservations = reservations;
     // }
 }

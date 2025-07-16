@@ -26,6 +26,13 @@ public interface InscriptionRepository extends JpaRepository<Inscription, Long> 
 
     // Retourne l'inscription d'un utilisateur qui est alors encore inscrit a ce
     // jour
-    @Query(value = "SELECT * FROM inscription WHERE id_user = :id_user AND DATE_ADD(date_inscription, INTERVAL duree_mois MONTH) > NOW()", nativeQuery = true)
+    // Ancienne version sans date_fin
+    // @Query(value = "SELECT * FROM inscription WHERE id_user = :id_user AND
+    // DATE_ADD(date_inscription, INTERVAL duree_mois MONTH) > NOW()", nativeQuery =
+    // true)
+    // Inscription estActuellementInscrit(@Param("id_user") long idUser);
+
+    @Query(value = "SELECT * FROM inscription WHERE id_user = :id_user AND " +
+            "COALESCE(date_fin, DATE_ADD(date_inscription, INTERVAL duree_mois MONTH)) > NOW()", nativeQuery = true)
     Inscription estActuellementInscrit(@Param("id_user") long idUser);
 }

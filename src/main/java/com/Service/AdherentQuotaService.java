@@ -11,7 +11,7 @@ import com.Repository.LivreRepository;
 import com.Repository.UserRepository;
 import com.Repository.LivreRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +24,5 @@ public class AdherentQuotaService {
     public int getQuotaInscription(Long idInscription) {
         return this.adherentQuotaRepository.getQuotaDepenseActuel(idInscription);
     }
-    
-    
+
 }

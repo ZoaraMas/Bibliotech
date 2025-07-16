@@ -262,6 +262,18 @@ Taches a faire:
 
 - Terminer fonctionalite validation prolongement
 
+# 16-07-25
+Maintenant lors de l'examen, il y a certaines choses qui ne marchent pas selon les donnees fournies
+[ok]- Jour Feries et Dimanches
+[ok] -> les ko sont ko pour now() - Validite inscription
+    - dateDebut - dateFin inscription
+[ok]- date fin pour inscription
+
+[A NE PLUS FAIRE]
+- genre livre multiple
+- quota de reservation
+- quota prolongement
+
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
 - [a verifier] CopyJsp pour copier uniquement les jsp

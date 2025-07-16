@@ -110,7 +110,6 @@ CREATE OR REPLACE TABLE inscription (
     id_user BIGINT NOT NULL,
     id_type_adherent INT NOT NULL,
     duree_mois INT NOT NULL,
-    date_fin DATE,
     id_employe BIGINT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_type_adherent) REFERENCES type_adherent(id),
@@ -180,30 +179,6 @@ INSERT INTO jour_special (date, type) VALUES('2025-08-17', 'dimanche');
 INSERT INTO jour_special (date, type) VALUES('2025-07-26', 'ferrie');
 INSERT INTO jour_special (date, type) VALUES('2025-07-19', 'ferrie');
 
--- Fonction pour calculer la date de fin en évitant les jours spéciaux
-DELIMITER $$
-CREATE FUNCTION calculate_date_fin_pret(initial_date DATETIME) 
-RETURNS DATETIME
-READS SQL DATA
-DETERMINISTIC
-BEGIN
-    DECLARE result_date DATETIME;
-    DECLARE counter INT DEFAULT 0;
-    
-    SET result_date = initial_date;
-    
-    -- Boucle tant que la date est dans jour_special
-    WHILE EXISTS (SELECT 1 FROM jour_special WHERE date = DATE(result_date)) 
-          AND counter < 365 DO
-        SET result_date = DATE_ADD(result_date, INTERVAL 1 DAY);
-        SET counter = counter + 1;
-    END WHILE;
-    
-    RETURN result_date;
-END$$
-DELIMITER ;
-
--- Vue simplifiée utilisant la fonction
 CREATE OR REPLACE VIEW pret_parametre AS (
     SELECT
         p.id,
@@ -214,25 +189,21 @@ CREATE OR REPLACE VIEW pret_parametre AS (
         p.id_employe,
         p.created_at,
         p.prolongement,
-        pp.id AS pp_id,
+        pp.id AS pp_id, -- Aliased to avoid conflict with p.id
         pp.id_type_adherent,
-        pp.id_type_pret AS pp_id_type_pret,
+        pp.id_type_pret AS pp_id_type_pret, -- Aliased to avoid conflict with p.id_type_pret
         pp.id_genre,
         pp.nb_jour_pret,
         pp.penalite_jours,
         pp.nb_jours_avant_prolongation,
         pp.nb_jours_prolongation,
-        pp.created_at AS pp_created_at,
-        
-        -- Utilisation de la fonction pour calculer la date de fin
-        calculate_date_fin_pret(
-            CASE
-                WHEN p.prolongement IS NOT NULL THEN DATE_ADD(p.date_pret, INTERVAL pp.nb_jours_prolongation DAY)
-                WHEN p.id_type_pret = 2 THEN TIMESTAMP(DATE(p.date_pret), '20:00:00')
-                ELSE DATE_ADD(p.date_pret, INTERVAL pp.nb_jour_pret DAY)
-            END
-        ) AS date_fin_pret,
-        
+        pp.created_at AS pp_created_at, -- Aliased to avoid conflict with p.created_at
+        CASE 
+            WHEN p.prolongement is not null THEN DATE_ADD(p.date_pret, INTERVAL pp.nb_jours_prolongation DAY)
+            WHEN p.id_type_pret = 2 THEN TIMESTAMP(DATE(p.date_pret), '20:00:00')
+            ELSE DATE_ADD(p.date_pret, INTERVAL pp.nb_jour_pret DAY)
+        END
+            AS date_fin_pret,
         COALESCE(rm.date_remise, NULL) AS date_remise
     FROM
         pret AS p
@@ -248,7 +219,7 @@ CREATE OR REPLACE VIEW pret_parametre AS (
         parametre_pret AS pp ON
             p.id_type_pret = pp.id_type_pret AND
             i.id_type_adherent = pp.id_type_adherent AND
-            l.id_genre = pp.id_genre
+            l.id_genre = pp.id_genre 
 );
 
 
@@ -553,9 +524,8 @@ INSERT INTO exemplaire (id_livre, reference, date_arrivee) VALUES
 -- (4, 2, 10, 1, 0, 0, 0);  -- Jeunesse sur place
 
 -- Inscription des membres (mises à jour pour 2025)
-INSERT INTO inscription (date_inscription, id_user, id_type_adherent, duree_mois, id_employe, date_fin) VALUES
-('2025-02-01', 1, 1, 6, 9, '2025-07-24');
 INSERT INTO inscription (date_inscription, id_user, id_type_adherent, duree_mois, id_employe) VALUES
+('2025-02-01', 1, 1, 6, 9), 
 ('2025-02-01', 2, 1, 5, 9), 
 ('2025-04-01', 3, 1, 8, 9),
 

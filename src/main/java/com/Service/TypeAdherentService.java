@@ -18,7 +18,7 @@ import com.Repository.ProlongementRepository;
 import com.Repository.TypeAdherentRepository;
 import com.dto.PenaliteResponse;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TypeAdherentService {

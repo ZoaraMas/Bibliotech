@@ -106,7 +106,7 @@ public class PretParametreView {
         if (dateDemande.isBefore(debutPret))
             throw new Exception(
                     "La date de demande de prolongation se situe avant le debut prevue pour le pret en question");
-        LocalDateTime dateProlongationValable = finPret.minusDays(3);
+        LocalDateTime dateProlongationValable = finPret.minusDays(this.getNbJoursAvantProlongation());
         if (dateDemande.isBefore(dateProlongationValable))
             throw new Exception("Vous devez attendre le " + dateProlongationValable
                     + " avant de pouvoir demander a prolonger le pret");

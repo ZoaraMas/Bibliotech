@@ -15,7 +15,7 @@ import com.Repository.UserRepository;
 import com.dto.PenaliteResponse;
 import com.Repository.LivreRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;

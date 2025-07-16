@@ -14,7 +14,7 @@ import com.Repository.UserRepository;
 import com.dto.ExemplaireDisponibilite;
 import com.Repository.LivreRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;

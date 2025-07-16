@@ -12,7 +12,7 @@ import com.Repository.PretNombreDescViewRepository;
 import com.Repository.UserRepository;
 import com.Repository.LivreRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;

@@ -20,7 +20,7 @@ import com.Repository.UserRepository;
 import com.dto.PenaliteResponse;
 import com.Repository.PretRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -45,6 +45,8 @@ public class PretService {
     private TypePretService typePretService;
     @Autowired
     private ParametrePretService parametrePretService;
+    @Autowired
+    private JourSpecialService jourSpecialService;
 
     public Pret findById(long id) {
         return this.pretRepository.findById(id)
@@ -72,6 +74,7 @@ public class PretService {
         this.preterUnExemplaireLivre(idUser, idEmploye, idExemplaire, idTypePret, LocalDateTime.now());
     }
 
+    @Transactional
     public void preterUnExemplaireLivre(long idUser, long idEmploye, long idExemplaire, Integer idTypePret,
             LocalDateTime datePret)
             throws Exception {
@@ -141,7 +144,10 @@ public class PretService {
         }
         pretCollision(datePret, pretFin, idExemplaire);
         //
-
+        // Le jour de pret n'est pas special
+        if (this.jourSpecialService.isSpecial(datePret)) {
+            throw new Exception("" + datePret + " Est soit un dimanche soit ferrie ");
+        }
         User employe = this.userService.findById(idEmploye);
         Pret pret = new Pret(currInscription, exemplaire, typePret, datePret, employe);
         this.pretRepository.save(pret);
@@ -157,6 +163,7 @@ public class PretService {
 
     // Meme code qu'en haut mais pour la validation de prolongatino avec mise en
     // valeur de la colonne prolongement
+    @Transactional
     public void preterUnExemplaireLivrePourProlongement(long idUser, long idEmploye, long idExemplaire,
             Integer idTypePret,
             LocalDateTime datePret)
@@ -181,16 +188,19 @@ public class PretService {
         // Le membre ne subit pas de penalite
         Inscription currInscription = inscriptionService.getCurrentInscription(idUser);
         // Subit une penalite maintenant
-        PenaliteResponse penaliteResponse = this.subitPenalite(currInscription.getId());
+        // PenaliteResponse penaliteResponse =
+        // this.subitPenalite(currInscription.getId());
+        // if (penaliteResponse.isSubitPenalite()) {
+        // throw new Exception(
+        // "1Vous etes actuellement penalise, user: " + idUser + ", idInscription = " +
+        // currInscription + ", "
+        // + penaliteResponse.getMessage());
+        // }
+        // Subit une penalite lors du jour demande a reserver
+        PenaliteResponse penaliteResponse = this.subitPenalite(currInscription.getId(), datePret);
         if (penaliteResponse.isSubitPenalite()) {
             throw new Exception(
-                    "1Vous etes actuellement penalise, user: " + idUser + ", idInscription = " + currInscription + ", "
-                            + penaliteResponse.getMessage());
-        }
-        // Subit une penalite lors du jour demande a reserver
-        penaliteResponse = this.subitPenalite(currInscription.getId(), datePret);
-        if (penaliteResponse.isSubitPenalite()) {
-            throw new Exception("Vous serez encore penalise a la date voulue, " + penaliteResponse.getMessage());
+                    "Vous serez encore penalise a la date voulue, " + datePret + ", " + penaliteResponse.getMessage());
         }
         TypePret typePret = this.typePretService.findById(idTypePret);
         // Le membre n’a pas encore termine tout son quota
@@ -220,6 +230,11 @@ public class PretService {
         LocalDateTime pretFin = datePret.plusDays(parametrePret.getNbJourPret());
         pretCollision(datePret, pretFin, idExemplaire);
         //
+
+        // // Le jour de pret n'est pas special
+        // if (this.jourSpecialService.isSpecial(datePret)) {
+        // throw new Exception("" + datePret + " Est soit un dimanche soit ferrie ");
+        // }
 
         User employe = this.userService.findById(idEmploye);
         Pret pret = new Pret(currInscription, exemplaire, typePret, datePret, employe);

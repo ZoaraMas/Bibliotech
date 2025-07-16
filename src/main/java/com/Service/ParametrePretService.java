@@ -18,7 +18,7 @@ import com.Repository.ParametrePretRepository;
 import com.Repository.UserRepository;
 import com.Repository.LivreRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,12 +38,15 @@ public class ParametrePretService {
         int nombreJour = parametrePret.getNbJourPret();
         LocalDate debutInscription = inscription.getDateInscription();
         LocalDate finInscription = debutInscription.plusMonths(inscription.getDureeMois());
+        if (inscription.getDateFin() != null) {
+            finInscription = inscription.getDateFin();
+        }
         LocalDate debutPret = datePrevu.toLocalDate();
         LocalDate finPret = (datePrevu.plusDays(nombreJour)).toLocalDate();
         if (((debutPret.isAfter(debutInscription) || debutPret.equals(debutInscription))
                 && (debutPret.isBefore(finInscription) || debutPret.equals(finInscription)) &&
-                (finPret.isAfter(debutInscription) || finPret.equals(debutInscription))
-                && finPret.isBefore(finInscription) || finPret.equals(finInscription))) {
+                ((finPret.isAfter(debutInscription) || finPret.equals(debutInscription)))
+                && (finPret.isBefore(finInscription) || finPret.equals(finInscription)))) {
             // Le pret est compris
             return true;
         }

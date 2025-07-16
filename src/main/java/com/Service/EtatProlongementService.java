@@ -30,7 +30,8 @@ import com.Repository.PretRepository;
 import com.Repository.RemiseLivreRepository;
 import com.Repository.ReservationRepository;
 
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityManager;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -51,6 +52,15 @@ public class EtatProlongementService {
     private PretParametreViewService pretParametreViewService;
     @Autowired
     private RemiseLivreService remiseLivreService;
+    @Autowired
+    private EntityManager entityManager;
+
+    // @Transactional
+    // public void preparerAjouterEtatProlongement(Long idEmp, Long idProlongement,
+    // Boolean confirmer, String commentaire)
+    // throws Exception {
+
+    // }
 
     @Transactional
     public void ajouterEtatProlongement(Long idEmp, Long idProlongement, Boolean confirmer, String commentaire)
@@ -89,13 +99,118 @@ public class EtatProlongementService {
             PretParametreView pretAProlonger = this.pretParametreViewService.findById(prolongement.getPret().getId());
             LocalDateTime dateRemise = pretAProlonger.getDateFinPret().minusMinutes(1);
             LocalDateTime dateDebut = pretAProlonger.getDateFinPret();
-            dateDebut = dateDebut.plusSeconds(30);
+            dateDebut = dateDebut.plusMinutes(5);
             long idUser = prolongement.getPret().getInscription().getUser().getId();
             long idExemplaire = prolongement.getPret().getExemplaire().getId();
             Integer idTypePret = prolongement.getPret().getTypePret().getId();
             // On effectue direct la remise avant la date fin pour eviter la penalisation
-            this.remiseLivreService.remettreUnExemplaireDeLivre(idExemplaire, idEmp, dateRemise,
+            this.remiseLivreService.remettreUnExemplaireDeLivreAvecNouvelleTransaction(idExemplaire, idEmp, dateRemise,
                     "Remise = " + commentaire);
+            entityManager.flush();
+
+            // On cree le pret a la date
+            this.pretService.preterUnExemplaireLivrePourProlongement(idUser, idEmp, idExemplaire, idTypePret,
+                    dateDebut);
+            etatProlongement.setEtat(EtatReservationEnum.VALIDEE);
+            this.etatProlongementRepository.save(etatProlongement);
+        }
+    }
+
+    @Transactional
+    public void preparerAjouterEtatProlongement(Long idEmp, Long idProlongement, Boolean confirmer, String commentaire)
+            throws Exception {
+        // l'employe existe
+        if (!userService.userExists(idEmp)) {
+            throw new IllegalArgumentException("L'utilisateur employe ID:" + idEmp + " n'existe pas");
+        }
+        // la prolongation existe
+        if (!this.prolongementService.prolongementExiste(idProlongement)) {
+            throw new IllegalArgumentException("Le prolongement de pret avec l'ID:" + idProlongement + " n'existe pas");
+        }
+        // l’etat change du dernier etat sur la prolongation
+        if (!etatProlongementChange(idProlongement, confirmer))
+            if (confirmer)
+                throw new IllegalArgumentException("Le prolongement :" + idProlongement + " a deja ete confirme");
+            else
+                throw new IllegalArgumentException("Le prolongement :" + idProlongement + " a deja ete refuse");
+        User employe = this.userService.findById(idEmp);
+        // Maintenant on peut s'occuper de l'acceptation/refus
+        // Si refus, refuser tout simplement
+        Prolongement prolongement = prolongementService.findByIdWithAllRelations(idProlongement);
+        LocalDateTime dateValidation = LocalDateTime.now();
+        EtatReservationEnum etat = EtatReservationEnum.REFUSEE;
+        EtatProlongement etatProlongement = new EtatProlongement(prolongement, dateValidation, etat, commentaire,
+                employe);
+        if (!confirmer) {
+            this.etatProlongementRepository.save(etatProlongement);
+            // this.etatReservationRepository.save(etatReservation);
+        } else {
+            // throw new Exception(
+            // "Desole, les validations de prolongement ne sont pas encore disponible pour
+            // l'instant.");
+            // Validation requiert les regles de gestions de pret + date choisie
+            // On prepare les argumens propers a prets
+            PretParametreView pretAProlonger = this.pretParametreViewService.findById(prolongement.getPret().getId());
+            LocalDateTime dateRemise = pretAProlonger.getDateFinPret().minusMinutes(1);
+            LocalDateTime dateDebut = pretAProlonger.getDateFinPret();
+            dateDebut = dateDebut.plusMinutes(5);
+            long idUser = prolongement.getPret().getInscription().getUser().getId();
+            long idExemplaire = prolongement.getPret().getExemplaire().getId();
+            Integer idTypePret = prolongement.getPret().getTypePret().getId();
+            // On effectue direct la remise avant la date fin pour eviter la penalisation
+            this.remiseLivreService.remettreUnExemplaireDeLivreAvecNouvelleTransaction(idExemplaire, idEmp, dateRemise,
+                    "Remise = " + commentaire);
+            entityManager.flush();
+        }
+    }
+
+    @Transactional
+    public void ajouterEtatProlongementFinal(Long idEmp, Long idProlongement, Boolean confirmer, String commentaire)
+            throws Exception {
+        // l'employe existe
+        if (!userService.userExists(idEmp)) {
+            throw new IllegalArgumentException("L'utilisateur employe ID:" + idEmp + " n'existe pas");
+        }
+        // la prolongation existe
+        if (!this.prolongementService.prolongementExiste(idProlongement)) {
+            throw new IllegalArgumentException("Le prolongement de pret avec l'ID:" + idProlongement + " n'existe pas");
+        }
+        // l’etat change du dernier etat sur la prolongation
+        if (!etatProlongementChange(idProlongement, confirmer))
+            if (confirmer)
+                throw new IllegalArgumentException("Le prolongement :" + idProlongement + " a deja ete confirme");
+            else
+                throw new IllegalArgumentException("Le prolongement :" + idProlongement + " a deja ete refuse");
+        User employe = this.userService.findById(idEmp);
+        // Maintenant on peut s'occuper de l'acceptation/refus
+        // Si refus, refuser tout simplement
+        Prolongement prolongement = prolongementService.findByIdWithAllRelations(idProlongement);
+        LocalDateTime dateValidation = LocalDateTime.now();
+        EtatReservationEnum etat = EtatReservationEnum.REFUSEE;
+        EtatProlongement etatProlongement = new EtatProlongement(prolongement, dateValidation, etat, commentaire,
+                employe);
+        if (!confirmer) {
+            this.etatProlongementRepository.save(etatProlongement);
+            // this.etatReservationRepository.save(etatReservation);
+        } else {
+            // throw new Exception(
+            // "Desole, les validations de prolongement ne sont pas encore disponible pour
+            // l'instant.");
+            // Validation requiert les regles de gestions de pret + date choisie
+            // On prepare les argumens propers a prets
+            PretParametreView pretAProlonger = this.pretParametreViewService.findById(prolongement.getPret().getId());
+            LocalDateTime dateRemise = pretAProlonger.getDateFinPret().minusMinutes(1);
+            LocalDateTime dateDebut = pretAProlonger.getDateFinPret();
+            dateDebut = dateDebut.plusMinutes(5);
+            long idUser = prolongement.getPret().getInscription().getUser().getId();
+            long idExemplaire = prolongement.getPret().getExemplaire().getId();
+            Integer idTypePret = prolongement.getPret().getTypePret().getId();
+            // On effectue direct la remise avant la date fin pour eviter la penalisation
+            // this.remiseLivreService.remettreUnExemplaireDeLivreAvecNouvelleTransaction(idExemplaire,
+            // idEmp, dateRemise,
+            // "Remise = " + commentaire);
+            // entityManager.flush();
+
             // On cree le pret a la date
             this.pretService.preterUnExemplaireLivrePourProlongement(idUser, idEmp, idExemplaire, idTypePret,
                     dateDebut);

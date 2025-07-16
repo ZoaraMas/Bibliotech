@@ -15,7 +15,7 @@ import com.Repository.PretParametreViewRepository;
 import com.Repository.UserRepository;
 import com.Repository.PretRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

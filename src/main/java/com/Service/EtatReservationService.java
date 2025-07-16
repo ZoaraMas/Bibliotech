@@ -27,7 +27,7 @@ import com.Repository.PretRepository;
 import com.Repository.RemiseLivreRepository;
 import com.Repository.ReservationRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -10,7 +10,7 @@ import com.Entite.User;
 import com.Repository.InscriptionRepository;
 import com.Repository.UserRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,6 +28,9 @@ public class InscriptionService {
             LocalDate[] result = new LocalDate[2];
             result[0] = inscription.getDateInscription();
             result[1] = (inscription.getDateInscription()).plusMonths(inscription.getDureeMois());
+            if (inscription.getDateFin() != null) {
+                result[1] = inscription.getDateFin();
+            }
             return result;
         }
         return null;

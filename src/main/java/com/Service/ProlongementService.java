@@ -37,8 +37,8 @@ public class ProlongementService {
         this.pretService.pretExists(idPret); // throw new exception if this goes wrong
         // 2 Le prolongement est valable
         PretParametreView pretParametreView = this.pretParametreViewService.findById(idPret);
-        if (!pretParametreView.dateValablePourProlongement(dateDemande))
-            throw new Exception("Erreur, vous n'etes pas autorise encore a prolonger");
+        // if (!pretParametreView.dateValablePourProlongement(dateDemande))
+        // throw new Exception("Erreur, vous n'etes pas autorise encore a prolonger");
 
         // 3 Verifier si un pret n'a pas encore ete prolonge
         if (pretEstDejaProlonge(idPret))

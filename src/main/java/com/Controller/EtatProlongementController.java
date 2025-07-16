@@ -78,7 +78,8 @@ public class EtatProlongementController {
             customMessage = "Prolongement REFUSEE";
         try {
             Long idEmp = (Long) session.getAttribute("auth");
-            this.etatProlongementService.ajouterEtatProlongement(idEmp, idProlongement, confirmer, commentaire);
+            this.etatProlongementService.preparerAjouterEtatProlongement(idEmp, idProlongement, confirmer, commentaire);
+            this.etatProlongementService.ajouterEtatProlongementFinal(idEmp, idProlongement, confirmer, commentaire);
             String succes = "?succes= " + customMessage;
             return "redirect:/prolongement/liste-prolongement" + succes;
         } catch (Exception e) {
