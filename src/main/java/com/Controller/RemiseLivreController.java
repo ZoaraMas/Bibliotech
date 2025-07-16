@@ -68,7 +68,11 @@ public class RemiseLivreController {
                 dateRemise = LocalDateTime.now();
             }
             Long idEmp = (Long) session.getAttribute("auth");
+            System.out.println("bleu");
+
             remiseLivreService.remettreUnExemplaireDeLivre(idExemplaire, idEmp, dateRemise, commentaire);
+            System.out.println("aladin");
+
             String succes = "?succes= Remise effectue avec succes";
             return "redirect:../pret/liste-pret" + succes;
         } catch (Exception e) {

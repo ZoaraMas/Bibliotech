@@ -41,19 +41,24 @@ public class RemiseLivreService {
 
     public void remettreUnExemplaireDeLivre(Long idExemplaire, long idEmploye, LocalDateTime dateRemise,
             String commentaire) throws Exception {
+        System.out.println("daupin");
+
         // l’employe existe
         if (!this.userService.userExists(idEmploye))
             throw new IllegalArgumentException("L'employe avec l'id " + idEmploye + " n'existe pas.");
+        System.out.println("requin");
 
         // l’exemplaire du livre existe
         if (!this.exemplaireService.exemplaireExists(idExemplaire))
             throw new IllegalArgumentException("L'exemplaire de livre avec l'id " + idExemplaire + " n'existe pas.");
+        System.out.println("pits");
 
         // Exemplaire non disponible
         if (!exemplaireService.exemplaireEstNonDisponible(idExemplaire, dateRemise)) {
             throw new IllegalArgumentException("L'exemplaire de livre ID:" + idExemplaire
                     + " a deja ete rendu ou n'est encore prete maintenant, il y a erreur.");
         }
+        System.out.println("mickey");
         // Date valide
         // if (!MyDate.dateValide(dateRemise)) {
         // throw new IllegalArgumentException("La date doit etre avant aujourd'hui");
@@ -67,8 +72,12 @@ public class RemiseLivreService {
         // Aussi les prets avec date superieur a aujourd'hui ne devraient pas exister,
         // changer la logique si on peut choisir la date d'un pret
         Pret pret = this.pretService.getPretFromExemplaireActuel(idExemplaire);
+        System.out.println("Donald");
         User emp = userService.findById(idEmploye);
+        System.out.println("Minnie");
         RemiseLivre remiseLivre = new RemiseLivre(pret, dateRemise, commentaire, emp);
+        System.out.println("Pluto");
+
         this.remiseLivreRepository.save(remiseLivre);
     }
 

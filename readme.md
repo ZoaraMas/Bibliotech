@@ -247,6 +247,21 @@ http://localhost:8089/Bibliotech/livre/getLivre-avec-exemplaires?idLivre=1
 
 Alea 4
 http://localhost:8089/Bibliotech/user/info?idUser=4
+
+- Je decouvre un nouveau bug: je ne verifie pas avant de faire un pret si pendant tout ce pret, il n'y aura pas d'autres sur lequels il se superpose.
+- j'essaye de le regler
+
+Taches a faire:
+[ok] - Demander a chat si il n'y a pas d'erreur au niveau du else
+        @Query(value = "SELECT COUNT(*) FROM pret_parametre WHERE :dateCible >= date_pret AND (date_remise IS NULL OR date_remise > :dateCible) AND id_inscription = :idInscription", nativeQuery = true)
+        public Integer getQuotaDepenseActuel(@Param("dateCible") LocalDateTime dateCible,
+                        @Param("idInscription") Long idInscription);}
+
+- Ajouter la verification de si le pret a inserer ne couvre pas un pret dans le futur
+- Faire des tests de verification
+
+- Terminer fonctionalite validation prolongement
+
 # BIBLIOTECH
 - CompAndMove ou CAM(recente) pour compiler et deplacer le projet compile vers tomcat, deux version pour le pc itu et le pc TUF
 - [a verifier] CopyJsp pour copier uniquement les jsp

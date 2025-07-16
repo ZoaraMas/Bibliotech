@@ -8,6 +8,7 @@ import com.Entite.Exemplaire;
 import com.Entite.Genre;
 import com.Entite.Inscription;
 import com.Entite.Livre;
+import com.Entite.ParametrePret;
 import com.Entite.Pret;
 import com.Entite.PretParametreView;
 import com.Entite.TypePret;
@@ -94,16 +95,19 @@ public class PretService {
         // Le membre ne subit pas de penalite
         Inscription currInscription = inscriptionService.getCurrentInscription(idUser);
         // Subit une penalite maintenant
-        PenaliteResponse penaliteResponse = this.subitPenalite(currInscription.getId());
+        // PenaliteResponse penaliteResponse =
+        // this.subitPenalite(currInscription.getId());
+        // if (penaliteResponse.isSubitPenalite()) {
+        // throw new Exception(
+        // "1Vous etes actuellement penalise, user: " + idUser + ", idInscription = " +
+        // currInscription + ", "
+        // + penaliteResponse.getMessage());
+        // }
+        // Subit une penalite lors du jour demande a reserver
+        PenaliteResponse penaliteResponse = this.subitPenalite(currInscription.getId(), datePret);
         if (penaliteResponse.isSubitPenalite()) {
             throw new Exception(
-                    "1Vous etes actuellement penalise, user: " + idUser + ", idInscription = " + currInscription + ", "
-                            + penaliteResponse.getMessage());
-        }
-        // Subit une penalite lors du jour demande a reserver
-        penaliteResponse = this.subitPenalite(currInscription.getId(), datePret);
-        if (penaliteResponse.isSubitPenalite()) {
-            throw new Exception("Vous serez encore penalise a la date voulue, " + penaliteResponse.getMessage());
+                    "Vous serez encore penalise a la date voulue(ou maintenant), " + penaliteResponse.getMessage());
         }
         TypePret typePret = this.typePretService.findById(idTypePret);
         // Le membre n’a pas encore termine tout son quota
@@ -127,10 +131,28 @@ public class PretService {
             throw new Exception("Le pret n'est pas couvert par l'inscription.");
         }
 
-        
+        // le pret ne superpose pas un autre pret
+        ParametrePret parametrePret = this.parametrePretService.findByParameters(currInscription.getTypeAdherent(),
+                typePret, genreFromExemplaire);
+        LocalDateTime pretFin = datePret.plusDays(parametrePret.getNbJourPret());
+        if (typePret.getId() == 2) {
+            pretFin = datePret;
+            pretFin = pretFin.withHour(20);
+        }
+        pretCollision(datePret, pretFin, idExemplaire);
+        //
+
         User employe = this.userService.findById(idEmploye);
         Pret pret = new Pret(currInscription, exemplaire, typePret, datePret, employe);
         this.pretRepository.save(pret);
+    }
+
+    // Verifier que le pret ne se superpose pas deja avec una utre
+    public void pretCollision(LocalDateTime debut, LocalDateTime fin, Long idExemplaire) throws Exception {
+        boolean result = this.pretParametreViewService.ExistCollisionPret(debut, fin, idExemplaire);
+        if (result)
+            throw new Exception(
+                    "Un pret existe deja lors de toute la duree du pret que vous voulez effectuer, veuillez patienter que l'utilisateur en queestion rendre l'exemplaire ou choisissez un nouvel exemplaire");
     }
 
     // Meme code qu'en haut mais pour la validation de prolongatino avec mise en
@@ -191,6 +213,14 @@ public class PretService {
                 typePret, genreFromExemplaire, currInscription, datePret)) {
             throw new Exception("Le pret n'est pas couvert par l'inscription.");
         }
+
+        // le pret ne superpose pas un autre pret
+        ParametrePret parametrePret = this.parametrePretService.findByParameters(currInscription.getTypeAdherent(),
+                typePret, genreFromExemplaire);
+        LocalDateTime pretFin = datePret.plusDays(parametrePret.getNbJourPret());
+        pretCollision(datePret, pretFin, idExemplaire);
+        //
+
         User employe = this.userService.findById(idEmploye);
         Pret pret = new Pret(currInscription, exemplaire, typePret, datePret, employe);
         pret.setProlongement("true");

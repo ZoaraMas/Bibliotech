@@ -33,9 +33,11 @@ public class InscriptionService {
         return null;
     }
 
+    @Transactional
     public Inscription getCurrentInscription(Long idUser) throws Exception {
         if (estActuellementInscrit(idUser)) {
-            Inscription result = this.inscriptionRepository.findFirstByUserIdOrderByDateInscriptionDesc(idUser)
+            Inscription result = this.inscriptionRepository
+                    .findFirstByUserIdOrderByDateInscriptionDescWithTypeAdherent(idUser)
                     .orElse(null);
             if (result == null)
                 throw new Exception("Erreur dans l'obtention de l'inscription, veuillez contacter les administrateurs");
@@ -46,7 +48,8 @@ public class InscriptionService {
 
     public Inscription getInscription(Long idUser) throws Exception {
         if (estActuellementInscrit(idUser)) {
-            Inscription result = this.inscriptionRepository.findFirstByUserIdOrderByDateInscriptionDesc(idUser)
+            Inscription result = this.inscriptionRepository
+                    .findFirstByUserIdOrderByDateInscriptionDescWithTypeAdherent(idUser)
                     .orElse(null);
             return result;
         }

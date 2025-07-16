@@ -2,11 +2,13 @@ package com.Controller;
 
 import com.Entite.AdherentQuota;
 import com.Entite.Inscription;
+import com.Entite.TypeAdherent;
 import com.Entite.TypeUser;
 import com.Entite.User;
 import com.Service.AdherentQuotaService;
 import com.Service.InscriptionService;
 import com.Service.PretService;
+import com.Service.TypeAdherentService;
 import com.Service.UserService;
 import com.dto.InfoUserDto;
 import com.dto.PenaliteResponse;
@@ -44,6 +46,8 @@ public class UserController {
     private InscriptionService inscriptionService;
     @Autowired
     private AdherentQuotaService adherentQuotaService;
+    @Autowired
+    private TypeAdherentService typeAdherentService;
 
     @GetMapping("/form-detail-user")
     public String formDetailUser(Model model) {
@@ -62,7 +66,7 @@ public class UserController {
             String nom = user.getNom();
             String prenom = user.getPrenom();
             TypeUser typeUserObject = user.getTypeUser();
-            String typeUser = typeUserObject.getLibelle();
+            String typeUser = "Non inscrit";
             Integer idTypeUser = typeUserObject.getId();
             LocalDate[] debutFinInscription = this.inscriptionService.getDebutFinInscription(idUser);
             boolean penalisation = false;
@@ -72,9 +76,10 @@ public class UserController {
             int quotaReste = -1;
             if (debutFinInscription != null) { // L'utilisateur n'est pas inscrit
                 Inscription currInscription = inscriptionService.getCurrentInscription(idUser); // throw exception si
-                                                                                                // non
-                                                                                                // inscrit
-                // Obtenir l'etat de la penalisation
+
+                TypeAdherent typeAdherent = currInscription.getTypeAdherent();
+                typeUser = typeAdherent.getLibelle();
+
                 PenaliteResponse penaliteResponse = this.pretService.subitPenalite(currInscription.getId(),
                         LocalDateTime.now());
                 penalisation = penaliteResponse.isSubitPenalite();

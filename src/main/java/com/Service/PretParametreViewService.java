@@ -31,6 +31,15 @@ public class PretParametreViewService {
     @Autowired
     private AdherentQuotaService adherentQuotaService;
 
+    // Verifier si il y a collision de pret
+    public boolean ExistCollisionPret(LocalDateTime debut, LocalDateTime fin, Long idExemplaire) {
+        List<PretParametreView> liste = this.pretParametreViewRepository.findPretCollisionSimulationDebutFin(debut, fin,
+                idExemplaire);
+        if (liste.size() == 0)
+            return false;
+        return true;
+    }
+
     // Verifier si le pret a deja ete rendu ou non
     public boolean pretEstRendu(Long idPret) throws Exception {
         PretParametreView pretParametreView = this.pretParametreViewRepository.findById(idPret)
@@ -68,12 +77,19 @@ public class PretParametreViewService {
         return this.pretParametreViewRepository.getAllPretOrderByDateFinAscByIdInscription(idInscription);
     }
 
-    public PretParametreView findPretWhereExemplaireIn(LocalDateTime dateCible, Long idExemplaire) {
-        return this.pretParametreViewRepository.findPretWhereExemplaireIn(dateCible, idExemplaire);
+    public PretParametreView findPretWhereExemplaireIn(LocalDateTime dateCible, Long idExemplaire) throws Exception {
+        List<PretParametreView> liste = this.pretParametreViewRepository.findPretWhereExemplaireIn(dateCible,
+                idExemplaire);
+        if (liste.size() >= 2)
+            throw new Exception(
+                    "Erreur dans la base de donnee, il y a peut etre corruption de donnee, veuillez contacter l'admin");
+        else if (liste.size() == 0)
+            return null;
+        return liste.get(0);
     }
 
     public Integer getQuotaDepenseActuel(LocalDateTime dateCible, Long idInscription) {
-        return this.pretParametreViewRepository.getQuotaDepenseActuel(dateCible, idInscription);
+        return (this.pretParametreViewRepository.getQuotaDepenseActuel(dateCible, idInscription)).intValue();
     }
 
 }

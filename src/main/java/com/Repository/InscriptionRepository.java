@@ -21,7 +21,8 @@ import com.Entite.User;
 public interface InscriptionRepository extends JpaRepository<Inscription, Long> {
     // Retourne l'inscription actuelle, verifier d'abord si le user est bien inscrit
     // avant de le faire
-    Optional<Inscription> findFirstByUserIdOrderByDateInscriptionDesc(Long userId);
+    @Query("SELECT i FROM Inscription i JOIN FETCH i.typeAdherent t WHERE i.user.id = :idUser ORDER BY i.dateInscription DESC")
+    Optional<Inscription> findFirstByUserIdOrderByDateInscriptionDescWithTypeAdherent(@Param("idUser") Long idUser);
 
     // Retourne l'inscription d'un utilisateur qui est alors encore inscrit a ce
     // jour
